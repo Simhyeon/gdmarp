@@ -32,27 +32,30 @@ function gd_help(){
 
 function gd_init(){
 	touch $INPUT/index.md  
-	mkdir $INPUT/res $INPUT/inc $INPUT/build
+	mkdir $INPUT/res $INPUT/inc $INPUT/build $INPUT/css $INPUT/m4_ext
 	echo "---" > $INPUT/index.md
 	echo "marp:true" >> $INPUT/index.md
 	echo "---" >> $INPUT/index.md
+	echo "!style(css/gdmarp.css)" >> $INPUT/index.md
+	cp $PACKAGE_DIR/gdmarp.css -f $INPUT/css
+	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
 	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
 }
 
 function gd_compile(){
+	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
 	# Preprocessing before marp compilation
 	m4 -I $PWD -I $PACKAGE_DIR -I $INCLUDE $PACKAGE_DIR/pre.m4 $INPUT/index.md > $INPUT/out.md
 
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
-		marp --pptx $INPUT/out.md -o $OUTPUT/out.pptx
+		marp --allow-local-files --pptx --html $INPUT/out.md -o $OUTPUT/out.pptx
 	else
 		# With Docker
-		ls $INPUT
-		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --pptx -o build/out.pptx
+		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --pptx --allow-local-files --html -o build/out.pptx
 	fi
-	rm $INPUT/out.md
+	# rm $INPUT/out.md
 }
 
 function gd_check(){
@@ -70,8 +73,8 @@ function gd_check(){
 		# Check docker installation
 		# DOCKER CHECK
 		echo "Checking marp-cli docker image installed"
-		if [ $(docker image ls | grep -c marpteam/marp-cli) -eq 0 ]; then
-			echo "Docker image is not installed"
+		if [ "$(docker image ls | grep -c marpteam/marp-cli)" = "0" ]; then
+			echo "ERR : Docker image is not installed"
 			CLEAN=false
 		fi
 		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
