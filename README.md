@@ -24,7 +24,7 @@ Simply clone or download whole repository and symlink binary file 'gdmarp' into 
 e.g
 
 ```bash
-git clone https://github.com/simhyon/gdmarp
+git clone https://github.com/Simhyeon/gdmarp
 cd gdmarp
 ln -s $PWD/gdmarp ~/.local/bin/gdmarp
 
@@ -146,4 +146,6 @@ _inc(other_file)
 * [x] Make title macro rules simpler to use
 * [ ] Modify csv macro so that user can input font size
 * [ ] Complete macro rules markdown file
-* [ ] Enable config file to modify font-sizes or several trivial css types
+* [ ] Enable config file option to modify font-sizes or several trivial css types
+* [ ] Add table alignment option to csv macro
+* [ ] Add raw csv macro
