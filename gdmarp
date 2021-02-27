@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo "$1"
+
+if [ "$1" == "--init" ]; then
+	touch index.md  
+	mkdir res inc
+	echo "---" > index.md
+	echo "marp:true" >> index.md
+	echo "---" >> index.md
+	exit 0
+elif [ "$1" == "--check" ]; then
+	CLEAN=true
+	[ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." && CLEAN=false
+	[ -z $(command -v marp) ] && echo "Marp cli not installed" && CLEAN=false
+	[ -z $(command -v m4) ] && echo "M4 not installed" && CLEAN=false
+	[ -z $(command -v awk) ] && echo "Awk not installed" && CLEAN=false
+	[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
+	exit 0	
+elif [ "$1" = "--compile" ]; then
+	ls
+	m4 $(dirname ${BASH_SOURCE[0]})/pre.m4 $PWD/index.md > out.md
+	#marp out.md --pptx
+	exit 0	
+fi
