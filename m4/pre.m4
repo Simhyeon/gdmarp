@@ -40,7 +40,9 @@ define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')p
 syscmd(`echo "$2" | awk -f m4_ext/rmNewLines.awk')
 </div>')dnl
 
-define(`_title', `m_class(title)')dnl
+define(`_title', `m_class(title)
+`#' $1
+`##' $2')dnl
 define(`_split', `m_class(split)')dnl
 define(`_left', `<div class="ldiv">')dnl
 define(`_right', `</div>

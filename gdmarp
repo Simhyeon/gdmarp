@@ -132,6 +132,7 @@ function gd_main(){
 		esac
 	done
 	$ACTION
+	exit 0
 }
 
 # ----------

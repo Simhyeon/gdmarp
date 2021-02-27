@@ -22,6 +22,7 @@ section.title h2 {
 }
 
 section.title h1 {
+  font-size: 1.5em;
   grid-area: title;
   --area-height: var(--title-height);
 }

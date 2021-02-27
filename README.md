@@ -96,10 +96,7 @@ marp:true
 _styles(css/layout.css, css/table.css)
 
 <!-- Make this slide a title slide-->
-_title()
-
-# Presentation title
-## Presentation author name
+_title(Title Text, Subtitle text)
 
 <!-- Add horizontal line to start new slide -->
 ---
@@ -145,7 +142,8 @@ _inc(other_file)
 
 ### TODO
 
+* [x] Test both symlink and rc alias ways
+* [x] Make title macro rules simpler to use
 * [ ] Modify csv macro so that user can input font size
-* [ ] Test both symlink and rc alias ways
 * [ ] Complete macro rules markdown file
 * [ ] Enable config file to modify font-sizes or several trivial css types
