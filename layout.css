@@ -19,8 +19,6 @@ section.title h2 {
   height: var(--area-height);
   line-height: var(--area-height);
   font-size: calc(var(--area-height) * 0.7);
-
-  border: 1px dashed gray; /* debug */
 }
 
 section.title h1 {
