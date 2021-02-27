@@ -7,13 +7,13 @@ divert(`-1')
 # ===
 # Variables 
 define(`v_img_height', `500')dnl
-define(`v_font_default', `14')dnl
+define(`v_font_default', `22')dnl
 
 # ===
 # Internal Macros 
 define(`m_width', `width:$1px')dnl
 define(`m_height', `height:$1px')dnl
-define(`m_class', `<!-- _class: $1 -->')dnl
+define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1 is necessary
 define(`m_img', `
 ![$1]($2)')dnl
 define(`m_img_auto', `eval( v_img_height / $1 )')dnl
@@ -32,10 +32,14 @@ define(`_csv', `syscmd(`awk -f m4_ext/csvToMd.awk $1')')
 define(`_imgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0', `m_img_auto( `eval( $# - 1 )')',`$1')')', it)')')dnl
 
 # If first argument is 0 then set font size as default, or else input gien argument (unit is pixel) 
+# Div should be separated with new line to properly work
+# Syscmd removes starting and trailing new lines
 define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')px;">
-$2
+
+syscmd(`echo "$2" | awk -f m4_ext/rmNewLines.awk')
 </div>')dnl
 
+define(`_title', `m_class(title)')dnl
 define(`_split', `m_class(split)')dnl
 define(`_left', `<div class="ldiv">')dnl
 define(`_right', `</div>
