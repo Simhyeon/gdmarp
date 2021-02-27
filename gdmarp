@@ -7,6 +7,7 @@
 INPUT=$PWD
 OUTPUT=$PWD/build
 INCLUDE=""
+PRESERVE=false
 DOCKER=false
 PACKAGE=$(basename $BASH_SOURCE)
 PACKAGE_DIR=$(dirname $(readlink -f "$0"))
@@ -22,6 +23,7 @@ function gd_help(){
 	echo "options:"
 	echo "-h, --help            show brief help"
 	echo "-I, --include=DIR     specify a path directory to include files"
+	echo "-p, --preserve        preserve middle format"
 	echo "--docker              indicate docker usage for init or compile. Docker image needs loose privilege to compile."
 	echo " "
 	echo "actions:"
@@ -55,7 +57,7 @@ function gd_compile(){
 		# With Docker
 		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --pptx --allow-local-files --html -o build/out.pptx
 	fi
-	# rm $INPUT/out.md
+	[ "$PRESERVE" = "false" ] && rm $INPUT/out.md
 }
 
 function gd_check(){
@@ -107,6 +109,10 @@ function gd_main(){
 				;;
 			--docker)
 				export DOCKER=true
+				shift
+				;;
+			-p|--preserve)
+				PRESERVE=true
 				shift
 				;;
 			init)
