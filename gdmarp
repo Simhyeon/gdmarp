@@ -1,25 +1,131 @@
 #!/bin/bash
 
-echo "$1"
+# Reference source : https://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash
 
-if [ "$1" == "--init" ]; then
-	touch index.md  
-	mkdir res inc
-	echo "---" > index.md
-	echo "marp:true" >> index.md
-	echo "---" >> index.md
-	exit 0
-elif [ "$1" == "--check" ]; then
+# ----------
+# VARIABLES
+INPUT=$PWD
+OUTPUT=$PWD/build
+INCLUDE=""
+DOCKER=false
+PACKAGE=$(basename $BASH_SOURCE)
+PACKAGE_DIR=$(dirname $(readlink -f "$0"))
+ACTION=""
+
+# ----------
+# FUNCTIONS
+
+function gd_help(){
+	echo "$PACKAGE - Compile markdown file into pptx file with predefined macro support."
+	echo "Usage: [options] action [arguments]"
+	echo " "
+	echo "options:"
+	echo "-h, --help            show brief help"
+	echo "-I, --include=DIR     specify a path directory to include files"
+	echo "--docker              indicate docker usage for init or compile. Docker image needs loose privilege to compile."
+	echo " "
+	echo "actions:"
+	echo "init                  Initiate file structure"
+	echo "compile               compile markdown"
+	echo "check                 check installed dependencies"
+}
+
+function gd_init(){
+	touch $INPUT/index.md  
+	mkdir $INPUT/res $INPUT/inc $INPUT/build
+	echo "---" > $INPUT/index.md
+	echo "marp:true" >> $INPUT/index.md
+	echo "---" >> $INPUT/index.md
+	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
+}
+
+function gd_compile(){
+	# Preprocessing before marp compilation
+	m4 -I $PWD -I $PACKAGE_DIR -I $INCLUDE $PACKAGE_DIR/pre.m4 $INPUT/index.md > $INPUT/out.md
+
+	# Compile with marp-cli
+	if [ "$DOCKER" = "false" ]; then
+		# No Docker
+		marp --pptx $INPUT/out.md -o $OUTPUT/out.pptx
+	else
+		# With Docker
+		ls $INPUT
+		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --pptx -o build/out.pptx
+	fi
+	rm $INPUT/out.md
+}
+
+function gd_check(){
+	# Check binary installation
+	# Currently m4 and awk is necessary regardless of docker image
 	CLEAN=true
-	[ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." && CLEAN=false
-	[ -z $(command -v marp) ] && echo "Marp cli not installed" && CLEAN=false
-	[ -z $(command -v m4) ] && echo "M4 not installed" && CLEAN=false
-	[ -z $(command -v awk) ] && echo "Awk not installed" && CLEAN=false
-	[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
-	exit 0	
-elif [ "$1" = "--compile" ]; then
-	ls
-	m4 $(dirname ${BASH_SOURCE[0]})/pre.m4 $PWD/index.md > out.md
-	#marp out.md --pptx
-	exit 0	
-fi
+	echo "Checking m4 install..." && [ -z $(command -v m4) ] && echo "M4 not installed" && CLEAN=false
+	echo "Checking awk install..." && [ -z $(command -v awk) ] && echo "Awk not installed" && CLEAN=false
+
+	if [ "$DOCKER" = "false" ]; then
+		echo "Checking google chrome install..." && [ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." && CLEAN=false
+		echo "Checking marp install..." && [ -z $(command -v marp) ] && echo "Marp cli not installed" && CLEAN=false
+		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
+	else
+		# Check docker installation
+		# DOCKER CHECK
+		echo "Checking marp-cli docker image installed"
+		if [ $(docker image ls | grep -c marpteam/marp-cli) -eq 0 ]; then
+			echo "Docker image is not installed"
+			CLEAN=false
+		fi
+		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
+	fi
+}
+
+function gd_main(){
+	# No arg given print -h
+	if [ $# -eq 0 ]; then
+		gd_help
+		exit 0
+	fi
+
+	# Argument parse
+	while test $# -gt 0; do
+		case "$1" in 
+			-h|--help)
+				ACTION=gd_help
+				break
+				;;
+			-I)
+				shift
+				if test $# -gt 0; then
+					export INCLUDE=$1
+				fi
+				;;
+			--include*)
+				export INCLUDE=`echo $1 | sed -e 's/^[^=]*=//g'`
+				shift
+				;;
+			--docker)
+				export DOCKER=true
+				shift
+				;;
+			init)
+				ACTION=gd_init
+				shift
+				;;
+			compile)
+				ACTION=gd_compile
+				shift
+				;;
+			check)
+				ACTION=gd_check
+				shift
+				;;
+			*)
+				break
+				;;
+		esac
+	done
+	$ACTION
+}
+
+# ----------
+# MAIN
+gd_main $*
