@@ -8,7 +8,6 @@ Multiple styles are supported. Simply type multiple css stylesheets delimtied by
 
 ```
 _styles(some_path/file_name.css, other.css)
-
 ```
 expands to
 ```
@@ -67,7 +66,6 @@ This is simple text
 	- and some **bold** text
 
 </div>
-
 ```
 
 #### CSV
@@ -81,7 +79,6 @@ _csv(test.csv)
 foo,bar,baz
 1,2,3
 4,5,6
-
 ```
 
 converts to
@@ -91,7 +88,6 @@ converts to
 | --- | --- | --- |
 | 1   | 2   | 3   |
 | 4   | 5   | 6   |
-
 ```
 
 #### Title

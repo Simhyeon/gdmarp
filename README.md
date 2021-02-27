@@ -67,16 +67,16 @@ TargetDirectory
 |- inc
 |- res
 |- css
-	|- layout.css
-	|- table.css
+    |- layout.css
+    |- table.css
 |- build
 |- m4_ext
-	|- csvToMd.awk
-	|- rmNewLines.awk
+    |- csvToMd.awk
+    |- rmNewLines.awk
 |- index.md
 ```
 
-It is okay to not 'init' a directory you want to, however there are several fixed rules.
+It is okay to not 'init' a directory, however there are several fixed rules.
 
 - Main file should be called **'index.md'**
 - Files you want to include should in located in directory named **'inc'**
@@ -134,7 +134,9 @@ _csv(example_table.csv)
 <!-- End double column slide >
 _end()
 
-
+---
+<!-- Include inc/other_file.md into index.md-->
+_inc(other_file)
 ```
 
 ### Macro rules
