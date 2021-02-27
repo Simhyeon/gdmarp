@@ -1,0 +1,11 @@
+table th {
+	background: #006DCC;
+	color: white;
+}
+
+table tr.even {
+    background: #fff;
+}
+table tr.odd {
+    background: #eeeeee;
+}
