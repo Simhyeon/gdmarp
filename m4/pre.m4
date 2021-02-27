@@ -20,9 +20,10 @@ define(`m_img_auto', `eval( v_img_height / $1 )')dnl
 
 # ===
 # User interface macros 
-define(`_style', `<!-- $1 -->
-<style>
-include(`$1')</style>')dnl
+define(`_styles', `<style>
+foreach(`it', ($*), `<!-- it -->
+include(it)
+')</style>')dnl
 define(`_inc', `include(`inc/$1.md')')dnl
 
 # Awk csv file into md table and paste into it

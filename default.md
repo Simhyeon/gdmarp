@@ -1,5 +1,5 @@
 ---
 marp:true
 ---
-
-!style(css/layout.css)
+<!-- Style macro can only be positioned within index.md file-->
+!styles(css/layout.css)
