@@ -35,7 +35,7 @@ function gd_help(){
 function gd_init(){
 	touch $INPUT/index.md  
 	mkdir $INPUT/res $INPUT/inc $INPUT/build $INPUT/css $INPUT/m4_ext
-	cp $PACKAGE_DIR/default.md -f $INPUT
+	cp $PACKAGE_DIR/default.md -f $INPUT/index.md
 	cp $PACKAGE_DIR/css/*.css -f $INPUT/css
 	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
 	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
@@ -49,9 +49,11 @@ function gd_compile(){
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
+		mkdir -p $OUTPUT
 		marp --allow-local-files --pptx --html $INPUT/out.md -o $OUTPUT/out.pptx
 	else
 		# With Docker
+		mkdir -p $OUTPUT
 		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --pptx --allow-local-files --html -o build/out.pptx
 	fi
 	[ "$PRESERVE" = "false" ] && rm $INPUT/out.md
