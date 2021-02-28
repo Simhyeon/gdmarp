@@ -145,8 +145,15 @@ _inc(other_file)
 * [x] Test both symlink and rc alias ways
 * [x] Make title macro rules simpler to use
 * [x] Add raw csv macro
-* [ ] Add easy multiline writing in raw csv table
-* [ ] Modify csv macro so that user can input font size
+* [x] Add easy multiline writing in raw csv table
 * [ ] Complete macro rules markdown file
 * [ ] Enable config file option to modify font-sizes or several trivial css types
-* [ ] Add table alignment option to csv macro
+* [ ] Add custom script enabled by default
+* [ ] Add optin to disable default m4 script
+
+#### Dropped todos
+
+Dropped becuase it makes macro usage overly complicated.
+
+* [ ] Add table alignment option to csv macro 
+* [ ] Modify csv macro so that user can input font size
