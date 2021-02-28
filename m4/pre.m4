@@ -17,6 +17,10 @@ define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1
 define(`m_img', `
 ![$1]($2)')dnl
 define(`m_img_auto', `eval( v_img_height / $1 )')dnl
+define(`m_trim_nl', `syscmd(`echo "$1" | awk -f m4_ext/rmExtNewLines.awk')')dnl
+
+# Convert contents into single lined html
+define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk NF=NF RS= OFS= ')')dnl
 
 # ===
 # User interface macros 
@@ -27,23 +31,24 @@ include(it)
 define(`_inc', `include(`inc/$1.md')')dnl
 
 # Awk csv file into md table and paste into it
-define(`_csv', `syscmd(`awk -f m4_ext/csvToMd.awk $1')')
+define(`_csv', `syscmd(`awk -f m4_ext/csvToMd.awk $1')')dnl
+define(`_rcsv', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk | awk -f m4_ext/csvToMd.awk')')dnl
 
 # If first argument is 0 then calculate height devided by count of arguments and set it has height or just input given argument. (unit is pixel) 
 define(`_imgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0', `m_img_auto( `eval( $# - 1 )')',`$1')')', it)')')dnl
 
 # If first argument is 0 then set font size as default, or else input gien argument (unit is pixel) 
 # Div should be separated with new line to properly work
-# Syscmd removes starting and trailing new lines
+# m_trim_nl removes starting and trailing new lines
 define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')px;">
 
-syscmd(`echo "$2" | awk -f m4_ext/rmNewLines.awk')
+m_trim_nl($2)
 </div>')dnl
 
 define(`_title', `m_class(title)
 `#' $1
 `##' $2')dnl
-define(`_split', `m_class(split)')dnl
+define(`_cls', `m_class($1)')dnl
 define(`_left', `<div class="ldiv">')dnl
 define(`_right', `</div>
 <div class="rdiv">')dnl
