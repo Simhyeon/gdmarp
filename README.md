@@ -67,13 +67,13 @@ TargetDirectory
 |- inc
 |- res
 |- css
-    |- layout.css
-    |- table.css
+    |- *.css
 |- build
 |- m4_ext
-    |- csvToMd.awk
-    |- rmNewLines.awk
+    |- *.awk
 |- index.md
+|- index.m4
+|- env.m4
 ```
 
 It is okay to not 'init' a directory, however there are several fixed rules.
@@ -81,6 +81,7 @@ It is okay to not 'init' a directory, however there are several fixed rules.
 - Main file should be called **'index.md'**
 - Files you want to include should in located in directory named **'inc'**
 - Built pptx file is always saved in directory named build and will be made if not existent.
+- use --no-default option to prevent unexpected error if not initiated
 
 Other than that you can call compile commands regardless of init command usage. However you cannot use csv, style macro or text macro without m4\_ext folder. 
 
@@ -146,10 +147,10 @@ _inc(other_file)
 * [x] Make title macro rules simpler to use
 * [x] Add raw csv macro
 * [x] Add easy multiline writing in raw csv table
+* [x] Add custom script enabled by default
+* [x] Add optin to disable default m4 script
+* [x] Enable env.file to modify font-sizes or several trivial css types
 * [ ] Complete macro rules markdown file
-* [ ] Enable config file option to modify font-sizes or several trivial css types
-* [ ] Add custom script enabled by default
-* [ ] Add optin to disable default m4 script
 
 #### Dropped todos
 
