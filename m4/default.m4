@@ -34,6 +34,25 @@ define(`_inc', `include(`inc/$1.md')')dnl
 define(`_csv', `syscmd(`awk -f m4_ext/csvToMd.awk $1')')dnl
 define(`_rcsv', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk | awk -f m4_ext/csvToMd.awk')')dnl
 
+# Multiline support csv table related macros
+define(`_ts', `<table>')dnl
+define(`_tfont', `<style scoped>
+	thead {
+		font-size: $1
+	}
+	tbody {
+
+	}
+	table t
+</style>')
+define(`_th', `<thead>
+foreach(`it', ($*), `<td> m_scell(it) </td>')
+</thead>')dnl
+define(`_tr', `<tr>
+foreach(`it', ($*), `<td> m_scell(it) </td>')
+</tr>')dnl
+define(`_te', `</table>')dnl
+
 # If first argument is 0 then calculate height devided by count of arguments and set it has height or just input given argument. (unit is pixel) 
 define(`_imgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0', `m_img_auto( `eval( $# - 1 )')',`$1')')', it)')')dnl
 
