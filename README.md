@@ -148,7 +148,7 @@ _inc(other_file)
 * [x] Add raw csv macro
 * [x] Add easy multiline writing in raw csv table
 * [x] Add custom script enabled by default
-* [x] Add optin to disable default m4 script
+* [x] Add option to disable default m4 script
 * [x] Enable env.file to modify font-sizes or several trivial css types
 * [ ] Complete macro rules markdown file
 
