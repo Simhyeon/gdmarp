@@ -22,7 +22,7 @@ define(`m_img_auto', `eval( v_basis_height / $1 )')dnl
 define(`m_trim_nl', `syscmd(`echo "$1" | awk -f m4_ext/rmExtNewLines.awk')')dnl
 
 # Convert contents into single lined html
-define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk NF=NF RS= OFS= ')')dnl
+define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext/merge_lines.awk -v d="" ')')dnl
 
 # ===
 # User interface macros 
@@ -39,13 +39,12 @@ define(`_rcsv', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk | awk -f m4
 # Multiline support csv table related macros
 define(`_ts', `<table>')dnl
 define(`_tfont', `<style scoped>
-	thead {
-		font-size: $1
+	thead > tr > td {
+		font-size: $1px !important;
 	}
-	tbody {
-
+	tr > td {
+		font-size: $2px !important;
 	}
-	table t
 </style>')
 define(`_th', `<thead>
 foreach(`it', ($*), `<td> m_scell(it) </td>')
