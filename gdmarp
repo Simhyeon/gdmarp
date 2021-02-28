@@ -8,6 +8,7 @@ INPUT=$PWD
 OUTPUT=$PWD/build
 INCLUDE=""
 PRESERVE=false
+DEFAULT=true
 DOCKER=false
 PACKAGE=$(basename $BASH_SOURCE)
 PACKAGE_DIR=$(dirname $(readlink -f "$0"))
@@ -24,6 +25,7 @@ function gd_help(){
 	echo "-h, --help            show brief help"
 	echo "-I, --include=DIR     specify a m4 script directory to include"
 	echo "-p, --preserve        preserve middle format"
+	echo "--no-default          do not apply default macro rules"
 	echo "--docker              indicate docker usage for init or compile. Docker image needs loose privilege to compile."
 	echo " "
 	echo "actions:"
@@ -35,6 +37,8 @@ function gd_help(){
 function gd_init(){
 	touch $INPUT/index.md  
 	mkdir $INPUT/res $INPUT/inc $INPUT/build $INPUT/css $INPUT/m4_ext
+	cp $PACKAGE_DR/env.m4 -f $INPUT/env.m4
+	cp $PACKAGE_DIR/index.m4 -f $INPUT/index.m4
 	cp $PACKAGE_DIR/default.md -f $INPUT/index.md
 	cp $PACKAGE_DIR/css/*.css -f $INPUT/css
 	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
@@ -42,9 +46,14 @@ function gd_init(){
 }
 
 function gd_compile(){
+	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
+	# Scripts array to process
+	SCRIPTS=($INPUT/index.m4)
+	# If default script is enabled or not disabled
+	[[ "$DEFAULT" = "true" ]] && SCRIPTS+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
 	# Preprocessing before marp compilation
-	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $INCLUDE $PACKAGE_DIR/m4/pre.m4 $INPUT/index.md > $INPUT/out.md
+	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $INCLUDE "${SCRIPTS[@]}" $INPUT/index.md > $INPUT/out.md
 
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
@@ -112,6 +121,10 @@ function gd_main(){
 				;;
 			-p|--preserve)
 				PRESERVE=true
+				shift
+				;;
+			--no-default)
+				DEFAULT=false
 				shift
 				;;
 			init)
