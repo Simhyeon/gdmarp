@@ -2,6 +2,14 @@
 
 This is a shell script to automate m4 macro pre-processing and marp pptx generation.
 
+### Caution
+
+This script is very early in stage which means many breaking changes occur.
+
+Curent version is 0.0.1.
+
+I'm currently dogfodding this script to create game design documents.
+
 ### Dependencies
 
 - m4 
@@ -32,6 +40,10 @@ ln -s $PWD/gdmarp ~/.local/bin/gdmarp
 alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 ```
 
+Edit index.m4 to define custom macros other than default macro rules
+
+Edit env.m4 file to change variables e.g) default font size
+
 ### Usage
 
 ```bash
@@ -46,6 +58,7 @@ gdmarp check
 gdmarp --docker check
 
 # Initialize current working directory with desired file structure.
+# docker option does not install docker image
 gdmarp init
 gdmarp --docker init
 
@@ -56,9 +69,12 @@ gdmarp --docker compile
 # To preserve m4 pre-processed file (out.md) use with --preserve option or -p in short
 gdmarp compile --preserve
 
+# To disable default macro use --no-defualt option
+gdmarp compile --no-default
+
 ```
 
-### NOTE
+### Using without init command
 
 Init command creates a file structure looks like this
 
@@ -102,18 +118,19 @@ _title(Title Text, Subtitle text)
 <!-- Add horizontal line to start new slide -->
 ---
 
-# Slide name
+<!--Text macro with font size-->
 _text(0, 
 This is some sample texts
 )
 
 ---
 
-<!-- Double column slide macro-->
+<!-- Add class to current section can be multiple classes -->
 _cls(split)
 
 # Slide title
 
+<!-- Column macros properly works only when split class was added>
 <!-- Start left column -->
 _left()
 
@@ -128,6 +145,13 @@ _right()
 <!-- Currently doesn't support font-size change in macro-->
 <!-- csv macro converts csv file into gfm flavored table format automatically -->
 _csv(example_table.csv)
+
+<!-- Raw csv conversion>
+_rcsv(
+name,mail,address
+simon,123@g.com,somesome
+creek,345@n.com,anywhere
+)
 
 <!-- End double column slide >
 _end()
@@ -150,7 +174,7 @@ _inc(other_file)
 * [x] Add custom script enabled by default
 * [x] Add option to disable default m4 script
 * [x] Enable env.file to modify font-sizes or several trivial css types
-* [ ] Complete macro rules markdown file
+* [x] Complete macro rules markdown file
 
 #### Dropped todos
 
