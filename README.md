@@ -109,7 +109,7 @@ This is some sample texts
 ---
 
 <!-- Double column slide macro-->
-_split()
+_cls(split)
 
 # Slide title
 
@@ -144,8 +144,9 @@ _inc(other_file)
 
 * [x] Test both symlink and rc alias ways
 * [x] Make title macro rules simpler to use
+* [x] Add raw csv macro
+* [ ] Add easy multiline writing in raw csv table
 * [ ] Modify csv macro so that user can input font size
 * [ ] Complete macro rules markdown file
 * [ ] Enable config file option to modify font-sizes or several trivial css types
 * [ ] Add table alignment option to csv macro
-* [ ] Add raw csv macro
