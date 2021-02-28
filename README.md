@@ -107,6 +107,7 @@ I recommend at least copy m4\_ext folder into desired location.
 
 ```markdown
 <!-- Do not escape underscore. Underscore means it's a macro -->
+<!-- If a macro doesn't expect arguments parenthesis is optional -->
 ---
 marp:true
 ---
@@ -179,7 +180,7 @@ _inc(other_file)
 * [x] Add option to disable default m4 script
 * [x] Enable env.file to modify font-sizes or several trivial css types
 * [x] Complete macro rules markdown file
-* [ ] Add reserved container layout
+* [ ] Add reserved container layout AKA text box
 
 #### Dropped todos
 
