@@ -6,8 +6,10 @@ divert(`-1')
 
 # ===
 # Variables 
-define(`v_img_height', `500')dnl
-define(`v_font_default', `22')dnl
+#
+# Followed varaibles are declared in env.m4 file
+# v_basis_height
+# v_font_default
 
 # ===
 # Internal Macros 
@@ -16,7 +18,7 @@ define(`m_height', `height:$1px')dnl
 define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1 is necessary
 define(`m_img', `
 ![$1]($2)')dnl
-define(`m_img_auto', `eval( v_img_height / $1 )')dnl
+define(`m_img_auto', `eval( v_basis_height / $1 )')dnl
 define(`m_trim_nl', `syscmd(`echo "$1" | awk -f m4_ext/rmExtNewLines.awk')')dnl
 
 # Convert contents into single lined html
