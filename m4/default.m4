@@ -65,9 +65,16 @@ define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')p
 m_trim_nl($2)
 </div>')dnl
 
+define(`_fbox', `<div style="flex:1;">
+
+m_trim_nl($1)
+</div>')dnl
+
 define(`_title', `m_class(title)
 `#' $1
 `##' $2')dnl
+define(`_tnc', `m_class(tnt)
+`#' $1')dnl
 define(`_cls', `m_class($1)')dnl
 define(`_left', `<div class="ldiv">')dnl
 define(`_right', `</div>
