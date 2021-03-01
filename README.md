@@ -133,7 +133,7 @@ _cls(split)
 
 <!-- Column macros properly works only when split class was added>
 <!-- Start left column -->
-_left()
+_left
 
 ## Left column title
 
@@ -141,7 +141,7 @@ _left()
 _imgs(0, res/sample.jpeg, res/gdmarp.png)
 
 <!-- Start right column -->
-_right()
+_right
 
 <!-- Currently doesn't support font-size change in macro-->
 <!-- csv macro converts csv file into gfm flavored table format automatically -->
@@ -155,7 +155,7 @@ creek,345@n.com,anywhere
 )
 
 <!-- End double column slide >
-_end()
+_end
 
 ---
 <!-- Include inc/other_file.md into index.md-->
@@ -168,7 +168,7 @@ _inc(other_file)
 
 ### DEMO
 
-[DEMO (TBD)]()
+not yet
 
 ### TODO
 

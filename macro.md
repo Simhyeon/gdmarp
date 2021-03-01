@@ -192,6 +192,22 @@ converts to
 </table>
 ```
 
+#### Flex text box
+
+Intended usage is for split slide
+
+```
+_fbox( text content )
+```
+
+```
+<div style="flex:1;">
+
+text content
+
+</div>
+```
+
 #### Class
 
 Set current section or slide's class which accords to marp class declaration. Argument after comma is ignored.
@@ -257,6 +273,17 @@ Left contents go here
 Right contents go here
 
 </div>
+```
+
+#### Title and contents slide
+
+```
+_tnc(Tnc title)
+```
+
+```
+<!-- _class: tnc -->
+# Tnc title
 ```
 
 #### Include 
