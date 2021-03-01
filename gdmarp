@@ -34,6 +34,7 @@ function gd_help(){
 	echo "init                  Initiate file structure"
 	echo "compile               compile markdown"
 	echo "check                 check installed dependencies"
+	echo "update                update css and m4 extension scripts"
 }
 
 function gd_init(){
@@ -47,6 +48,11 @@ function gd_init(){
 	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
 
 	[ "$GIT" = "true" ] && cd $INPUT && git init && printf "build\nout.md" > .gitignore
+}
+
+function gd_update(){
+	cp $PACKAGE_DIR/css/*.css -f $INPUT/css
+	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
 }
 
 function gd_compile(){
@@ -145,6 +151,10 @@ function gd_main(){
 				;;
 			check)
 				ACTION=gd_check
+				shift
+				;;
+			update)
+				ACTION=gd_update
 				shift
 				;;
 			*)
