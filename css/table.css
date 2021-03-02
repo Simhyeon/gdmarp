@@ -11,6 +11,7 @@ table tr.odd {
 }
 
 thead {
+	text-align: center;
 	font-weight: bold;
 }
 
@@ -19,11 +20,22 @@ thead tr {
 	color: white !important;
 }
 
-section.gdtable table td{
-	white-space: nowrap;
-}
+/*section.gdtable table td{*/
+	/*white-space: nowrap;*/
+/*}*/
 
 section.gdtable table td:last-child{
-	text-align: center;
 	width:100%;
+}
+
+td > * {
+	vertical-align: middle;
+}
+
+td > p {
+	margin-bottom: 0px;
+}
+
+td > ul, li {
+	margin-bottom: 1px;
 }
