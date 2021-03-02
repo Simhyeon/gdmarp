@@ -38,7 +38,7 @@ section.split {
     /*overflow: visible;*/
     display: grid;
     grid-template-columns: v_basis_height()px v_basis_height()px;
-    grid-template-rows: 100px auto;
+    grid-template-rows: 100px v_basis_height();
     grid-template-areas: 
         "slideheading slideheading"
         "leftpanel rightpanel";
@@ -52,14 +52,14 @@ section.split .ldiv {
 	display: flex; 
 	flex-direction: column; 
 	padding-right: 25px;
-	overflow: auto;
+	overflow: visible;
 }
 section.split .rdiv { 
 	grid-area: rightpanel; 
 	display: flex; 
 	flex-direction: column; 
 	padding-left: 25px;
-	overflow: auto;
+	overflow: visible;
 }
 
 section.tnc {

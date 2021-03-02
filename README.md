@@ -178,7 +178,8 @@ not yet
 * [x] Enable env.file to modify font-sizes or several trivial css types
 * [x] Complete macro rules markdown file
 * [x] Add reserved container layout 
-* [ ] No pixel option for images
+* [x] No pixel option for images
+* [ ] Fix image overflow errors :: Suspended
 
 #### Dropped todos
 
