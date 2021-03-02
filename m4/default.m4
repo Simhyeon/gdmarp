@@ -55,7 +55,8 @@ foreach(`it', ($*), `<td> m_scell(it) </td>')
 define(`_te', `</table>')dnl
 
 # If first argument is 0 then calculate height devided by count of arguments and set it has height or just input given argument. (unit is pixel) 
-define(`_imgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0', `m_img_auto( `eval( $# - 1 )')',`$1')')', it)')')dnl
+define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
+define(`_simgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0', `m_img_auto( `eval( $# - 1 )')',`$1')')', it)')')dnl
 
 # If first argument is 0 then set font size as default, or else input gien argument (unit is pixel) 
 # Div should be separated with new line to properly work
