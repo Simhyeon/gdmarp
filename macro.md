@@ -70,15 +70,22 @@ This is simple text
 
 ### Img macro
 
-Created markdown image text with marp favored attribute. First argument is always image width in pixel(px) 0 menas autoscale which actually divides v\_basis\_height by image counts.
+Simple img macros creates markdown img list.
+
+Sized img macro creates markdown image text with marp favored attribute. First argument is always image width in pixel(px) 0 menas autoscale which actually divides v\_basis\_height by image counts.
 
 ```
-_imgs(0, 1.jpeg, 2.png)
+_imgs(1.jpeg, 2.png)
+
+_simgs(1.jpeg, 2.png)
 
 ```
 converts to
 
 ```
+![](1.jpeg)
+![](2.png)
+
 <!-- Assume v_basis_height is 500 -->
 ![width:250px](1.jpeg)
 ![width:250px](2.png)

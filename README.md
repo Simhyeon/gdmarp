@@ -108,9 +108,6 @@ I recommend at least copy m4\_ext folder into desired location.
 ```markdown
 <!-- Do not escape underscore. Underscore means it's a macro -->
 <!-- If a macro doesn't expect arguments parenthesis is optional -->
----
-marp:true
----
 _styles(css/layout.css, css/table.css)
 
 <!-- Make this slide a title slide-->
@@ -126,19 +123,19 @@ This is some sample texts
 
 ---
 
-<!-- Add class to current section can be multiple classes -->
+<!-- Add class to current section. Content can be multiple classes -->
 _cls(split)
 
 # Slide title
 
-<!-- Column macros properly works only when split class was added>
+<!-- Column macros properly works only when split class was added -->
 <!-- Start left column -->
 _left
 
 ## Left column title
 
-<!-- 0 auto scales image size in some extent rather than directly setting width pixel-->
-_imgs(0, res/sample.jpeg, res/gdmarp.png)
+<!-- Imgs macro-->
+_imgs(res/sample.jpeg, res/gdmarp.png)
 
 <!-- Start right column -->
 _right
@@ -147,18 +144,18 @@ _right
 <!-- csv macro converts csv file into gfm flavored table format automatically -->
 _csv(example_table.csv)
 
-<!-- Raw csv conversion>
+<!-- Raw csv conversion -->
 _rcsv(
 name,mail,address
 simon,123@g.com,somesome
 creek,345@n.com,anywhere
 )
 
-<!-- End double column slide >
+<!-- End double column slide -->
 _end
 
 ---
-<!-- Include inc/other_file.md into index.md-->
+<!-- Include inc/other_file.md into index.md -->
 _inc(other_file)
 ```
 
