@@ -63,7 +63,7 @@ function gd_compile(){
 	# If default script is enabled or not disabled
 	[[ "$DEFAULT" = "true" ]] && SCRIPTS+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
 	# Preprocessing before marp compilation
-	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $INCLUDE "${SCRIPTS[@]}" $INPUT/index.md > $INPUT/out.md
+	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SCRIPTS[@]}" $INPUT/index.md > $INPUT/out.md
 
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
