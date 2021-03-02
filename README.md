@@ -180,7 +180,8 @@ not yet
 * [x] Add option to disable default m4 script
 * [x] Enable env.file to modify font-sizes or several trivial css types
 * [x] Complete macro rules markdown file
-* [ ] Add reserved container layout AKA text box
+* [x] Add reserved container layout 
+* [ ] No pixel option for images
 
 #### Dropped todos
 
