@@ -39,12 +39,8 @@ define(`_rcsv', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk | awk -f m4
 # Multiline support csv table related macros
 define(`_ts', `<table>')dnl
 define(`_tfont', `<style scoped>
-	thead > tr > td {
-		font-size: $1px !important;
-	}
-	tr > td {
-		font-size: $2px !important;
-	}
+	thead > tr > td { ifelse(`$1', `0', `', `font-size: $1px !important;') }
+	tr > td { ifelse(`$2', `0', `', `font-size: $2px !important;') }
 </style>')
 define(`_th', `<thead>
 foreach(`it', ($*), `<td> m_scell(it) </td>')

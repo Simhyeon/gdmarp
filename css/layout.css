@@ -47,8 +47,20 @@ section.split {
 section.split h1 {
     grid-area: slideheading;
 }
-section.split .ldiv { grid-area: leftpanel; display: flex; flex-direction: column;}
-section.split .rdiv { grid-area: rightpanel; display: flex; flex-direction: column;}
+section.split .ldiv { 
+	grid-area: leftpanel; 
+	display: flex; 
+	flex-direction: column; 
+	padding-right: 25px;
+	overflow: auto;
+}
+section.split .rdiv { 
+	grid-area: rightpanel; 
+	display: flex; 
+	flex-direction: column; 
+	padding-left: 25px;
+	overflow: auto;
+}
 
 section.tnc {
 	--title-height: 130px;
