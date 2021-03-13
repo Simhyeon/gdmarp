@@ -86,7 +86,8 @@ function gd_check(){
 	echo "Checking awk install..." && [ -z $(command -v awk) ] && echo "Awk not installed" && CLEAN=false
 
 	if [ "$DOCKER" = "false" ]; then
-		echo "Checking google chrome install..." && [ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." && CLEAN=false
+		echo "Checking google chrome install..." && [ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." \
+			&& echo "Checking chromium install instead..." &&[ -z $(command -v chromium) ] && echo "Chromium not installed or not found in path". && CLEAN=false
 		echo "Checking marp install..." && [ -z $(command -v marp) ] && echo "Marp cli not installed" && CLEAN=false
 		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
 	else

@@ -180,6 +180,7 @@ not yet
 * [x] Add reserved container layout 
 * [x] No pixel option for images
 * [ ] Fix image overflow errors :: Suspended
+* [ ] Add support for uml plugin
 
 #### Dropped todos
 

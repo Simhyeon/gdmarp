@@ -68,6 +68,11 @@ define(`_fbox', `<div style="flex:1;">
 m_trim_nl($1)
 </div>')dnl
 
+define(`_ffbox', `<div style="flex:1; font-size: $1px;">
+
+m_trim_nl($2)
+</div>')dnl
+
 define(`_title', `m_class(title)
 `#' $1
 `##' $2')dnl
