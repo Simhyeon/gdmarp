@@ -84,3 +84,5 @@ define(`_right', `</div>
 <div class="rdiv">')dnl
 define(`_end', `</div>')dnl
 divert`'dnl
+
+define(`_cc', ``,'')dnl

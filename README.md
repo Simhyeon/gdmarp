@@ -15,7 +15,7 @@ I'm currently dogfodding this script to create game design documents.
 - m4 
 - awk
 - marp-cli
-- google chrome or chromium (pptx option dependencies)
+- google chrome or chromium (pptx creation dependencies)
 
 ### Using docker
 
@@ -25,7 +25,7 @@ However you still need to install **m4** and **awk** to run this script. This mi
 
 ### Installation
 
-Any linux distributions will work out of the box if dependencies are all properly installed. MacOs is not so sure because this script expects to use GNU version utilites. Windows can work with WSL(Window Subsystem Linux) without problems.
+Any linux distributions will work out of the box if dependencies are all properly installed. MacOs is not so sure because this script expects to use GNU version utilites. Windows can work with WSL(Window Subsystem Linux) without problems however it is somewhat hassel to be frankly speaking.
 
 Simply clone or download whole repository and symlink binary file 'gdmarp' into your binary path.
 
@@ -180,7 +180,11 @@ not yet
 * [x] Add reserved container layout 
 * [x] No pixel option for images
 * [ ] Fix image overflow errors :: Suspended
-* [ ] Add support for uml plugin
+* [ ] Add auto scale macro 
+
+### Big TODO
+
+* [ ] Make alternative language for m4 and awk in rust.
 
 #### Dropped todos
 
