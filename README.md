@@ -40,9 +40,11 @@ ln -s $PWD/gdmarp ~/.local/bin/gdmarp
 alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 ```
 
+### Customization
+
 Edit index.m4 to define custom macros other than default macro rules
 
-Edit env.m4 file to change variables e.g) default font size
+Edit env.m4 file to define macro variables or frequently used but might changing numbers. e.g) default font size or current products stock ETC...
 
 ### Usage
 
@@ -54,11 +56,12 @@ gdmarp -h
 gdmarp --help
 
 # Check dependencies for local install or docker environment
+# This only checkes binary files' names as they are. e.g) chrome or chromium is ok but chrome-browser or chromium-browser might not get detected.
 gdmarp check
 gdmarp --docker check
 
 # Initialize current working directory with desired file structure.
-# docker option does not install docker image
+# docker option does not install docker image but creates build folder with specific authority
 gdmarp init
 gdmarp --docker init
 
@@ -68,6 +71,12 @@ gdmarp --docker compile
 
 # To preserve m4 pre-processed file (out.md) use with --preserve option or -p in short
 gdmarp compile --preserve
+
+# To create pdf file instead of pptx
+gdmarp compile --pdf
+
+# To create html when you want to tweak and test csv formats, this automatically preserves medium file
+gdmarp test
 
 # To disable default macro use --no-defualt option
 gdmarp compile --no-default
@@ -95,13 +104,13 @@ TargetDirectory
 It is okay to not 'init' a directory, however there are several fixed rules.
 
 - Main file should be called **'index.md'**
-- Files you want to include should in located in directory named **'inc'**
-- Built pptx file is always saved in directory named build and will be made if not existent.
-- use --no-default option to prevent unexpected error if not initiated
+- Files you want to include should be located inside of a directory named **'inc'**
+- Built pptx or pdf files are always saved in directory named 'build' and the directory will be created if not existent.
+- use --no-default option to prevent unexpected error if the directory was not initiated.
 
-Other than that you can call compile commands regardless of init command usage. However you cannot use csv, style macro or text macro without m4\_ext folder. 
+Other than that you can call compile commands regardless of init command usage. However you cannot extension macros. 
 
-I recommend at least copy m4\_ext folder into desired location.
+I recommend at least copy m4\_ext folder into desired location to utilize frequently used macros.
 
 ### Basic syntax
 
@@ -123,8 +132,8 @@ This is some sample texts
 
 ---
 
-<!-- Add class to current section. Content can be multiple classes -->
-_cls(split)
+<!-- Add class to current section. Content can be multiple classes delimted by spaces -->
+_cls(split gdtable)
 
 # Slide title
 
@@ -181,6 +190,8 @@ not yet
 * [x] No pixel option for images
 * [ ] Fix image overflow errors :: Suspended
 * [ ] Add auto scale macro 
+* [ ] Change class macro to get inputs delimited by comma not spaces.
+* [ ] Make in-memory database interaction extension to get specific result using query macro
 
 ### Big TODO
 
