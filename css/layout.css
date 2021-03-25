@@ -77,5 +77,4 @@ section.tnc h1 {
 	grid-area: heading;
 	height: var(--area-height);
 	line-height: var(--area-height);
-	font-size: calc(var(--area-height) * 0.7);
 }
