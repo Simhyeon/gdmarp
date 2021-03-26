@@ -188,10 +188,9 @@ not yet
 * [x] Complete macro rules markdown file
 * [x] Add reserved container layout 
 * [x] No pixel option for images
+* [x] Make in-memory database interaction extension to get specific result using query macro
 * [ ] Fix image overflow errors :: Suspended
 * [ ] Add auto scale macro 
-* [ ] Change class macro to get inputs delimited by comma not spaces.
-* [ ] Make in-memory database interaction extension to get specific result using query macro
 
 ### Big TODO
 
@@ -203,3 +202,6 @@ Dropped becuase it makes macro usage overly complicated.
 
 * [ ] Add table alignment option to csv macro 
 * [ ] Modify csv macro so that user can input font size
+
+For legacy support + Space delimited class is not that bad
+* [ ] Change class macro to get inputs delimited by comma not spaces.
