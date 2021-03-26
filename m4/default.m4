@@ -20,7 +20,7 @@ define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1
 define(`m_img', `
 ![$1]($2)')dnl
 define(`m_img_auto', `eval( v_basis_height / $1 )')dnl
-define(`m_trim_nl', `syscmd(`echo "$1" | awk -f m4_ext/rmExtNewLines.awk')')dnl
+define(`m_trim_nl', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk')')dnl
 
 # Convert contents into single lined html
 define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext/merge_lines.awk -v d="" ')')dnl
@@ -60,19 +60,19 @@ define(`_simgs',`foreach(`it', (`shift($*)'), `m_img(`m_height(`ifelse(`$1', `0'
 # m_trim_nl removes starting and trailing new lines
 define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')px;">
 
-m_trim_nl($2)
+m_trim_nl(shift($*))
 </div>')dnl
 
 # Flex box 
 define(`_fbox', `<div style="flex:1;">
 
-m_trim_nl($1)
+m_trim_nl($*)
 </div>')dnl
 
 # Flex box with font size
 define(`_ffbox', `<div style="flex:1; font-size: $1px;">
 
-m_trim_nl($2)
+m_trim_nl(shift($*))
 </div>')dnl
 
 # Class related macros
@@ -91,6 +91,9 @@ define(`_end', `</div>')dnl
 
 # Comma macro, use _cc to substitute comma or else it will treat comma separated texts as arguments
 define(`_cc', ``,'')dnl
+
+# Comment macro, it justs removes all texts inside comment macro
+define(`_comment', `')dnl
 
 # Sql macro to invoke sql query and get result as gfm formatted csv file through sqlite in-memory csv virtual table.
 define(`_sql', `m_sqlbuilder(ifelse(`$#', `3', `$@,v_bin_sqlite', `$*'))')dnl
