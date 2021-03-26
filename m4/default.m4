@@ -63,26 +63,38 @@ define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')p
 m_trim_nl($2)
 </div>')dnl
 
+# Flex box 
 define(`_fbox', `<div style="flex:1;">
 
 m_trim_nl($1)
 </div>')dnl
 
+# Flex box with font size
 define(`_ffbox', `<div style="flex:1; font-size: $1px;">
 
 m_trim_nl($2)
 </div>')dnl
 
+# Class related macros
 define(`_title', `m_class(title)
 `#' $1
 `##' $2')dnl
 define(`_tnc', `m_class(tnt)
 `#' $1')dnl
 define(`_cls', `m_class($1)')dnl
+
+# Split screen related macros
 define(`_left', `<div class="ldiv">')dnl
 define(`_right', `</div>
 <div class="rdiv">')dnl
 define(`_end', `</div>')dnl
-divert`'dnl
 
+# Comma macro, use _cc to substitute comma or else it will treat comma separated texts as arguments
 define(`_cc', ``,'')dnl
+
+# Sql macro to invoke sql query and get result as gfm formatted csv file through sqlite in-memory csv virtual table.
+define(`_sql', `m_sqlbuilder(ifelse(`$#', `3', `$@,v_bin_sqlite', `$*'))')dnl
+# Internal macro for deciding which sqlite to use 
+# Change v_bin_sqlite varaible in env.m4 file to set path for sqlite
+define(`m_sqlbuilder', `_rcsv(esyscmd(`echo ".mode csv\n.headers on\n.import $1 $2\n$3\n.exit" | $4'))')dnl
+divert`'dnl
