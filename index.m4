@@ -23,6 +23,8 @@ divert(`-1')
 # Use built-in macro syscmd to run bash command for macro substitution
 # Surround syscmd's content with `' to send all commands intact to syscmd
 # define(`_run_shell', `syscmd(`echo "Echo text from bash and paste stdout as macro substitution" ')')
+# Use esyscmd rather than syscmd if you want to redirect output into another macro
+# define(`_some_macro', `_another_macro(`esyscmd(`echo "Hello world!" | awk -f m4/somefile.awk')')')
 #
 # To escape reserved keywords or macros put `' arround it
 # `macro_name' will not substitute but print literal 'macro_name' as text
