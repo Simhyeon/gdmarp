@@ -53,6 +53,7 @@ section.split .ldiv {
 	flex-direction: column; 
 	padding-right: 25px;
 	overflow: visible;
+  height: v_basis_height()px;
 }
 section.split .rdiv { 
 	grid-area: rightpanel; 
@@ -60,6 +61,7 @@ section.split .rdiv {
 	flex-direction: column; 
 	padding-left: 25px;
 	overflow: visible;
+  height: v_basis_height()px;
 }
 
 section.tnc {
