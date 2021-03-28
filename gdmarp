@@ -10,6 +10,7 @@ INCLUDE=""
 PRESERVE=false
 DEFAULT=true
 DOCKER=false
+CODE=false
 GIT=false
 MAKE=false
 FORMAT=pptx
@@ -33,6 +34,7 @@ function gd_help(){
 	echo "--git                 initiate with git after gdmarp init and create gitignore file"
 	echo "--make                initiate with make file"
 	echo "--pdf                 convert into pdf rather than pptx format"
+	echo "--code                create tasks.json for vs code integration"
 	echo " "
 	echo "actions:"
 	echo "init                  initiate file structure"
@@ -55,6 +57,7 @@ function gd_init(){
 
 	[ "$GIT" = "true" ] && cd $INPUT && git init && printf "build\nout.md" > .gitignore
 	[ "$MAKE" = "true" ] && cp $PACKAGE_DIR/Makefile -f $INPUT/Makefile
+	[ "$CODE" = "true" ] && mkdir $INPUT/.vscode && cp $PACKAGE_DIR/tasks.json -f $INPUT/.vscode/tasks.json
 }
 
 function gd_update(){
@@ -171,6 +174,10 @@ function gd_main(){
 				;;
 			--make)
 				MAKE=true
+				shift
+				;;
+			--code)
+				CODE=true
 				shift
 				;;
 			--pdf)

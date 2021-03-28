@@ -1,0 +1,111 @@
+{
+  "version": "0.0.1",
+  "tasks": [
+    {
+      "label": "Compile",
+      "type": "shell",
+      "command": "gdmarp compile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile docker",
+      "type": "shell",
+      "command": "gdmarp compile --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "command": "gdmarp test",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label":"Compile pdf",
+      "type": "shell",
+      "command": "gdmarp compile --pdf",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile pdf docker",
+      "type": "shell",
+      "command": "gdmarp compile --docker --pdf",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Preprocess",
+      "type":"shell",
+      "command":"gdmarp prep",
+      "group":"build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile preserve",
+      "type": "shell",
+      "command": "gdmarp compile --preserve",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile preserve docker",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile pdf preserve",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --pdf",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Compile pdf preserve docker",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --pdf --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
