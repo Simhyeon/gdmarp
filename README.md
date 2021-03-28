@@ -12,6 +12,7 @@ I'm currently dogfooding this script to create game design documents.
 
 ### Dependencies
 
+- sed
 - m4 
 - awk
 - marp-cli
