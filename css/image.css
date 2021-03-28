@@ -1,0 +1,5 @@
+/* Make all images centered inside img-center*/
+section.img-center img {
+    display: block;
+    margin: auto;
+}
