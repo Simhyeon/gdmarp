@@ -2,6 +2,13 @@
 
 Macro starts with underscore. There are several macro rules that don't start with underscore which are mostly intended for internal usage.
 
+### Comma rules
+
+M4 translates comma as argument delimiter so you cannot put comma literal without escaping. Use ``,'' or _cc to use comma literal.
+
+Text macro and flex box macros handle comma and comma literal so it is ok to use comma literal in such macros. However csv macros or sql
+macros currently doesn't support comma literal. 
+
 #### Styles 
 
 Multiple styles are supported. Simply type multiple css stylesheets delimtied by comma. Styles macro can be included only one time.
@@ -33,10 +40,17 @@ table td{
 </script>
 ```
 
+Built-in css files list are follwed as
+- layout.css
+- table.css
+- image.css
+
+
 #### Texts
 
 Multiline texts are supported. Starting and trailing new lines are all removed from input.
-First argument is font-size. 0 means default font-size which is 22px for now.
+First argument is font-size. 0 means default font-size which is 22px.
+You can edit default font size in env.m4 file.
 
 ```
 _texts(30, Big texts are printed)
@@ -72,12 +86,20 @@ This is simple text
 
 Simple img macros creates markdown img list.
 
-Sized img macro creates markdown image text with marp favored attribute. First argument is always image width in pixel(px) 0 menas autoscale which actually divides v\_basis\_height by image counts.
+Sized img macro creates markdown image text with marp favored attribute. First argument scale of image and last elements are image file pathes.
+
+Split sized img macro is same with sized img macro but sets standard width as 200% so that images fit well into split slide.
+
+Default width(in fact, css:max-width) is 100% for sized img macros.
 
 ```
 _imgs(1.jpeg, 2.png)
 
-_simgs(1.jpeg, 2.png)
+_simgs(0 ,1.jpeg, 2.png)
+
+_simgs(0.5 ,1.jpeg, 2.png)
+
+_ssimgs(0 ,1.jpeg, 2.png)
 
 ```
 converts to
@@ -86,9 +108,14 @@ converts to
 ![](1.jpeg)
 ![](2.png)
 
-<!-- Assume v_basis_height is 500 -->
-![width:250px](1.jpeg)
-![width:250px](2.png)
+<div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
+<div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
+
+<div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 50.00%; max-height: auto;"></img></div>
+<div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 50.00%; max-height: auto;"></img></div>
+
+<div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
+<div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
 ```
 
 #### CSV
@@ -199,16 +226,55 @@ converts to
 </table>
 ```
 
+#### SQL macro
+
+This macro reads csv file from local path and read into in-memory sqlite3 database. You can set query statement and substitute macro with query result formatted as github flavored table.
+
+M4 macro converts comma as delimiter you can use either ``,'' or _cc to use comma as literal.
+Text macro handles comma easily however sql macro is actually building another macro and gets surplus arguments thus it may need different approach to allow comma literal.
+
+```
+_sql(csv_path.csv, table_name,
+SELECT id _cc room_id FROM table_name;)
+
+<!-- Where csv data is followed as-->
+id,name,room_id
+1,simon,26
+2,jim,99
+3,creek,56
+4,keller,48
+```
+converts to
+```
+| id | room_id |
+| -- | ------- |
+| 1  | 26      |
+| 2  | 99      |
+| 3  | 56      |
+| 4  | 48      |
+```
+
 #### Flex text box
 
-Intended usage is for split slide
+Flex text box creates flex display text box. This is intended when using multiple text boxes in split slide.
+
+Font flex box gets font size as first argument.
+
 
 ```
 _fbox( text content )
+
+_ffbox(16, text content with examples)
 ```
 
 ```
 <div style="flex:1;">
+
+text content
+
+</div>
+
+<div style="flex:1; font-size:16px;">
 
 text content
 
@@ -285,12 +351,12 @@ Right contents go here
 #### Title and contents slide
 
 ```
-_tnc(Tnc title)
+_tnc(This is title contents)
 ```
 
 ```
 <!-- _class: tnc -->
-# Tnc title
+# This is title contents
 ```
 
 #### Include 

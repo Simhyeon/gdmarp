@@ -6,9 +6,9 @@ This is a shell script to automate m4 macro pre-processing and marp pptx generat
 
 This script is very early in stage which means many breaking changes occur.
 
-Curent version is 0.0.1.
+Curent version is 0.0.1. Means nothing but sem-ver compliant.
 
-I'm currently dogfodding this script to create game design documents.
+I'm currently dogfooding this script to create game design documents.
 
 ### Dependencies
 
@@ -17,17 +17,29 @@ I'm currently dogfodding this script to create game design documents.
 - marp-cli
 - google chrome or chromium (pptx creation dependencies)
 
+### Optional dependencies
+
+- git (git flag)
+- bc (sized image macros)
+- sqlite3 (sql macro)
+
 ### Using docker
 
 You can use docker image to containerize marp-cli and chromium installation if you want. Please refer to marp-cli github pages to learn how to install a docker image.
 
-However you still need to install **m4** and **awk** to run this script. This might change later.
+However you still need to install **m4** and **awk** to run this script. 
+
+I'm trying to make a time to build custom docker image based on official marp-cli docker image wich all dependencies included.
+
+### Operating system
+
+Any linux distributions will work out of the box if dependencies are all properly installed. MacOS is not guaranteed to work because this script expects to use GNU version utilites. However you can just install GNU version utilities. Windows 10 can work with WSL(Window Subsystem Linux) without problems if you use docker image.
 
 ### Installation
 
-Any linux distributions will work out of the box if dependencies are all properly installed. MacOs is not so sure because this script expects to use GNU version utilites. Windows can work with WSL(Window Subsystem Linux) without problems however it is somewhat hassel to be frankly speaking.
+Install dependencies before using gdmarp binary file.
 
-Simply clone or download whole repository and symlink binary file 'gdmarp' into your binary path.
+Then simply clone or download whole repository and symlink binary file 'gdmarp' into your binary path.
 
 e.g
 
@@ -56,34 +68,39 @@ gdmarp -h
 gdmarp --help
 
 # Check dependencies for local install or docker environment
-# This only checkes binary files' names as they are. e.g) chrome or chromium is ok but chrome-browser or chromium-browser might not get detected.
+# This only checkes binary files' names as they are. e.g) chrome or chromium is ok but chrome-browser or chromium-browser might not get detected. However it doesn't mean marp-cli cannot detect chrome binary file.
 gdmarp check
 gdmarp --docker check
 
 # Initialize current working directory with desired file structure.
 # docker option does not install docker image but creates build folder with specific authority
+# git flag initialize folder and create .gitignore file
 gdmarp init
 gdmarp --docker init
+gdmarp --git init
 
 # To compile within initiated directory
 gdmarp compile
 gdmarp --docker compile
 
-# To preserve m4 pre-processed file (out.md) use with --preserve option or -p in short
+# To preserve m4 pre-processed file (out.md) use --preserve option or -p in short
 gdmarp compile --preserve
 
 # To create pdf file instead of pptx
 gdmarp compile --pdf
 
 # To create html when you want to tweak and test csv formats, this automatically preserves medium file
+# This may not include local files
 gdmarp test
 
-# To disable default macro use --no-defualt option
+# To disable default macro, use --no-defualt option
 gdmarp compile --no-default
 
 ```
 
 ### Using without init command
+
+**Highly recommend using init command before using gdmarp script.**
 
 Init command creates a file structure looks like this
 
@@ -192,7 +209,6 @@ not yet
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
-* [ ] Add auto scale macro for texts with external programs
 
 ### Big TODO
 
@@ -201,9 +217,11 @@ not yet
 #### Dropped todos
 
 Dropped becuase it makes macro usage overly complicated.
-
 * [ ] Add table alignment option to csv macro 
 * [ ] Modify csv macro so that user can input font size
 
 For legacy support + Space delimited class is not that bad
 * [ ] Change class macro to get inputs delimited by comma not spaces.
+
+Un-ergonomic to do with simple unix programs or m4 macro processing
+* [ ] Add auto scale macro for texts with external programs
