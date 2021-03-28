@@ -5,7 +5,7 @@ Macro starts with underscore. There are several macro rules that don't start wit
 ### Comma rules
 
 M4 translates comma as argument delimiter so you cannot put comma literal without escaping. 
-There are two ways to escape comma literal. First is \, and second is _cc macro. First way is to escape character with sed script. This is useful when you need to escape character so that the character should be included in final generated file content. Second is macro that converts string literal and redirects to internal macro. Such usage is sql macro because sql queries' comma should be consumed by sqlbuilder macro and redirected to sqlite3 binary.
+There are two ways to escape comma literal. First is \. and second is _cc macro. First way is to escape character with sed script. This is useful when you need to escape character so that the character should be included in final generated file content. Second is macro that converts string literal and redirects to internal macro. Such usage is sql macro because sql queries' comma should be consumed by sqlbuilder macro and redirected to sqlite3 binary.
 
 General rule of thumb is to use comma literals only in text related macros and try not to use comma in other macros other than sql macro.
 

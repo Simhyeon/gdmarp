@@ -66,8 +66,6 @@ function gd_update(){
 }
 
 function gd_preprocess(){	
-	# Sed to use space independent macro or escape characters
-	sed -f $INPUT/m4_ext/escape.sed $INPUT/index.md > $INPUT/sed_out.md
 	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
 	# Scripts array to process
@@ -75,11 +73,9 @@ function gd_preprocess(){
 	# If default script is enabled or not disabled
 	[[ "$DEFAULT" = "true" ]] && SCRIPTS+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
 	# Run main m4 functions
-	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SCRIPTS[@]}" $INPUT/sed_out.md > $INPUT/out.md
-	# Sed again for escape characters restoration
+	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SCRIPTS[@]}" $INPUT/index.md > $INPUT/out.md
+	# Sed for escape characters restoration
 	sed -i -f $INPUT/m4_ext/restore.sed $INPUT/out.md
-	# Delete seded file
-	rm $INPUT/sed_out.md
 }
 
 function gd_compile(){
