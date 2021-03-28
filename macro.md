@@ -53,9 +53,9 @@ First argument is font-size. 0 means default font-size which is 22px.
 You can edit default font size in env.m4 file.
 
 ```
-_texts(30, Big texts are printed)
+_text(30, Big texts are printed)
 
-_texts(0, 
+_text(0, 
 This is simple text
 
 - This is a list item
@@ -232,6 +232,10 @@ This macro reads csv file from local path and read into in-memory sqlite3 databa
 
 M4 macro converts comma as delimiter you can use either ``,'' or _cc to use comma as literal.
 Text macro handles comma easily however sql macro is actually building another macro and gets surplus arguments thus it may need different approach to allow comma literal.
+
+Sql macro doesn't sanitize macro becuase it only read csv file as in-memory database. However it is always a good idea to take care when you create sql queries.
+
+You can set sqlite3 path within env.m4 file.
 
 ```
 _sql(csv_path.csv, table_name,
