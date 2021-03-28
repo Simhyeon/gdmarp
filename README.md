@@ -191,8 +191,8 @@ not yet
 * [x] Make in-memory database interaction extension to get specific result using query macro
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
+* [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
 * [ ] Add auto scale macro for texts with external programs
-* [ ] Make img center class works
 
 ### Big TODO
 
