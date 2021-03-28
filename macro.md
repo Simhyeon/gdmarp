@@ -4,10 +4,13 @@ Macro starts with underscore. There are several macro rules that don't start wit
 
 ### Comma rules
 
-M4 translates comma as argument delimiter so you cannot put comma literal without escaping. Use ``,'' or _cc to use comma literal.
+M4 translates comma as argument delimiter so you cannot put comma literal without escaping. 
+There are two ways to escape comma literal. First is \c an second is _cc macro. First way is to escape character with sed script. This is useful when you need to escape character so that the character should be included in final generated file content. Second is macro that converts string literal and redirects to internal macro. Such usage is sql macro because sql queries' comma should be consumed by sqlbuilder macro and redirected to sqlite3 binary.
 
-Text macro and flex box macros handle comma and comma literal so it is ok to use comma literal in such macros. However csv macros or sql
-macros currently doesn't support comma literal. 
+General rule of thumb is to use comma literals only in text related macros and try not to use comma in other macros other than sql macro.
+
+Text macro and flex box macros handle comma literal so it is ok to use comma literal in such macros. However csv macros or sql
+macros currently doesn't support comma literal so you should always escape comma to use comma as text. 
 
 #### Styles 
 
@@ -160,7 +163,6 @@ converts to
 ```
 
 Advanced table macros enable users to use multiline texts inside markdown table
-However converted syntax is not so beautiful to read, keep in mind.
 
 ```
 <!-- Start table -->
@@ -196,32 +198,43 @@ converts to
 <table>
 
 <style scoped>
-	thead > tr > td {
-		font-size: 5px !important;
-	}
-	tr > td {
-		font-size: 16px !important;
-	}
+        thead > tr > td { font-size: 30px !important; }
+        :not(thead) > tr > td { font-size: 16px !important; }
 </style>
 
 <thead>
-<td> <p>Name</p>
- </td><td> <p>email</p>
- </td><td> <p>description</p>
- </td>
+    <td>
+        <p>Name</p>
+    </td>
+    <td>
+        <p>email</p>
+    </td>
+    <td>
+        <p>description</p>
+    </td>
 </thead>
 
 <tr>
-<td> <p>Simon</p>
- </td><td> <p>123@gmail.com</p>
- </td><td> <ul><li>List can be inserted inside markdown</li><ul><li>Nested lists too</li></ul><li>With some ordered list</li></ul>
- </td>
+    <td>
+        <p>Simon</p>
+    </td>
+    <td>
+        <p>123@gmail.com</p>
+    </td>
+    <td>
+        <ul><li>List can be inserted inside markdown</li><ul><li>Nested lists too</li></ul><li>With some ordered list</li></ul>
+    </td>
 </tr>
 <tr>
-<td> <p>Creek</p>
- </td><td> <p>456@naver.com</p>
- </td><td> <p>Simple texts without listing</p><p>can be inserted</p>
- </td>
+    <td>
+        <p>Creek</p>
+    </td>
+    <td>
+        <p>456@naver.com</p>
+    </td>
+    <td>
+        <p>Simple texts without listing</p><p>can be inserted</p>
+    </td>
 </tr>
 </table>
 ```
@@ -230,7 +243,7 @@ converts to
 
 This macro reads csv file from local path and read into in-memory sqlite3 database. You can set query statement and substitute macro with query result formatted as github flavored table.
 
-M4 macro converts comma as delimiter you can use either ``,'' or _cc to use comma as literal.
+M4 macro converts comma as delimiter you can use _cc to input comma literal.
 Text macro handles comma easily however sql macro is actually building another macro and gets surplus arguments thus it may need different approach to allow comma literal.
 
 Sql macro doesn't sanitize macro becuase it only read csv file as in-memory database. However it is always a good idea to take care when you create sql queries.
