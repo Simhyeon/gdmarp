@@ -189,8 +189,10 @@ not yet
 * [x] Add reserved container layout 
 * [x] No pixel option for images
 * [x] Make in-memory database interaction extension to get specific result using query macro
-* [ ] Fix image overflow errors :: Suspended
-* [ ] Add auto scale macro 
+* [x] Fix image overflow errors :: Suspended
+    - Also modified sized images macro mechanics : Need bc to be installed.
+* [ ] Add auto scale macro for texts with external programs
+* [ ] Make img center class works
 
 ### Big TODO
 
