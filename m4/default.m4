@@ -26,7 +26,7 @@ define(`m_img_auto', `eval( v_basis_height / $1 )')dnl
 define(`m_trim_nl', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk')')dnl
 
 # Convert contents into single lined html
-define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext/merge_lines.awk -v d="" ')')dnl
+define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
 
 # ===
 # User interface macros 
@@ -47,11 +47,15 @@ define(`_tfont', `<style scoped>
 	:not(thead) > tr > td { ifelse(`$2', `0', `font-size: v_thead_default()px !important;', `font-size: $2px !important;') }
 </style>')
 define(`_th', `<thead>
-foreach(`it', ($*), `<td> m_scell(it) </td>')
-</thead>')dnl
+foreach(`it', ($*), `    <td>
+        m_scell(it)
+    </td>
+')</thead>')dnl
 define(`_tr', `<tr>
-foreach(`it', ($*), `<td> m_scell(it) </td>')
-</tr>')dnl
+foreach(`it', ($*), `    <td>
+        m_scell(it)
+    </td>
+')</tr>')dnl
 define(`_te', `</table>')dnl
 
 # If first argument is 0 then calculate height devided by count of arguments and set it has height or just input given argument. (unit is pixel) 
