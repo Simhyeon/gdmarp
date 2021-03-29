@@ -72,6 +72,10 @@ function gd_preprocess(){
 	echo $OUTPUT
 	echo "pwd value is "
 	echo $PWD
+	echo "Package path"
+	echo $PACKAGE
+	echo "Package dir"
+	echo $PACKAGE_DIR
 	exit 0 
 	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
