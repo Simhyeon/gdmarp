@@ -110,9 +110,9 @@
     {
       "label": "Container: Compile",
       "type": "shell",
-      "command": "docker run --rm -v $PWD:/home/marp/app gdmarp compile",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp compile",
       "windows": {
-        "command": "docker run --rm -v ${PWD}:/home/marp/app gdmarp compile"
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp compile"
        },
       "group": "build",
       "presentation": {
@@ -123,9 +123,9 @@
     {
       "label": "Container: Compile pdf",
       "type": "shell",
-      "command": "docker run --rm -v $PWD:/home/marp/app gdmarp compile --pdf",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp compile --pdf",
       "windows": {
-        "command": "docker run --rm -v ${PWD}:/home/marp/app gdmarp compile --pdf"
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp compile --pdf"
        },
       "group": "build",
       "presentation": {
@@ -136,9 +136,9 @@
     {
       "label": "Container: test",
       "type": "shell",
-      "command": "docker run --rm -v $PWD:/home/marp/app gdmarp test",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp test",
       "windows": {
-        "command": "docker run --rm -v ${PWD}:/home/marp/app gdmarp test"
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp test"
        },
       "group": "build",
       "presentation": {
@@ -149,9 +149,9 @@
     {
       "label": "Container: Preprocess",
       "type": "shell",
-      "command": "docker run --rm -v $PWD:/home/marp/app gdmarp prep",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp prep",
       "windows": {
-        "command": "docker run --rm -v ${PWD}:/home/marp/app gdmarp prep"
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp prep"
        },
       "group": "build",
       "presentation": {
