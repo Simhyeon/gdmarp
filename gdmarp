@@ -66,6 +66,13 @@ function gd_update(){
 }
 
 function gd_preprocess(){	
+	echo "Input directory is : "
+	echo $INPUT
+	echo "Output directory is :"
+	echo $OUTPUT
+	echo "pwd value is "
+	echo $PWD
+	exit 0 
 	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
 	# Scripts array to process
