@@ -18,6 +18,9 @@ PACKAGE=$(basename $BASH_SOURCE)
 PACKAGE_DIR=$(dirname $(readlink -f "$0"))
 ACTION=""
 
+# Marp path can be changed with a flat
+marp=marp
+
 # ----------
 # FUNCTIONS
 
@@ -86,7 +89,7 @@ function gd_compile(){
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
 		mkdir -p $OUTPUT
-		marp --allow-local-files --$FORMAT --html $INPUT/out.md -o $OUTPUT/out.$FORMAT
+		$marp --allow-local-files --$FORMAT --html $INPUT/out.md -o $OUTPUT/out.$FORMAT
 	else
 		# With Docker
 		mkdir -p $OUTPUT
@@ -102,7 +105,7 @@ function gd_test(){
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
 		mkdir -p $OUTPUT
-		marp --allow-local-files --html $INPUT/out.md -o $OUTPUT/out.html
+		$marp --allow-local-files --html $INPUT/out.md -o $OUTPUT/out.html
 	else
 		# With Docker
 		mkdir -p $OUTPUT
@@ -160,6 +163,10 @@ function gd_main(){
 				;;
 			--docker)
 				export DOCKER=true
+				shift
+				;;
+			--container)
+				marp="node /home/marp/.cli/marp-cli.js"
 				shift
 				;;
 			-p|--preserve)
