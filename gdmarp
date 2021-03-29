@@ -169,7 +169,11 @@ function gd_main(){
 				shift
 				;;
 			--docker)
-				export DOCKER=true
+				DOCKER=true
+				shift
+				;;
+			--container)
+				marp="node /home/marp/.cli/marp-cli.js"
 				shift
 				;;
 			-p|--preserve)
