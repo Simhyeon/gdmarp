@@ -1,6 +1,6 @@
 ## Marp-cli pptx generation automation script
 
-This is a shell script to automate m4 macro pre-processing and marp pptx generation.
+This is a bash script to automate m4 macro pre-processing and marp pptx generation.
 
 ### Caution
 
@@ -12,10 +12,11 @@ I'm currently dogfooding this script to create game design documents.
 
 ### Dependencies
 
+- bash 
 - sed
 - m4 
-- awk
-- marp-cli
+- awk (preferably GNU version)
+- marp-cli (node package)
 - google chrome or chromium (pptx creation dependencies)
 
 ### Optional dependencies
@@ -24,19 +25,19 @@ I'm currently dogfooding this script to create game design documents.
 - bc (sized image macros)
 - sqlite3 (sql macro)
 
-### Using docker
-
-You can use docker image to containerize marp-cli and chromium installation if you want. Please refer to marp-cli github pages to learn how to install a docker image.
-
-However you still need to install **m4** and **awk** to run this script. 
-
-I'm trying to make a time to build custom docker image based on official marp-cli docker image wich all dependencies included.
-
-### Operating system
-
-Any linux distributions will work out of the box if dependencies are all properly installed. MacOS is not guaranteed to work because this script expects to use GNU version utilites. However you can just install GNU version utilities. Windows 10 can work with WSL(Window Subsystem Linux) without problems if you use docker image.
-
 ### Installation
+
+#### Docker iamge (OS independent option)
+
+Pull docker image from dockerhub
+
+```bash
+docker pull simoncreek/gdmarp
+```
+
+Docker image includes all dependencies including optional ones.
+
+#### Unix
 
 Install dependencies before using gdmarp binary file.
 
@@ -53,6 +54,12 @@ ln -s $PWD/gdmarp ~/.local/bin/gdmarp
 alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 ```
 
+#### Windows (Not confirmed)
+
+You can use windows subsystem linux2. However you have to configure chrome installation path with wsl2 option.
+This is a bash script, so theoritically windows bash can execute this script. However binary names in script doesn't end with '.exe' so I'm not so sure if it works or not. 
+I personally recommend using docker image.
+
 ### Customization
 
 Edit index.m4 to define custom macros other than default macro rules
@@ -60,6 +67,8 @@ Edit index.m4 to define custom macros other than default macro rules
 Edit env.m4 file to define macro variables or frequently used but might changing numbers. e.g) default font size or current products stock ETC...
 
 ### Usage
+
+#### bash
 
 ```bash
 
@@ -76,9 +85,11 @@ gdmarp --docker check
 # Initialize current working directory with desired file structure.
 # docker option does not install docker image but creates build folder with specific authority
 # git flag initialize folder and create .gitignore file
+# code flag creates vs code compliant tasks.json for easy build
 gdmarp init
 gdmarp --docker init
 gdmarp --git init
+gdmarp --code init 
 
 # To compile within initiated directory
 gdmarp compile
@@ -96,7 +107,19 @@ gdmarp test
 
 # To disable default macro, use --no-defualt option
 gdmarp compile --no-default
+```
+#### docker
 
+Every argument and flags are all same but gdmarp should be substituted with ```docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp```
+
+for example,
+
+```bash
+<!-- Linux-->
+docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp init --git --code
+
+<!-- Windows Powershell-->
+docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init --git --code
 ```
 
 ### Using without init command
@@ -184,6 +207,13 @@ _end
 ---
 <!-- Include inc/other_file.md into index.md -->
 _inc(other_file)
+
+---
+<!-- Read csv file into sqlite and print query results -->
+<!-- _cc means comma because comma is treated as argument delimters-->
+<!-- therefore needs escaping -->
+_sql(stock.csv, stock,
+SELECT id _cc product_id FROM stock WHERE id = 22;)
 ```
 
 ### Macro rules
@@ -210,6 +240,7 @@ not yet
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
+* [ ] Pandoc extension to create editable pptx file.
 
 ### Big TODO
 
@@ -224,5 +255,5 @@ Dropped becuase it makes macro usage overly complicated.
 For legacy support + Space delimited class is not that bad
 * [ ] Change class macro to get inputs delimited by comma not spaces.
 
-Un-ergonomic to do with simple unix programs or m4 macro processing
+Unergonomic to do with simple unix programs or m4 macro processing
 * [ ] Add auto scale macro for texts with external programs
