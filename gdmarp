@@ -76,7 +76,6 @@ function gd_preprocess(){
 	echo $PACKAGE
 	echo "Package dir"
 	echo $PACKAGE_DIR
-	exit 0 
 	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
 	# Scripts array to process
