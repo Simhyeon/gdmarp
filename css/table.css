@@ -28,6 +28,10 @@ section.gdtable table td:last-child{
 	width:100%;
 }
 
+section.gdtable table td:first-child{
+	text-align: center;
+}
+
 td > * {
 	vertical-align: middle;
 }
