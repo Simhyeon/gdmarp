@@ -240,7 +240,7 @@ not yet
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
-* [ ] Pandoc extension to create editable pptx file.
+* [ ] Make stiatc image macro
 
 ### Big TODO
 
@@ -257,3 +257,7 @@ For legacy support + Space delimited class is not that bad
 
 Unergonomic to do with simple unix programs or m4 macro processing
 * [ ] Add auto scale macro for texts with external programs
+
+Not possible to create reproducible output from 'pdf->editable pptx' generation.
+Thus it is better to separate responsibilites of creating a pptx and enabling editing.
+* [ ] Pandoc extension to create editable pptx file.
