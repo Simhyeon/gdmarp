@@ -240,6 +240,7 @@ not yet
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
+* [ ] Image centering is not working.... 
 * [ ] Make stiatc image macro
 
 ### Big TODO
