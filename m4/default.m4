@@ -108,4 +108,9 @@ define(`_sql', `m_sqlbuilder(ifelse(`$#', `3', `$@,v_bin_sqlite', `$*'))')dnl
 # Internal macro for deciding which sqlite to use 
 # Change v_bin_sqlite varaible in env.m4 file to set path for sqlite
 define(`m_sqlbuilder', `_rcsv(esyscmd(`printf ".mode csv\n.headers on\n.import $1 $2\n$3\n.exit" | $4'))')dnl
+
+# Web api macro
+# Simple combination of http client and json parser
+define(`_wapi', `syscmd(`curl $1 | jq "$2"')')
+
 divert`'dnl
