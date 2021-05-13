@@ -214,6 +214,10 @@ _inc(other_file)
 <!-- therefore needs escaping -->
 _sql(stock.csv, stock,
 SELECT id _cc product_id FROM stock WHERE id = 22;)
+
+<!--You can use _cc() if you don't like whitespaces -->
+_sql(stock.csv, stock,
+SELECT id_cc()product_id FROM stock WHERE id = 22;)
 ```
 
 ### Macro rules
@@ -240,11 +244,13 @@ not yet
 * [x] Fix image overflow errors :: Suspended
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
+* [x] Make simple web api macro
 * [ ] Image centering is not working.... 
 * [ ] Make stiatc image macro
 
 ### Big TODO
 
+* [ ] Make integrated auto html deployment service
 * [ ] Make alternative language for m4 and awk in rust.
 
 #### Dropped todos
