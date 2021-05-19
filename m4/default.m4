@@ -111,6 +111,10 @@ define(`m_sqlbuilder', `_rcsv(esyscmd(`printf ".mode csv\n.headers on\n.import $
 
 # Web api macro
 # Simple combination of http client and json parser
-define(`_wapi', `syscmd(`curl $1 | jq "$2"')')
+define(`_wapi', `syscmd(`curl $1 | jq "$2"')')dnl
+
+# Web api with csv auto formatting
+# Not tested
+define(`_wcsv', `_rcsv(esyscmd(`curl $1 | jq "d2"'))')dnl
 
 divert`'dnl

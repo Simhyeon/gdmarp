@@ -245,12 +245,13 @@ not yet
     - Also modified sized images macro mechanics : Need bc to be installed.
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
 * [x] Make simple web api macro
-* [ ] Image centering is not working.... 
-* [ ] Make stiatc image macro
+* [ ] Fix image centering 
+* [ ] Make stiatc image/textbox macro
+* [ ] Background image macro
 
 ### Big TODO
 
-* [ ] Make integrated auto html deployment service
+* [ ] Make integrated auto html deployment service such as doxygen or sphinx
 * [ ] Make alternative language for m4 and awk in rust.
 
 #### Dropped todos
