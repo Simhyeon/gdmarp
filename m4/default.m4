@@ -14,8 +14,6 @@ divert(`-1')
 
 # ===
 # Internal Macros 
-define(`m_width', `width:$1px')dnl
-define(`m_height', `height:$1px')dnl
 define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1 is necessary
 define(`m_img', `
 ![$1]($2)')dnl
@@ -23,7 +21,8 @@ define(`m_scaled_img',`<div style="flex: 1;"><img src="$1" style="width: 100%; m
 ')dnl
 define(`m_bc_calc', `syscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
 define(`m_img_auto', `eval( v_basis_height / $1 )')dnl
-define(`m_trim_nl', `syscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk')')dnl
+define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk')')dnl
+define(`m_sanitize', `esyscmd(`printf "$*" | sed -f m4_ext/sanitize.sed')')dnl
 
 # Convert contents into single lined html
 define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
@@ -68,20 +67,22 @@ define(`_ssimgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( 
 # m_trim_nl removes starting and trailing new lines
 define(`_text',`<div style="font-size : ifelse(`$1', `0', v_font_default, `$1')px;">
 
-m_trim_nl(shift($*))
+m_trim_nl(m_sanitize(shift($*)))
 </div>')dnl
 
-# Flex box 
+# Flex box =====
 define(`_fbox', `<div style="flex:1;">
 
 m_trim_nl($*)
 </div>')dnl
+# ===== macro end
 
-# Flex box with font size
+# Flex box with font size =====
 define(`_ffbox', `<div style="flex:1; font-size: $1px;">
 
 m_trim_nl(shift($*))
 </div>')dnl
+# ===== macro end
 
 # Class related macros
 define(`_title', `m_class(title)
@@ -116,5 +117,11 @@ define(`_wapi', `syscmd(`curl $1 | jq "$2"')')dnl
 # Web api with csv auto formatting
 # Not tested
 define(`_wcsv', `_rcsv(esyscmd(`curl $1 | jq "d2"'))')dnl
+
+# Fixed image
+define(`_fimg',`<div style="position:fixed; $2 "><img src="$1" style="width: 100%; max-width: 100%; max-height: auto;"/></div>')dnl
+
+# Fixed div
+define(`_fbox',`<div style="position:fixed; $2">$1</div>')dnl
 
 divert`'dnl
