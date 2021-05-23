@@ -62,6 +62,9 @@ define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
 define(`_ssimgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 200', `scale=2; $1 * 100'))')')')dnl
 
+# Compress image, only for jpeg and png 
+define(`_comp', `esyscmd(`bash m4_ext/compress.bash $1')')dnl
+
 # If first argument is 0 then set font size as default, or else input gien argument (unit is pixel) 
 # Div should be separated with new line to properly work
 # m_trim_nl removes starting and trailing new lines
