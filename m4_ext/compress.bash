@@ -3,9 +3,10 @@ BASE=${FILE%%.*}
 EXT=${FILE##*.}
 DIR=$(dirname "${FILE}")
 
-# Basic logic
-# Copy file and substitue text with it
-# Compression program : Optipng for png, jpegoptim for jpeg
+# Basic workflow
+# Get file as input
+# Compress the file and send compressed file's name
+# - Compression program : Optipng for png, jpegoptim for jpeg
 
 if [[ "$EXT" = "jpg" ]] || [[ "$EXT" = "jpeg" ]]; then
 	new_name="$BASE"_comp.jpg
