@@ -16,9 +16,10 @@
 * [x] Make img center class works - Kinda works but strange bug occurs well rarely though.
 * [x] Make simple web api macro
 * [x] Make stiatc image/textbox macro
+* [x] Image compression macro (Optipng for png, jpegoptim for jpeg)
+* [x] Documentation is weak, make it happen before even I forget what it does
 
-* [ ] Image compression macro (Optipng for png, jpegoptim for jpeg)
-* [ ] Documentation is weak, make it happen before even I forget what it does
+* [ ] Enable cache feature for easy maintenance of temporary files 
 * [ ] Fix image centering 
 * [ ] Update macro.md
 * [ ] Background image macro
