@@ -1,5 +1,20 @@
 ### TODO
 
+#### Imminent
+
+* [ ] Enable cache feature for easy maintenance of temporary files 
+Save compressed images and out.md in cache directory
+* [ ] Fix image centering 
+This is not so definite because class should work but actually it doesn't
+* [ ] Update macro.md
+Add newy added macro usage
+* [ ] Background image macro
+This is easier than others
+* [ ] Enhance macro ergonomics
+Especially make derived macros usage easier 
+
+#### Done
+
 * [x] Test both symlink and rc alias ways
 * [x] Make title macro rules simpler to use
 * [x] Add raw csv macro
@@ -18,12 +33,6 @@
 * [x] Make stiatc image/textbox macro
 * [x] Image compression macro (Optipng for png, jpegoptim for jpeg)
 * [x] Documentation is weak, make it happen before even I forget what it does
-
-* [ ] Enable cache feature for easy maintenance of temporary files 
-* [ ] Fix image centering 
-* [ ] Update macro.md
-* [ ] Background image macro
-* [ ] Enhance macro ergonomics
 
 ### Big TODO
 
