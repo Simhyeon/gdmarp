@@ -9,12 +9,12 @@ compile:
 compile-docker:
 	@gdmarp compile --docker
 cnprep:
-	@docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp prep
+	@docker run --rm -v $(shell pwd):/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp prep
 cntest:
-	@docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp test
+	@docker run --rm -v $(shell pwd):/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp test
 cncompile:
-	@docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp compile
+	@docker run --rm -v $(shell pwd):/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp compile
 cnpdf:
-	@docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp compile --pdf
+	@docker run --rm -v $(shell pwd):/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp compile --pdf
 
 .PHONY : test prep compile
