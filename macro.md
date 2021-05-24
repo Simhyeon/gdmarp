@@ -85,7 +85,7 @@ This is simple text
 </div>
 ```
 
-### Img macro
+#### Img macro
 
 Simple img macros creates markdown img list.
 
@@ -95,6 +95,8 @@ Split sized img macro is same with sized img macro but sets standard width as 20
 
 Default width(in fact, css:max-width) is 100% for sized img macros.
 
+Compress macro compress image files with optipng and jpegoptim. And substitute original file with compressed file. This does not affect original image file nor original index.md file. It just changes out.md file and final product's image source. 
+
 ```
 _imgs(1.jpeg, 2.png)
 
@@ -103,6 +105,8 @@ _simgs(0 ,1.jpeg, 2.png)
 _simgs(0.5 ,1.jpeg, 2.png)
 
 _ssimgs(0 ,1.jpeg, 2.png)
+
+_imgs(_comp(1.jpeg), _comp(2.png))
 
 ```
 converts to
@@ -119,6 +123,9 @@ converts to
 
 <div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
 <div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
+
+![](1_comp.jpeg)
+![](2_comp.png)
 ```
 
 #### CSV
@@ -385,3 +392,7 @@ _inc(other_file_name)
 ```
 
 In this case inc/other\_file\_name.md file's content will be pasted into where macro was called.
+
+#### Web api(WIP)
+
+#### Fixed component(WIP)
