@@ -6,8 +6,6 @@ This is a bash script to automate m4 macro pre-processing and marp pptx generati
 
 This script is very early in stage which means many breaking changes occur.
 
-Curent version is 0.0.1. Means nothing but sem-ver compliant.
-
 I'm currently dogfooding this script to create game design documents.
 
 ### Dependencies
@@ -24,6 +22,9 @@ I'm currently dogfooding this script to create game design documents.
 - git (git flag)
 - bc (sized image macros)
 - sqlite3 (sql macro)
+- curl + jq (web api)
+- jpegoptim (jpeg compression)
+- optipng (png compression)
 
 ### Installation
 
@@ -54,11 +55,15 @@ ln -s $PWD/gdmarp ~/.local/bin/gdmarp
 alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 ```
 
-#### Windows (Not confirmed)
+#### Windows
 
 You can use windows subsystem linux2. However you have to configure chrome installation path with wsl2 option.
-This is a bash script, so theoritically windows bash can execute this script. However binary names in script doesn't end with '.exe' so I'm not so sure if it works or not. 
-I personally recommend using docker image.
+
+This is a bash script, so theoritically windows bash can execute this script. However it is not guaranteed to work with cygwin or similar unix layer.
+
+I strongly recommend using docker image especially on windows.
+
++ CR/LF triggers wrong formatted macro substitution. Therefore every file's EOL should be formatted as CR(\n). e.g. visual studio code support config to set default EOL to CR.
 
 ### Customization
 
@@ -116,15 +121,32 @@ for example,
 
 ```bash
 <!-- Linux-->
-docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp init --git --code
+<!-- Linux needs to set user id manually-->
+docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp init --git --code
 
 <!-- Windows Powershell-->
 docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init --git --code
+
+<!--If you dont' set alias for docker command using --make or --code flag can be handy-->
+
+<!-- Creates makefile(Linux) -->
+docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp init --git --code
+
+make cnprep
+make cncompile
+make cnpdf
+
+<!-- Creates vs code tasks.json file(Windows) -->
+docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init --git --code
+
+<!-- Press "Ctrl(Cmd) + Shift + b" to trigger aliased build tasks -->
 ```
 
 ### Using without init command
 
 **Highly recommend using init command before using gdmarp script.**
+
+It is similar to use git without git init command.
 
 Init command creates a file structure looks like this
 
