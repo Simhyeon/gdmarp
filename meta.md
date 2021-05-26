@@ -2,16 +2,24 @@
 
 #### Imminent
 
+* [ ] Enhance macro ergonomics
+	* [ ] Make advanced image macro
+	* [ ] Make advanced text macro
+
+Candidates for attr value
+_fixed for static image ( _left _right _top _bottom )
+_center for centering
+_size for pixel size
+_ratio for proportional size
+
 * [ ] Enable cache feature for easy maintenance of temporary files 
 Save compressed images and out.md in cache directory
-* [ ] Fix image centering 
-This is not so definite because class should work but actually it doesn't
+
 * [ ] Update macro.md
 Add newy added macro usage
+
 * [ ] Background image macro
 This is easier than others
-* [ ] Enhance macro ergonomics
-Especially make derived macros usage easier 
 
 #### Done
 
