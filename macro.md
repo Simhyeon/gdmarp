@@ -104,7 +104,7 @@ _simgs(0 ,1.jpeg, 2.png)
 
 _simgs(0.5 ,1.jpeg, 2.png)
 
-_ssimgs(0 ,1.jpeg, 2.png)
+_fimg(100px, 100px, 30%, 3.png)
 
 _imgs(_comp(1.jpeg), _comp(2.png))
 
@@ -121,11 +121,27 @@ converts to
 <div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 50.00%; max-height: auto;"></img></div>
 <div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 50.00%; max-height: auto;"></img></div>
 
-<div style="flex: 1;"><img src="1.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
-<div style="flex: 1;"><img src="2.jpeg" style="width: 100%; max-width: 100.00%; max-height: auto;"></img></div>
+<div style="position: fixed; top: 100px; left: 100px;">
+<img style="width: 30%;" src="3.png"></img>
+</div>
 
 ![](1_comp.jpeg)
 ![](2_comp.png)
+```
+
+#### Wrapper macro
+
+This is intended to use with other macros
+
+Center macro makes image centered
+```
+_center(_imgs(_comp(1.jpeg)))
+```
+converts to
+```
+<div style="text-align:center; display:block; margin: 0 auto;">
+
+![](ppp_comp.png)</div>
 ```
 
 #### CSV
@@ -394,5 +410,3 @@ _inc(other_file_name)
 In this case inc/other\_file\_name.md file's content will be pasted into where macro was called.
 
 #### Web api(WIP)
-
-#### Fixed component(WIP)
