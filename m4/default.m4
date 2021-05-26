@@ -98,6 +98,10 @@ define(`_te', `</table>')dnl
 define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value
 define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
+# Fixed position image
+define(`_fimg',`<div style="position: fixed; top: $1; left: $2;">
+<img style="width: $3;" src="$4"></img>
+</div>')dnl
 # TODO >>> Compress only the first time, if compressed file already exists do not compress
 # MACRO >>> Compress image, only for jpeg and png 
 # Example :
@@ -176,7 +180,7 @@ define(`_wapi', `syscmd(`curl $1 | jq "$2"')')dnl
 # Not tested
 define(`_wcsv', `_rcsv(esyscmd(`curl $1 | jq "$2"'))')dnl
 
-# Attribute based div wrapper macro
+# Center macro
 define(`_center',`<div style="text-align:center; display:block; margin: 0 auto;">
 
 $1</div>')dnl
