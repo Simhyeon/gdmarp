@@ -1,5 +1,7 @@
 divert(`-1') 
 # ===
+# Version 0.0.1
+# ===
 # Includes 
 # Foreach macro from official GNU source
 include(`foreach.m4')dnl
@@ -25,7 +27,7 @@ define(`m_img', `
 define(`m_scaled_img',`<div style="flex: 1;"><img src="$1" style="width: 100%; max-width: $2%; max-height: auto;"></img></div>
 ')dnl
 # Send formula to program bc and return calculated result
-define(`m_bc_calc', `syscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
+define(`m_bc_calc', `esyscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
 # Trim all starting and trailing new lines from content
 define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f m4_ext/rmExtNewLines.awk')')dnl
 # Sanitize content, or say temporarily convert content that disturbs sane macro operations
@@ -92,8 +94,6 @@ define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
 # MACRO >>> Same with simgs macro but it's calculation is based on split screen
 define(`_ssimgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 200', `scale=2; $1 * 100'))')')')dnl
-# MACRO >>> Custom image format
-define(`_cssimg',`<img src="$1" m_trim_nl($2)/>')dnl
 
 # TODO >>> Compress only the first time, if compressed file already exists do not compress
 # MACRO >>> Compress image, only for jpeg and png 
@@ -182,5 +182,20 @@ define(`_fimg',`<div style="position:fixed; $2 "><img src="$1" style="width: 100
 
 # MACRO >>> Fixed div macro
 define(`_fdiv',`<div style="position:fixed; $2">$1</div>')dnl 
+
+# ===
+# Advanced macros which heavily uses custom bash scripts
+# Advanced image macro
+# TODO ::: Wrap m_img_builder around esyscmd
+define(`_aimg', `esyscmd(`bash m4_ext/advanced_image.bash {$*}')')dnl
+# Advanced text macro
+# TODO ::: Wrap m_text_builder around esyscmd
+define(`_atext', `esyscmd(`bash m4_ext/advanced_text.bash {$*}')')dnl
+
+# Advanced image macro builder (src, outer css, inner css)
+define(`m_img_builder',`<div style="$2"><img src="$1" style="$3"></img></div>')dnl
+# Advanced text macro builder (src, css) 
+define(`m_text_builder',`<div style="$2">$1</div>
+')dnl
 
 divert`'dnl
