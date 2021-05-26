@@ -50,7 +50,7 @@ define(`m_scell', `syscmd(`echo "$1" | awk -f m4_ext/md2html.awk | awk -f m4_ext
 # Usage :
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
-foreach(`it', ($*), `<!-- it -->
+foreach(`it', ($*), `_comment(it)
 include(it)
 ')</style>')dnl
 
