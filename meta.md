@@ -2,16 +2,25 @@
 
 #### Imminent
 
-* [ ] Enhance macro ergonomics
+* [ ] **Enhance macro ergonomics**
+	- Avoid meaningless verbosity
+	- Improve argument rationale
+	- Macro usage should not be ambiguous
 
-* [ ] Enable cache feature for easy maintenance of temporary files 
-Save compressed images and out.md in cache directory
+* [ ] Improve documentation
+	* [ ] Update macro.md
+	* [ ] Add comment for internal macro implementations
 
-* [ ] Update macro.md
-Add newy added macro usage
+* [ ] New macros
+	* [ ] Background image macro
+	* [ ] Fixed position image(or textbox) macro
 
-* [ ] Background image macro
-This is easier than others
+* [ ] New features
+	* [ ] Enable cache feature for easy maintenance of temporary files 
+	Save compressed images and out.md in cache directory
+	* [ ] Template feature
+	Create pre-configured project structure
+	* [ ] Auto publish content into python sphinx like web page.
 
 #### Done
 
@@ -39,18 +48,23 @@ This is easier than others
 * [ ] Make integrated auto html deployment service such as doxygen or sphinx
 * [ ] Make alternative language for m4 and awk in rust.
 
-#### Dropped todos
+#### Dropped todos (However this might change in future)
 
+- Add table alignment option to csv macro 
+- Modify csv macro so that user can input font size
 Dropped becuase it makes macro usage overly complicated.
-* [ ] Add table alignment option to csv macro 
-* [ ] Modify csv macro so that user can input font size
 
-For legacy support + Space delimited class is not that bad
-* [ ] Change class macro to get inputs delimited by comma not spaces.
+- Change class macro to get inputs delimited by comma not spaces.
+For legacy support + Space delimited class is not that bad + using multiple
+classes is somewhat buggy in terms of marp transition
 
+- Add auto scale macro for texts with external programs
 Unergonomic to do with simple unix programs or m4 macro processing
-* [ ] Add auto scale macro for texts with external programs
 
+- Pandoc extension to create editable pptx file.
 Not possible to create reproducible output from 'pdf->editable pptx' generation.
 Thus it is better to separate responsibilites of creating a pptx and enabling editing.
-* [ ] Pandoc extension to create editable pptx file.
+
+- Advanced macro with various attributes
+This makes macro usage very unergonomic while it is not so desperately needed.
+Thus not worthwhile to implement, at least for now
