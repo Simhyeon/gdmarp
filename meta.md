@@ -3,14 +3,6 @@
 #### Imminent
 
 * [ ] Enhance macro ergonomics
-	* [ ] Make advanced image macro
-	* [ ] Make advanced text macro
-
-Candidates for attr value
-_fixed for static image ( _left _right _top _bottom )
-_center for centering
-_size for pixel size
-_ratio for proportional size
 
 * [ ] Enable cache feature for easy maintenance of temporary files 
 Save compressed images and out.md in cache directory

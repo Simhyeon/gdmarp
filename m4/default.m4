@@ -98,9 +98,6 @@ define(`_te', `</table>')dnl
 define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value
 define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
-# MACRO >>> Same with simgs macro but it's calculation is based on split screen
-define(`_ssimgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 200', `scale=2; $1 * 100'))')')')dnl
-
 # TODO >>> Compress only the first time, if compressed file already exists do not compress
 # MACRO >>> Compress image, only for jpeg and png 
 # Example :
