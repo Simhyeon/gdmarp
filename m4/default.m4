@@ -3,9 +3,15 @@ divert(`-1')
 # Version 0.0.1
 # ===
 # Includes 
-# Foreach macro from official GNU source
+# Useful macro from official GNU source
 include(`foreach.m4')dnl
 divert(`-1')
+include(`reverse.m4')dnl
+divert(`-1')
+
+# This should be in default m4, init? Not sure why it isn't
+define(`argn', `ifelse(`$1', 1, ``$2'',
+  `argn(decr(`$1'), shift(shift($@)))')')dnl
 
 # ===
 # Variables 
@@ -24,7 +30,7 @@ define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1
 define(`m_img', `
 ![$1]($2)')dnl
 # Make Set img's max-width with given arguments
-define(`m_scaled_img',`<div style="flex: 1;"><img src="$1" style="width: 100%; max-width: $2%; max-height: auto;"></img></div>
+define(`m_scaled_img',`<div style="text-align: inherit; flex: 1;"><img src="$1" style="width: 100%; max-width: $2%; max-height: auto;"></img></div>
 ')dnl
 # Send formula to program bc and return calculated result
 define(`m_bc_calc', `esyscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
@@ -171,31 +177,11 @@ define(`_wapi', `syscmd(`curl $1 | jq "$2"')')dnl
 
 # MACRO >>> Web api with csv auto formatting
 # Not tested
-define(`_wcsv', `_rcsv(esyscmd(`curl $1 | jq "d2"'))')dnl
+define(`_wcsv', `_rcsv(esyscmd(`curl $1 | jq "$2"'))')dnl
 
-# MACRO >>> Fixed image macro
-# This is simply a sugar method that makes fixed style image 
-# You can feed any css style as arguments
-# Example :
-# _fimg(res/sample.png, top: 50px; left 100px)
-define(`_fimg',`<div style="position:fixed; $2 "><img src="$1" style="width: 100%; max-width: 100%; max-height: auto;"/></div>')dnl
+# Attribute based div wrapper macro
+define(`_center',`<div style="text-align:center; display:block; margin: 0 auto;">
 
-# MACRO >>> Fixed div macro
-define(`_fdiv',`<div style="position:fixed; $2">$1</div>')dnl 
-
-# ===
-# Advanced macros which heavily uses custom bash scripts
-# Advanced image macro
-# TODO ::: Wrap m_img_builder around esyscmd
-define(`_aimg', `esyscmd(`bash m4_ext/advanced_image.bash {$*}')')dnl
-# Advanced text macro
-# TODO ::: Wrap m_text_builder around esyscmd
-define(`_atext', `esyscmd(`bash m4_ext/advanced_text.bash {$*}')')dnl
-
-# Advanced image macro builder (src, outer css, inner css)
-define(`m_img_builder',`<div style="$2"><img src="$1" style="$3"></img></div>')dnl
-# Advanced text macro builder (src, css) 
-define(`m_text_builder',`<div style="$2">$1</div>
-')dnl
+$1</div>')dnl
 
 divert`'dnl
