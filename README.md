@@ -8,6 +8,9 @@ This script is very early in stage which means many breaking changes occur.
 
 I'm currently dogfooding this script to create game design documents.
 
+Big update is planned for 0.2 version which modifies working project
+structure, new program execution wrapper, new render forms and so on and so forth.
+
 ### Dependencies
 
 - bash 
