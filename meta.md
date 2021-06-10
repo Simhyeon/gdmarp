@@ -45,7 +45,25 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### 0.2
 
-To be updated
+* [ ] Config feature
+	* [ ] Config option to designate render process. (Similar to MakeFile)
+
+* [ ] Modular components
+	* [ ] Separate a global basic macro component.
+	* [ ] Separate a representation macro component.
+	* [ ] Create new wikijs backend macro component for wiki render forme.
+	* [ ] Create new webui backend macro component.
+
+* [ ] Ergonomic program execution script for both windows and linux.
+	* [ ] Windows powershell execution script.
+	This is technically a wrapper around docker commands
+	* [ ] Posix compliant shell execution script.
+		* [ ] Include install command in gdmarp
+		* [ ] Change all bash speicifc syntax into posix compliant.
+
+* [ ] Lightweight + ergonomic local project directory
+	* [ ] No more local css, m4 extension scripts
+	* [ ] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
 
 ### 0.1
 
