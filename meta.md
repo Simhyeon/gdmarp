@@ -41,6 +41,12 @@ I found docker command execution is bit tedious and feels helpless when I don't
 remember the exact commands. So gdmarp 0.2 will have separate script(sh or
 powershell) to install and execute commands without recurring docker commands.
 
+### Candidates for wiki backends
+
+- documize
+- django-wiki
+- wikijs
+
 ### TODO
 
 ### 0.2
@@ -49,9 +55,10 @@ powershell) to install and execute commands without recurring docker commands.
 	* [ ] Config option to designate render process. (Similar to MakeFile)
 
 * [ ] Modular components
-	* [ ] Separate a global basic macro component.
-	* [ ] Separate a representation macro component.
+	* [x] Separate a global basic macro component.
+	* [x] Separate a representation macro component.
 	* [ ] Create new wikijs backend macro component for wiki render forme.
+	Think about how wikijs can be done 
 	* [ ] Create new webui backend macro component.
 
 * [ ] Ergonomic program execution script for both windows and linux.
@@ -61,9 +68,9 @@ powershell) to install and execute commands without recurring docker commands.
 		* [ ] Include install command in gdmarp
 		* [ ] Change all bash speicifc syntax into posix compliant.
 
-* [ ] Lightweight + ergonomic local project directory
-	* [ ] No more local css, m4 extension scripts
-	* [ ] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
+* [x] Lightweight + ergonomic local project directory
+	* [x] No more local css, m4 extension scripts
+	* [x] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
 
 ### 0.1
 
