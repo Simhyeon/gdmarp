@@ -45,17 +45,14 @@ function gd_help(){
 	echo "compile               compile markdown"
 	echo "check                 check installed dependencies"
 	echo "test                  create html format for testing and preserve out.md file"
-	echo "update                update css and m4 extension scripts"
 }
 
 function gd_init(){
 	touch $INPUT/index.md  
-	mkdir $INPUT/res $INPUT/inc $INPUT/build $INPUT/css $INPUT/m4_ext
+	mkdir $INPUT/res $INPUT/inc $INPUT/build
 	cp $PACKAGE_DIR/env.m4 -f $INPUT/env.m4
 	cp $PACKAGE_DIR/index.m4 -f $INPUT/index.m4
 	cp $PACKAGE_DIR/default.md -f $INPUT/index.md
-	cp $PACKAGE_DIR/css/*.css -f $INPUT/css
-	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
 	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
 
 	[ "$GIT" = "true" ] && cd $INPUT && git init && printf "build\nout.md" > .gitignore
@@ -63,22 +60,26 @@ function gd_init(){
 	[ "$CODE" = "true" ] && mkdir $INPUT/.vscode && cp $PACKAGE_DIR/tasks.json -f $INPUT/.vscode/tasks.json
 }
 
-function gd_update(){
-	cp $PACKAGE_DIR/css/*.css -f $INPUT/css
-	cp $PACKAGE_DIR/m4_ext/* -f $INPUT/m4_ext
-}
-
 function gd_preprocess(){	
+	# DEBUG
+	# Try export environment variable
+	export ROOT=$PACKAGE_DIR
+	export MODULE=$PACKAGE_DIR/modules
+	export CSS=$PACKAGE_DIR/css
+	export SCRIPTS=$PACKAGE_DIR/m4/scripts
+
 	# M4 include path
 	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
-	# Scripts array to process
-	SCRIPTS=($INPUT/index.m4)
+	# Source files array to process
+	SOURCES=($INPUT/index.m4)
 	# If default script is enabled or not disabled
-	[[ "$DEFAULT" = "true" ]] && SCRIPTS+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
+	[[ "$DEFAULT" = "true" ]] && SOURCES+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
+	# DEBUG ::: Add repr by default
+	SOURCES+=($MODULE/repr/macro.m4)
 	# Run main m4 functions
-	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SCRIPTS[@]}" $INPUT/index.md > $INPUT/out.md
+	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SOURCES[@]}" $INPUT/index.md > $INPUT/out.md
 	# Sed for escape characters restoration
-	sed -i -f $INPUT/m4_ext/restore.sed $INPUT/out.md
+	sed -i -f $SCRIPTS/restore.sed $INPUT/out.md
 }
 
 function gd_compile(){
@@ -211,10 +212,6 @@ function gd_main(){
 				;;
 			check)
 				ACTION=gd_check
-				shift
-				;;
-			update)
-				ACTION=gd_update
 				shift
 				;;
 			*)
