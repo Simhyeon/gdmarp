@@ -51,6 +51,8 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### 0.2
 
+* [ ] Modify subcommand usage
+
 * [ ] Config feature
 	* [ ] Config option to designate render process. (Similar to MakeFile)
 
@@ -64,9 +66,10 @@ powershell) to install and execute commands without recurring docker commands.
 * [ ] Ergonomic program execution script for both windows and linux.
 	* [ ] Windows powershell execution script.
 	This is technically a wrapper around docker commands
-	* [ ] Posix compliant shell execution script.
-		* [ ] Include install command in gdmarp
-		* [ ] Change all bash speicifc syntax into posix compliant.
+	* [x] Posix compliant shell execution script.
+		* [x] Include install command in gdmarp
+		* [x] Change all bash speicifc syntax into posix compliant.
+		* [x] Substitue array with something posix compliant...
 
 * [x] Lightweight + ergonomic local project directory
 	* [x] No more local css, m4 extension scripts
