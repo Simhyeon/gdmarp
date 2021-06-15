@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 # Reference source : https://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash
 
 # ----------
 # VARIABLES
 INPUT=$PWD
-OUTPUT=$PWD/build
+OUTPUT="$PWD"/build
 INCLUDE=""
 PRESERVE=false
 DEFAULT=true
@@ -14,8 +14,8 @@ CODE=false
 GIT=false
 MAKE=false
 FORMAT=pptx
-PACKAGE=$(basename $BASH_SOURCE)
-PACKAGE_DIR=$(dirname $(readlink -f "$0"))
+PACKAGE=$(basename "$0")
+PACKAGE_DIR=$(dirname "$(readlink -f "$0")")
 ACTION=""
 
 # Marp path can be changed with a flat
@@ -24,7 +24,7 @@ marp=marp
 # ----------
 # FUNCTIONS
 
-function gd_help(){
+help_message(){
 	echo "$PACKAGE - Compile markdown file into pptx file with predefined macro support."
 	echo "Usage: [options] action [arguments]"
 	echo " "
@@ -45,87 +45,113 @@ function gd_help(){
 	echo "compile               compile markdown"
 	echo "check                 check installed dependencies"
 	echo "test                  create html format for testing and preserve out.md file"
+	echo "install-image         install latest gdmarp docker image"
 }
 
-function gd_init(){
-	touch $INPUT/index.md  
-	mkdir $INPUT/res $INPUT/inc $INPUT/build
-	cp $PACKAGE_DIR/env.m4 -f $INPUT/env.m4
-	cp $PACKAGE_DIR/index.m4 -f $INPUT/index.m4
-	cp $PACKAGE_DIR/default.md -f $INPUT/index.md
-	[ "$DOCKER" = "true" ] && chmod 777 $INPUT/build
-
-	[ "$GIT" = "true" ] && cd $INPUT && git init && printf "build\nout.md" > .gitignore
-	[ "$MAKE" = "true" ] && cp $PACKAGE_DIR/Makefile -f $INPUT/Makefile
-	[ "$CODE" = "true" ] && mkdir $INPUT/.vscode && cp $PACKAGE_DIR/tasks.json -f $INPUT/.vscode/tasks.json
+gd_install(){
+	docker pull simoncreek/gdmarp:latest
 }
 
-function gd_preprocess(){	
-	# DEBUG
-	# Try export environment variable
+gd_init(){
+	touch "$INPUT"/index.md  
+	mkdir "$INPUT"/res "$INPUT"/inc "$INPUT"/build
+	cp "$PACKAGE_DIR"/env.m4 -f "$INPUT"/env.m4
+	cp "$PACKAGE_DIR"/index.m4 -f "$INPUT"/index.m4
+	cp "$PACKAGE_DIR"/default.md -f "$INPUT"/index.md
+	[ "$DOCKER" = "true" ] && chmod 777 "$INPUT"/build
+
+	[ "$GIT" = "true" ] && cd "$INPUT" && git init && printf "build\nout.md" > .gitignore
+	[ "$MAKE" = "true" ] && cp "$PACKAGE_DIR"/Makefile -f "$INPUT"/Makefile
+	[ "$CODE" = "true" ] && mkdir "$INPUT"/.vscode && cp "$PACKAGE_DIR"/tasks.json -f "$INPUT"/.vscode/tasks.json
+}
+
+read_config(){
+	# This dot is equivalent to source but posix way
+	. "$INPUT"/config
+}
+
+add_sources(){
+	while test $# -gt 0; do
+		case "$1" in 
+			repr)
+				SOURCES="${SOURCES} $MODULE/repr/macro.m4"
+				shift
+				;;
+		esac
+	done
+}
+
+gd_preprocess(){	
+	# Literally read the config
+	read_config
+
+	# Export environment variable
 	export ROOT=$PACKAGE_DIR
 	export MODULE=$PACKAGE_DIR/modules
 	export CSS=$PACKAGE_DIR/css
 	export SCRIPTS=$PACKAGE_DIR/m4/scripts
 
 	# M4 include path
-	[[ -z "$INCLUDE" ]] && INCLUDE=$PWD
+	[ -z "$INCLUDE" ] && INCLUDE=$PWD
+
 	# Source files array to process
-	SOURCES=($INPUT/index.m4)
+	# Word splitting is intended because there is no array in posix sh
+	SOURCES="$INPUT"/index.m4
 	# If default script is enabled or not disabled
-	[[ "$DEFAULT" = "true" ]] && SOURCES+=($INPUT/env.m4 $PACKAGE_DIR/m4/default.m4)
-	# DEBUG ::: Add repr by default
-	SOURCES+=($MODULE/repr/macro.m4)
+	[ "$DEFAULT" = "true" ] && SOURCES="${SOURCES} $INPUT/env.m4 $PACKAGE_DIR/m4/default.m4"
+	add_sources $modules
+
 	# Run main m4 functions
-	m4 -I $PWD -I $PACKAGE_DIR/m4 -I $PACKAGE_DIR/m4/GNU -I $INCLUDE "${SOURCES[@]}" $INPUT/index.md > $INPUT/out.md
+	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/index.md > "$INPUT"/out.md
 	# Sed for escape characters restoration
-	sed -i -f $SCRIPTS/restore.sed $INPUT/out.md
+	sed -i -f "$SCRIPTS"/restore.sed "$INPUT"/out.md
 }
 
-function gd_compile(){
+gd_compile(){
 	# Preprocessing before marp compilation
 	gd_preprocess
 
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
-		mkdir -p $OUTPUT
-		$marp --allow-local-files --$FORMAT --html $INPUT/out.md -o $OUTPUT/out.$FORMAT
+		mkdir -p "$OUTPUT"
+		$marp --allow-local-files --$FORMAT --html "$INPUT"/out.md -o "$OUTPUT"/out.$FORMAT
 	else
 		# With Docker
-		mkdir -p $OUTPUT
-		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --$FORMAT --allow-local-files --html -o build/out.$FORMAT
+		mkdir -p "$OUTPUT"
+		docker run --rm --init -v "$INPUT":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$FORMAT --allow-local-files --html -o build/out.$FORMAT
 	fi
-	[ "$PRESERVE" = "false" ] && rm $INPUT/out.md
+
+	[ "$PRESERVE" = "false" ] && rm "$INPUT"/out.md
 }
 
-function gd_test(){
+gd_test(){
 	gd_preprocess
 
 	# Compile with marp-cli
 	if [ "$DOCKER" = "false" ]; then
 		# No Docker
-		mkdir -p $OUTPUT
-		$marp --allow-local-files --html $INPUT/out.md -o $OUTPUT/out.html
+		mkdir -p "$OUTPUT"
+		$marp --allow-local-files --html "$INPUT"/out.md -o "$OUTPUT"/out.html
 	else
 		# With Docker
-		mkdir -p $OUTPUT
-		docker run --rm --init -v $INPUT:/home/marp/app/ -e LANG=$LANG marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
+		mkdir -p "$OUTPUT"
+		docker run --rm --init -v "$INPUT":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
 	fi
 }
 
-function gd_check(){
+gd_check(){
 	# Check binary installation
 	# Currently m4 and awk is necessary regardless of docker image
 	CLEAN=true
-	echo "Checking m4 install..." && [ -z $(command -v m4) ] && echo "M4 not installed" && CLEAN=false
-	echo "Checking awk install..." && [ -z $(command -v awk) ] && echo "Awk not installed" && CLEAN=false
+	echo "Checking m4 install..." && [ -z "$(command -v m4)" ] && echo "M4 not installed" && CLEAN=false
+	echo "Checking awk install..." && [ -z "$(command -v awk)" ] && echo "Awk not installed" && CLEAN=false
 
 	if [ "$DOCKER" = "false" ]; then
-		echo "Checking google chrome install..." && [ -z $(command -v google-chrome) ] && echo "Chrome browser not installed or not found in path." \
-			&& echo "Checking chromium install instead..." &&[ -z $(command -v chromium) ] && echo "Chromium not installed or not found in path". && CLEAN=false
-		echo "Checking marp install..." && [ -z $(command -v marp) ] && echo "Marp cli not installed" && CLEAN=false
-		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
+		echo "Checking google chrome install..." && [ -z "$(command -v google-chrome)" ] && echo "Chrome browser not installed or not found in path." \
+			&& echo "Checking chromium install instead..." &&[ -z "$(command -v chromium)" ] && echo "Chromium not installed or not found in path". && CLEAN=false
+		echo "Checking marp install..." && [ -z "$(command -v marp)" ] && echo "Marp cli not installed" && CLEAN=false
+		[ "$CLEAN" = "true" ] && echo "Every dependencies are installed"
 	else
 		# Check docker installation
 		# DOCKER CHECK
@@ -134,14 +160,14 @@ function gd_check(){
 			echo "ERR : Docker image is not installed"
 			CLEAN=false
 		fi
-		[ "$CLEAN" == "true" ] && echo "Every dependencies are installed"
+		[ "$CLEAN" = "true" ] && echo "Every dependencies are installed"
 	fi
 }
 
-function gd_main(){
+gd_main(){
 	# No arg given print -h
 	if [ $# -eq 0 ]; then
-		gd_help
+		help_message
 		exit 0
 	fi
 
@@ -149,7 +175,7 @@ function gd_main(){
 	while test $# -gt 0; do
 		case "$1" in 
 			-h|--help)
-				ACTION=gd_help
+				ACTION=help_message
 				break
 				;;
 			-I)
@@ -159,7 +185,7 @@ function gd_main(){
 				fi
 				;;
 			--include*)
-				export INCLUDE=`echo $1 | sed -e 's/^[^=]*=//g'`
+				INCLUDE=$(echo "$1" | sed -e 's/^[^=]*=//g')
 				shift
 				;;
 			--docker)
@@ -202,6 +228,10 @@ function gd_main(){
 				ACTION=gd_compile
 				shift
 				;;
+			install-image)
+				ACTION=gd_install
+				shift
+				;;
 			prep)
 				ACTION=gd_preprocess
 				shift
@@ -225,4 +255,4 @@ function gd_main(){
 
 # ----------
 # MAIN
-gd_main $*
+gd_main "$*"
