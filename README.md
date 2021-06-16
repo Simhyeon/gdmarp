@@ -245,10 +245,10 @@ SELECT id_cc()product_id FROM stock WHERE id = 22;)
 
 ### Macro rules
 
-[Macro rules](macro.md)
+[Macro rules](docs/macro.md)
 
 ### DEMO
 
 not yet
 
-[Todos and issues](./meta.md)
+[Todos and issues](docs/meta.md)
