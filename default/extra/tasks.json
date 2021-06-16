@@ -1,0 +1,163 @@
+{
+  "version": "0.0.1",
+  "tasks": [
+    {
+      "label": "Compile",
+      "type": "shell",
+      "command": "gdmarp compile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile docker",
+      "type": "shell",
+      "command": "gdmarp compile --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "command": "gdmarp test",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label":"Compile pdf",
+      "type": "shell",
+      "command": "gdmarp compile --pdf",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile pdf docker",
+      "type": "shell",
+      "command": "gdmarp compile --docker --pdf",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Preprocess",
+      "type":"shell",
+      "command":"gdmarp prep",
+      "group":"build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile preserve",
+      "type": "shell",
+      "command": "gdmarp compile --preserve",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile preserve docker",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile pdf preserve",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --pdf",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Compile pdf preserve docker",
+      "type": "shell",
+      "command": "gdmarp compile --preserve --pdf --docker",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Container: Compile",
+      "type": "shell",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp compile",
+      "windows": {
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp compile"
+       },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Container: Compile pdf",
+      "type": "shell",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp compile --pdf",
+      "windows": {
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp compile --pdf"
+       },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Container: test",
+      "type": "shell",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp test",
+      "windows": {
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp test"
+       },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Container: Preprocess",
+      "type": "shell",
+      "command": "docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp prep",
+      "windows": {
+        "command": "docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp prep"
+       },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
