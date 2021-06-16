@@ -31,7 +31,7 @@ define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f 
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
 foreach(`it', ($*), `_comment(it)
-include(esyscmd(`printf $CSS')/it)
+include(esyscmd(`printf "$MODULE"/repr/css')/it)
 ')</style>')dnl
 
 # MACRO >>> Awk script to convert csv file's content into github flavored formatted table 
