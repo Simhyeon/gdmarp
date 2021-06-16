@@ -88,7 +88,6 @@ gd_preprocess(){
 	# Export environment variable
 	export ROOT=$PACKAGE_DIR
 	export MODULE=$PACKAGE_DIR/modules
-	export CSS=$PACKAGE_DIR/css
 	export SCRIPTS=$PACKAGE_DIR/m4/scripts
 
 	# M4 include path
