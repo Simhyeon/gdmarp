@@ -51,6 +51,16 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### 0.2
 
+* [ ] Make it rusty, finally
+	* [x] Init
+		* [x] Config support
+	* [x] Prep
+		* [x] Solve include and sources
+		* [x] Make extra scripts position work with
+	* [ ] Repr
+		* [ ] Marp
+	* [ ] Documize
+
 * [ ] Modify subcommand usage
 
 * [ ] Config feature
