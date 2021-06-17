@@ -21,7 +21,7 @@ define(`m_scaled_img',`<div style="text-align: inherit; flex: 1;"><img src="$1" 
 ')dnl
 # Convert contents into single lined html
 # This was intended for multi line support in csv table
-define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f $MODULE/repr/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
+define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/Repr/md2html.awk | awk -f $MODULE/Repr/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
 
 # ==========
 # User interface macros 
@@ -31,19 +31,19 @@ define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f 
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
 foreach(`it', ($*), `_comment(it)
-include(esyscmd(`printf "$MODULE"/repr/css')/it)
+include(esyscmd(`printf "$MODULE"/Repr/css')/it)
 ')</style>')dnl
 
 # MACRO >>> Awk script to convert csv file's content into github flavored formatted table 
 # Usage :
 # _csv(someCsvFile.csv)
-define(`_csv', `syscmd(`awk -f $MODULE/repr/csvToMd.awk $1')')dnl
+define(`_csv', `syscmd(`awk -f $MODULE/Repr/csvToMd.awk $1')')dnl
 
 # MACRO >>> Extended version of csv macro which gets raw csv conent
 # Usage :
 # _rcsv(Name,Address,ID
 # Simon,Seoul,1)
-define(`_rcsv', `syscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/repr/csvToMd.awk')')dnl
+define(`_rcsv', `syscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/Repr/csvToMd.awk')')dnl
 
 # Multiline support csv table related macros
 # Refer macro.md for general usage
@@ -82,7 +82,7 @@ define(`_fimg',`<div style="position: fixed; top: $1; left: $2;">
 # MACRO >>> Compress image, only for jpeg and png 
 # Example :
 # _simgs(0.8, _comp(res/img.jpeg), _comp(res/emoji.png))
-define(`_comp', `esyscmd(`bash $MODULE/repr/compress.bash $1')')dnl
+define(`_comp', `esyscmd(`bash $MODULE/Repr/compress.bash $1')')dnl
 
 # MACRO >>> Text macro that also sets font size for the text
 #
