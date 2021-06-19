@@ -54,6 +54,7 @@ powershell) to install and execute commands without recurring docker commands.
 * [ ] Modify subcommand usage
 
 * [ ] Config feature
+	* [x] Modules to include for preprocessing
 	* [ ] Config option to designate render process. (Similar to MakeFile)
 
 * [ ] Modular components
@@ -69,7 +70,8 @@ powershell) to install and execute commands without recurring docker commands.
 	* [x] Posix compliant shell execution script.
 		* [x] Include install command in gdmarp
 		* [x] Change all bash speicifc syntax into posix compliant.
-		* [x] Substitue array with something posix compliant...
+		* [x] Substitue array with something posix compliant.
+		* [x] Posix sh compliant flag naming which is single character
 
 * [x] Lightweight + ergonomic local project directory
 	* [x] No more local css, m4 extension scripts
