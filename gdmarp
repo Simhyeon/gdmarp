@@ -16,6 +16,7 @@ MAKE=false
 FORMAT=pptx
 PACKAGE=$(basename "$0")
 PACKAGE_DIR=$(dirname "$(readlink -f "$0")")
+INIT_MODULES=""
 ACTION=""
 
 # Marp path can be changed with a flat
@@ -29,20 +30,20 @@ help_message(){
 	echo "Usage: [options] action [arguments]"
 	echo " "
 	echo "options:"
-	echo "-h, --help            show brief help"
-	echo "-I, --include=DIR     specify a m4 script directory to include"
-	echo "-p, --preserve        preserve middle format"
-	echo "--no-default          do not apply default macro rules"
-	echo "--docker              indicate docker usage for init or compile. Docker image needs loose privilege to compile."
-	echo "--git                 initiate with git after gdmarp init and create gitignore file"
-	echo "--make                initiate with make file"
-	echo "--pdf                 convert into pdf rather than pptx format"
-	echo "--code                create tasks.json for vs code integration"
+	echo "-h                    show brief help"
+	echo "-I <DIR>              specify a m4 script directory to include"
+	echo "-M <MODULES>          modules to include with init subcommand"
+	echo "-p                    preserve middle format"
+	echo "-n                    do not apply default macro rules"
+	echo "-d                    indicate docker usage. Docker image needs loose privilege."
+	echo "-g                    initiate with git after gdmarp init and create gitignore file"
+	echo "-S <TYPE>             add automation script"
+	echo "-F <FORMAT>           repr format to render"
 	echo " "
 	echo "actions:"
 	echo "init                  initiate file structure"
 	echo "prep                  only pre-process m4 macros"
-	echo "compile               compile markdown"
+	echo "repr                  render representation form"
 	echo "check                 check installed dependencies"
 	echo "test                  create html format for testing and preserve out.md file"
 	echo "install-image         install latest gdmarp docker image"
@@ -53,16 +54,16 @@ gd_install(){
 }
 
 gd_init(){
-	touch "$INPUT"/index.md  
-	mkdir "$INPUT"/res "$INPUT"/inc "$INPUT"/build
-	cp "$PACKAGE_DIR"/env.m4 -f "$INPUT"/env.m4
-	cp "$PACKAGE_DIR"/index.m4 -f "$INPUT"/index.m4
-	cp "$PACKAGE_DIR"/default.md -f "$INPUT"/index.md
-	[ "$DOCKER" = "true" ] && chmod 777 "$INPUT"/build
+	cp "$PACKAGE_DIR"/default/basic/* -rf "$INPUT"
 
+	[ "$DOCKER" = "true" ] && chmod 777 "$INPUT"/build
 	[ "$GIT" = "true" ] && cd "$INPUT" && git init && printf "build\nout.md" > .gitignore
-	[ "$MAKE" = "true" ] && cp "$PACKAGE_DIR"/Makefile -f "$INPUT"/Makefile
-	[ "$CODE" = "true" ] && mkdir "$INPUT"/.vscode && cp "$PACKAGE_DIR"/tasks.json -f "$INPUT"/.vscode/tasks.json
+	[ "$MAKE" = "true" ] && cp "$PACKAGE_DIR"/default/extra/Makefile -f "$INPUT"/Makefile
+	[ "$CODE" = "true" ] && mkdir "$INPUT"/.vscode && cp "$PACKAGE_DIR"/default/extra/tasks.json -f "$INPUT"/.vscode/tasks.json
+
+	# Remove first character for proper formatting
+	INIT_MODULES=$(printf '%s' "$INIT_MODULES" | sed 's/^ //')
+	[ -n "$INIT_MODULES" ] && printf "export modules=%s" "$INIT_MODULES" > "$INPUT"/config;
 }
 
 read_config(){
@@ -70,11 +71,15 @@ read_config(){
 	. "$INPUT"/config
 }
 
+# Yet to complete
 add_sources(){
 	while test $# -gt 0; do
 		case "$1" in 
 			repr)
-				SOURCES="${SOURCES} $MODULE/repr/macro.m4"
+				SOURCES="${SOURCES} $MODULE/repr/env.m4 $MODULE/repr/macro.m4"
+				shift
+				;;
+			*)
 				shift
 				;;
 		esac
@@ -88,7 +93,6 @@ gd_preprocess(){
 	# Export environment variable
 	export ROOT=$PACKAGE_DIR
 	export MODULE=$PACKAGE_DIR/modules
-	export CSS=$PACKAGE_DIR/css
 	export SCRIPTS=$PACKAGE_DIR/m4/scripts
 
 	# M4 include path
@@ -99,6 +103,7 @@ gd_preprocess(){
 	SOURCES="$INPUT"/index.m4
 	# If default script is enabled or not disabled
 	[ "$DEFAULT" = "true" ] && SOURCES="${SOURCES} $INPUT/env.m4 $PACKAGE_DIR/m4/default.m4"
+	# modules are references from config file
 	add_sources $modules
 
 	# Run main m4 functions
@@ -107,7 +112,7 @@ gd_preprocess(){
 	sed -i -f "$SCRIPTS"/restore.sed "$INPUT"/out.md
 }
 
-gd_compile(){
+gd_repr(){
 	# Preprocessing before marp compilation
 	gd_preprocess
 
@@ -172,60 +177,112 @@ gd_main(){
 	fi
 
 	# Argument parse
-	while test $# -gt 0; do
+	while [ $# -gt 0 ] ; do
 		case "$1" in 
 			-h|--help)
 				ACTION=help_message
 				break
 				;;
 			-I)
-				shift
-				if test $# -gt 0; then
-					export INCLUDE=$1
+				if [ -n "$2" ]; then
+					while [ -n "$2" ]; do
+						case "$2" in
+							# Next element is another flag
+							-*)
+								break
+								;;
+							*)
+								INCLUDE="${INCLUDE} $2"
+								shift
+								;;
+						esac
+					done
+					shift 
+				else
+					printf 'ERROR: "-I" requires a non-empty option argument.\n' >&2
+					exit 1
 				fi
 				;;
-			--include*)
-				INCLUDE=$(echo "$1" | sed -e 's/^[^=]*=//g')
-				shift
+			-M)
+				if [ -n "$2" ]; then
+					while [ -n "$2" ]; do
+						case "$2" in
+							# Next element is another flag
+							-*)
+								break
+								;;
+							*)
+								INIT_MODULES="${INIT_MODULES} $2"
+								shift
+								;;
+						esac
+					done
+					shift 
+				else
+					printf 'ERROR: "-M" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
 				;;
-			--docker)
+			-d)
 				export DOCKER=true
 				shift
 				;;
-			--container)
+			-c)
 				marp="node /home/marp/.cli/marp-cli.js"
 				shift
 				;;
-			-p|--preserve)
+			-p)
 				PRESERVE=true
 				shift
 				;;
-			--no-default)
+			-n)
 				DEFAULT=false
 				shift
 				;;
-			--git)
+			-g)
 				GIT=true
 				shift
 				;;
-			--make)
-				MAKE=true
+			-S)
+				if [ -n "$2" ]; then
+					case "$2" in
+						"make")
+							MAKE=true
+							;;
+						"code")
+							CODE=true
+							;;
+					esac
+					shift
+				else
+					printf 'ERROR: "-s" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
 				shift
 				;;
-			--code)
-				CODE=true
-				shift
-				;;
-			--pdf)
-				FORMAT=pdf
+			-F)
+				if [ -n "$2" ]; then
+					case "$2" in
+						"pdf")
+							FORMAT=pdf
+							;;
+						"pptx")
+							FORMAT=pptx
+							;;
+					esac
+					shift
+				else
+					printf 'ERROR: "-F" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
 				shift
 				;;
 			init)
 				ACTION=gd_init
 				shift
 				;;
-			compile)
-				ACTION=gd_compile
+			repr)
+				ACTION=gd_repr
 				shift
 				;;
 			install-image)
@@ -245,7 +302,7 @@ gd_main(){
 				shift
 				;;
 			*)
-				break
+				shift
 				;;
 		esac
 	done
@@ -255,4 +312,5 @@ gd_main(){
 
 # ----------
 # MAIN
-gd_main "$*"
+# No quote is needed
+gd_main $*
