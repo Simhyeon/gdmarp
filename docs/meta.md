@@ -51,15 +51,6 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### 0.2
 
-* [ ] Make it rusty, finally
-	* [x] Init
-		* [x] Config support
-	* [x] Prep
-		* [x] Solve include and sources
-		* [x] Make extra scripts position work with
-	* [ ] Repr
-		* [ ] Marp
-	* [ ] Documize
 
 * [ ] Modify subcommand usage
 
@@ -134,6 +125,9 @@ powershell) to install and execute commands without recurring docker commands.
 * [ ] Make alternative language for m4 and awk in rust.
 
 #### Dropped todos (However this might change in future)
+
+- Make it rusty
+Problem is that basic image uses alpine, which doesn't include glibc by default. I don't rust port is worth hassling with all the depedencies requirement.
 
 - Add table alignment option to csv macro 
 - Modify csv macro so that user can input font size
