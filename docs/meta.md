@@ -55,7 +55,12 @@ powershell) to install and execute commands without recurring docker commands.
 
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
-	* [ ] Config option to designate render process. (Similar to MakeFile)
+	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
+
+* [ ] Template functionality
+	* [ ] Make local content template from system design
+	* [ ] Make basic templates functionality which copys templates from bin folder or web 
+	Integrate with subcommand flags
 
 * [ ] Modular components
 	* [x] Separate a global basic macro component.
