@@ -252,3 +252,7 @@ SELECT id_cc()product_id FROM stock WHERE id = 22;)
 not yet
 
 [Todos and issues](docs/meta.md)
+
+### License
+
+[MIT](docs/LICENSE.md)
