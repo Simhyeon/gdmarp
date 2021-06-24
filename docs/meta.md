@@ -43,7 +43,9 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### Candidates for wiki backends
 
-- documize
+- mediawiki : Currently actively developed
+Mature api, large userbase
+
 - django-wiki
 - wikijs
 
@@ -53,9 +55,12 @@ powershell) to install and execute commands without recurring docker commands.
 
 * [ ] Modify subcommand usage
 
+* [ ] Feature ::: Add "remove all unused macro expression" flag
+
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
 	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
+	* [ ] Consider making config format as json
 
 * [ ] Template functionality
 	* [ ] Make local content template from system design
@@ -65,9 +70,11 @@ powershell) to install and execute commands without recurring docker commands.
 * [ ] Modular components
 	* [x] Separate a global basic macro component.
 	* [x] Separate a representation macro component.
-	* [ ] Create new wikijs backend macro component for wiki render forme.
-	Think about how wikijs can be done 
-	* [ ] Create new webui backend macro component.
+	* [ ] Create new mediawiki backend macro component for wiki render forme.
+		* [ ] Make wikitext macros which are compatible with repr markdown macros
+		* [ ] Automatic post page functionality binded to gdmarp script execution
+	* [ ] Create new webui backend macro component. 
+	(Consider bootstrap with pure javascript for better compatibility)
 
 * [ ] Ergonomic program execution script for both windows and linux.
 	* [ ] Windows powershell execution script.
