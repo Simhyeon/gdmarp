@@ -57,6 +57,7 @@ Mature api, large userbase
 * [ ] Comment macro 
 * [ ] Feature ::: Add "remove all unused macro expression" flag
 * [ ] Make withmods variables can save multiple arguments
+* [ ] Post installation script for docker usage (Mostly npm install)
 
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
