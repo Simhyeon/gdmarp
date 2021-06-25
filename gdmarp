@@ -14,9 +14,10 @@ CODE=false
 GIT=false
 MAKE=false
 FORMAT=pptx
+WITHMODS=""
+CONFIG=""
 PACKAGE=$(basename "$0")
 PACKAGE_DIR=$(dirname "$(readlink -f "$0")")
-INIT_MODULES=""
 ACTION=""
 
 # Marp path can be changed with a flat
@@ -32,7 +33,7 @@ help_message(){
 	echo "options:"
 	echo "-h                    show brief help"
 	echo "-I <DIR>              specify a m4 script directory to include"
-	echo "-M <MODULES>          modules to include with init subcommand"
+	echo "-M <MODULES>          modules to include with execution"
 	echo "-p                    preserve middle format"
 	echo "-n                    do not apply default macro rules"
 	echo "-d                    indicate docker usage. Docker image needs loose privilege."
@@ -44,6 +45,8 @@ help_message(){
 	echo "init                  initiate file structure"
 	echo "prep                  only pre-process m4 macros"
 	echo "repr                  render representation form"
+	echo "wiki                  Push processed file into wiki website"
+	echo "script                (TODO) Run all scripts configured in config.json file"
 	echo "check                 check installed dependencies"
 	echo "test                  create html format for testing and preserve out.md file"
 	echo "install-image         install latest gdmarp docker image"
@@ -61,14 +64,19 @@ gd_init(){
 	[ "$MAKE" = "true" ] && cp "$PACKAGE_DIR"/default/extra/Makefile -f "$INPUT"/Makefile
 	[ "$CODE" = "true" ] && mkdir "$INPUT"/.vscode && cp "$PACKAGE_DIR"/default/extra/tasks.json -f "$INPUT"/.vscode/tasks.json
 
-	# Remove first character for proper formatting
-	INIT_MODULES=$(printf '%s' "$INIT_MODULES" | sed 's/^ //')
-	[ -n "$INIT_MODULES" ] && printf "export modules=%s" "$INIT_MODULES" > "$INPUT"/config;
+	# TODO | Currently withmods are a single item despite the name
+	case $WITHMODS in
+		mw)
+			read_config
+
+			CONFIG=$(printf '%s' "$CONFIG" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
+			printf '%s' "$CONFIG" > "$INPUT"/config.json
+			;;
+	esac
 }
 
 read_config(){
-	# This dot is equivalent to source but posix way
-	. "$INPUT"/config
+	CONFIG=$(cat "$INPUT"/config.json)
 }
 
 # Yet to complete
@@ -77,6 +85,10 @@ add_sources(){
 		case "$1" in 
 			repr)
 				SOURCES="${SOURCES} $MODULE/repr/env.m4 $MODULE/repr/macro.m4"
+				shift
+				;;
+			mw)
+				SOURCES="${SOURCES} $MODULE/wiki/mediawiki/env.m4 $MODULE/wiki/mediawiki/macro.m4"
 				shift
 				;;
 			*)
@@ -103,8 +115,8 @@ gd_preprocess(){
 	SOURCES="$INPUT"/index.m4
 	# If default script is enabled or not disabled
 	[ "$DEFAULT" = "true" ] && SOURCES="${SOURCES} $INPUT/env.m4 $PACKAGE_DIR/m4/default.m4"
-	# modules are references from config file
-	add_sources $modules
+	# modules are references from flag option
+	add_sources $WITHMODS
 
 	# Run main m4 functions
 	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/index.md > "$INPUT"/out.md
@@ -133,6 +145,40 @@ gd_repr(){
 	fi
 
 	[ "$PRESERVE" = "false" ] && rm "$INPUT"/out.md
+}
+
+gd_wiki(){
+	# Preprocessing before sending out file
+	gd_preprocess
+
+	# No Docker code only for now
+	# Make directory if not existant
+	mkdir -p "$OUTPUT"
+
+	# Utilzie various backends
+	case $WITHMODS in
+		mw)
+			# Export environment variables
+			export bot_id=$(printf '%s' "$CONFIG" | jq .env.bot_id)
+			export bot_pwd=$(printf '%s' "$CONFIG" | jq .env.bot_pwd)
+			export page_title=$(printf '%s' "$CONFIG" | jq .env.page_title)
+
+			# Return early if variable is null
+			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && exit 0
+			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && exit 0
+			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 0
+
+			# TODO | Currently binary query is not complete
+			# node "$PACKAGE_DIR"/modules/wiki/mediawiki/mediawiki_bin/index.js "$INPUT"/out.md
+			;;
+	esac
+
+	[ "$PRESERVE" = "false" ] && rm "$INPUT"/out.md
+}
+
+# TODO 
+gd_script(){
+	echo "DUMMY"
 }
 
 gd_test(){
@@ -208,26 +254,6 @@ gd_main(){
 					exit 1
 				fi
 				;;
-			-M)
-				if [ -n "$2" ]; then
-					while [ -n "$2" ]; do
-						case "$2" in
-							# Next element is another flag
-							-*)
-								break
-								;;
-							*)
-								INIT_MODULES="${INIT_MODULES} $2"
-								shift
-								;;
-						esac
-					done
-					shift 
-				else
-					printf 'ERROR: "-M" requires a non-empty option argument.\n' >&2
-					exit 1
-				fi
-				;;
 			-d)
 				export DOCKER=true
 				shift
@@ -248,6 +274,16 @@ gd_main(){
 				GIT=true
 				shift
 				;;
+			-M)
+				if [ -n "$2" ]; then
+					WITHMODS=$2
+					shift
+				else
+					printf 'ERROR: "-M" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
+				shift
+				;;
 			-S)
 				if [ -n "$2" ]; then
 					case "$2" in
@@ -260,7 +296,7 @@ gd_main(){
 					esac
 					shift
 				else
-					printf 'ERROR: "-s" requires a non-empty option argument.\n' >&2
+					printf 'ERROR: "-S" requires a non-empty option argument.\n' >&2
 					exit 1
 				fi
 				shift
@@ -288,6 +324,14 @@ gd_main(){
 				;;
 			repr)
 				ACTION=gd_repr
+				shift
+				;;
+			wiki)
+				ACTION=gd_wiki
+				shift
+				;;
+			script)
+				ACtION=gd_script
 				shift
 				;;
 			install-image)
