@@ -126,7 +126,7 @@ function main() {
 	const file_path = process.argv0;
 	const file_content = fs.readFileSync(file_path);
 	let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", process.env.bot_id, process.env.bot_pwd);
-	mw.postPage(process.env.mw_title, file_content);
+	mw.postPage(process.env.page_title, file_content);
 }
 
 // -----------------------
