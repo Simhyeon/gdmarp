@@ -54,10 +54,10 @@ define(`_idt', `forloop(`', 1, $1, `  ')')dnl
 
 # Lists
 # Unordered List
-define(`_ul', `forloop(`', 1, $1, `  ')*')dnl
+define(`_ul', `forloop(`', 2, $1, `  ')*')dnl
 
 # Ordered list
-define(`_ol', `forloop(`', 1, $1, `  ')1.')dnl
+define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 
 # MACRO >>> Get style files' name and paste the content
 # Usage :
