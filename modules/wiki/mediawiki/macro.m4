@@ -3,18 +3,21 @@ divert(`-1')
 # wikitext, rather it is about making markdown compatible wikitext macro
 
 # Headers
+# H1 is actually page title and should be downgraded to h2
+define(`_h1', `==$1==')dnl
 define(`_h2', `==$1==')dnl
 define(`_h3', `===$1===')dnl
 define(`_h4', `====$1====')dnl
 define(`_h5', `=====$1=====')dnl
 
 # Bold triple quotes
-# define(`_b', `''''$1'''')dnl
+# define(`_b', `\;\;\;$1\;\;\;')dnl
 
 # Italic double quotes
-# define(`_b', `'''$1''')dnl
+# define(`_i', `\;\;$1\;\;')dnl
 
 # ItalicBold five quotes
+# define(`_bi', `\;\;\;\;\;$1\;\;\;\;\;')dnl
 
 # Strike through
 define(`_st', `<s>$1</s>')dnl
@@ -22,25 +25,26 @@ define(`_st', `<s>$1</s>')dnl
 # Underline
 define(`_ud', `<u>$1</u>')dnl
 
-# Internal Link
-
 # Other wiki page link 
+define(`_wikipage',`[[$1]]')dnl
+define(`_wikipageAlt',`_wikipage($1|$2)')dnl # Wikipage link with alternative text
 
 # Unordered List
-# _ul(1)
-# _ul(2)
-
+define(`_ul', `forloop(`', 1, $1, ``*'')')dnl
 
 # Ordered list
-# _ol(1)
-# _ol(2)
+define(`_ol', `forloop(`', 1, $1, ``#'')')dnl
 
 # Indentation
+define(`_idt', `forloop(`', 1, $1, `:')')dnl
 
 # URL Link (Same functionality wit markdown link)
-
-# File Link
+define(`_url',`[$1 $2]')dnl
 
 # Image Link
+define(`_image',`[[File:$1|alt=$2]]')dnl
+
+# Table (normal reading + raw csv)
+# define(`_csv', `syscmd(`awk -f $MODULE/repr/csvToMd.awk $1')')dnl
 
 divert`'dnl
