@@ -11,13 +11,13 @@ define(`_h4', `====$1====')dnl
 define(`_h5', `=====$1=====')dnl
 
 # Bold triple quotes
-# define(`_b', `\;\;\;$1\;\;\;')dnl
+define(`_b', `\;\;\;$1\;\;\;')dnl
 
 # Italic double quotes
-# define(`_i', `\;\;$1\;\;')dnl
+define(`_i', `\;\;$1\;\;')dnl
 
 # ItalicBold five quotes
-# define(`_bi', `\;\;\;\;\;$1\;\;\;\;\;')dnl
+define(`_bi', `\;\;\;\;\;$1\;\;\;\;\;')dnl
 
 # Strike through
 define(`_st', `<s>$1</s>')dnl
