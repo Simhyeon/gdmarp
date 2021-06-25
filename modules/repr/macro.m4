@@ -62,6 +62,9 @@ define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 # New page
 define(`_newpage', `---')dnl
 
+# Comment
+define(`_cm', `/* $1 */')dnl
+
 # MACRO >>> Get style files' name and paste the content
 # Usage :
 # _styles(css/image.css, css/layout.css)
