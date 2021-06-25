@@ -26,6 +26,39 @@ define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f 
 # ==========
 # User interface macros 
 
+# Basic syntax macros
+# Headers
+define(`_h1', `# $1')dnl
+define(`_h2', `## $1')dnl
+define(`_h3', `### $1')dnl
+define(`_h4', `#### $1')dnl
+define(`_h5', `##### $1')dnl
+
+# Bold triple quotes
+# define(`_b', `**$1**')dnl
+
+# Italic double quotes
+# define(`_i', `*$1*')dnl
+
+# ItalicBold five quotes
+# define(`_bi', `***$1***')dnl
+
+# Strike through
+define(`_st', `~~$1~~')dnl
+
+# Underline
+define(`_ud', `__$1__')dnl
+
+# Indentation
+define(`_idt', `forloop(`', 1, $1, `  ')')dnl
+
+# Lists
+# Unordered List
+define(`_ul', `forloop(`', 1, $1, `  ')*')dnl
+
+# Ordered list
+define(`_ol', `forloop(`', 1, $1, `  ')1.')dnl
+
 # MACRO >>> Get style files' name and paste the content
 # Usage :
 # _styles(css/image.css, css/layout.css)
@@ -69,7 +102,11 @@ foreach(`it', ($*), `    <td>
 # end table
 define(`_te', `</table>')dnl
 
+# URL
+define(`_url',`[$2]($1)')dnl # $2 is alternate text, $1 is image url
+
 # Image substitue macros
+define(`_img', `m_img($2,$1)')dnl # $2 is alternate text, $1 is image url
 # MACRO >>> Simply substitue all image arguments with compatible form
 define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value
