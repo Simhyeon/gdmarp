@@ -53,9 +53,10 @@ Mature api, large userbase
 
 ### 0.2
 
-* [ ] Test mediawiki\_bin execution
 * [ ] Post installation script for docker usage (Mostly npm install)
 
+* [ ] Improove wikitext macros
+* [ ] Prepare for improoved readme
 * [ ] Make withmods variables can save multiple arguments
 * [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
 
@@ -76,10 +77,10 @@ Mature api, large userbase
 * [ ] Modular components
 	* [x] Separate a global basic macro component.
 	* [x] Separate a representation macro component.
-	* [ ] Create new mediawiki backend macro component for wiki render forme.
+	* [x] Create new mediawiki backend macro component for wiki render forme.
 		* [x] Make wikitext macros which are compatible with repr markdown macros
 		* [x] Table macro
-		* [ ] Automatic post page functionality binded to gdmarp script execution
+		* [x] Automatic post page functionality binded to gdmarp script execution
 	* [ ] Create new webui backend macro component. 
 	(Consider bootstrap with pure javascript for better compatibility)
 
