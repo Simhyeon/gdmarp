@@ -123,7 +123,9 @@ gd_preprocess(){
 
 	# Process again for fragmented macro execution no sources needed
 	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/out.md > "$INPUT"/frag.md
-	mv -f "$INPUT"/frag.md "$INPUT"/out.md
+	# This squahses multiple new lines into single new line
+	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$INPUT"/frag.md > "$INPUT"/out.md
+	rm "$INPUT"/frag.md
 
 	# Sed for escape characters restoration
 	sed -i -f "$SCRIPTS"/restore.sed "$INPUT"/out.md
