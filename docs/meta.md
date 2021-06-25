@@ -55,6 +55,8 @@ Mature api, large userbase
 
 * [ ] Modify subcommand usage
 
+* [ ] Comment macro 
+
 * [ ] Feature ::: Add "remove all unused macro expression" flag
 
 * [ ] Config feature
