@@ -1,7 +1,7 @@
 "use strict;"
 
-import dotenv from "dotenv";
 import axios from "axios";
+import fs from "fs";
 
 class MediaWiki {
 	constructor(baseUrl, botId, botPwd) {
@@ -119,10 +119,16 @@ class MediaWiki {
 
 }
 
-// Initial Config
-dotenv.config();
-axios.defaults.withCredentials = true;
+function main() {
+	// Initial Config
+	axios.defaults.withCredentials = true;
 
-let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", process.env.bot_id, process.env.bot_pwd);
+	const file_path = process.argv0;
+	const file_content = fs.readFileSync(file_path);
+	let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", process.env.bot_id, process.env.bot_pwd);
+	mw.postPage(process.env.mw_title, file_content);
+}
 
-mw.getPage(process.env.page_title);
+// -----------------------
+// Main function
+main();
