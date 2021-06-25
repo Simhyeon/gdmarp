@@ -45,6 +45,10 @@ define(`_url',`[$1 $2]')dnl
 define(`_image',`[[File:$1|alt=$2]]')dnl
 
 # Table (normal reading + raw csv)
-# define(`_csv', `syscmd(`awk -f $MODULE/repr/csvToMd.awk $1')')dnl
+# Read from csv file Second parameter is caption. Caption cannot include spaces use underscore instead
+define(`_csv', `esyscmd(`awk -v caption=$2 -f $MODULE/wiki/mediawiki/csvToWikiTable.awk $1')')dnl
+
+# Raw csv file
+define(`_rcsv', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/wiki/mediawiki/csvToWikiTable.awk')')dnl
 
 divert`'dnl
