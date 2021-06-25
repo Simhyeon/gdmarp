@@ -63,6 +63,7 @@ Mature api, large userbase
 	* [x] Modules to include for preprocessing
 	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
 	* [ ] Consider making config format as json
+	* [ ] Add environmental variables
 
 * [ ] Template functionality
 	* [ ] Make local content template from system design
