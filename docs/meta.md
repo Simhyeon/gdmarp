@@ -54,10 +54,13 @@ Mature api, large userbase
 ### 0.2
 
 * [ ] Test mediawiki\_bin execution
-* [ ] Comment macro 
-* [ ] Feature ::: Add "remove all unused macro expression" flag
-* [ ] Make withmods variables can save multiple arguments
 * [ ] Post installation script for docker usage (Mostly npm install)
+
+* [ ] Make withmods variables can save multiple arguments
+* [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
+
+* [x] Comment macro 
+* [x] Set Variable macro
 
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
@@ -77,7 +80,6 @@ Mature api, large userbase
 		* [x] Make wikitext macros which are compatible with repr markdown macros
 		* [x] Table macro
 		* [ ] Automatic post page functionality binded to gdmarp script execution
-		* [ ] Make split macro compliant with mw if possible
 	* [ ] Create new webui backend macro component. 
 	(Consider bootstrap with pure javascript for better compatibility)
 
