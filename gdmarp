@@ -86,7 +86,7 @@ add_sources(){
 	done
 }
 
-gd_preprocess(){	
+gd_preprocess(){
 	# Literally read the config
 	read_config
 
@@ -108,6 +108,11 @@ gd_preprocess(){
 
 	# Run main m4 functions
 	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/index.md > "$INPUT"/out.md
+
+	# Process again for fragmented macro execution no sources needed
+	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/out.md > "$INPUT"/frag.md
+	mv -f "$INPUT"/frag.md "$INPUT"/out.md
+
 	# Sed for escape characters restoration
 	sed -i -f "$SCRIPTS"/restore.sed "$INPUT"/out.md
 }
