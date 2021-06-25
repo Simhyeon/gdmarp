@@ -43,7 +43,9 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### Candidates for wiki backends
 
-- documize
+- mediawiki : Currently actively developed
+Mature api, large userbase
+
 - django-wiki
 - wikijs
 
@@ -51,18 +53,36 @@ powershell) to install and execute commands without recurring docker commands.
 
 ### 0.2
 
-* [ ] Modify subcommand usage
+* [ ] Post installation script for docker usage (Mostly npm install)
+
+* [ ] Improove wikitext macros
+* [ ] Prepare for improoved readme
+* [ ] Make withmods variables can save multiple arguments
+* [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
+
+* [x] Comment macro 
+* [x] Set Variable macro
 
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
-	* [ ] Config option to designate render process. (Similar to MakeFile)
+	* [x] Consider making config format as json
+	* [x] Add environmental variables
+	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
+
+* [ ] Template functionality
+	* [ ] Make local content template from system design
+	* [ ] Make basic templates functionality which copys templates from bin folder or web 
+	Integrate with subcommand flags
 
 * [ ] Modular components
 	* [x] Separate a global basic macro component.
 	* [x] Separate a representation macro component.
-	* [ ] Create new wikijs backend macro component for wiki render forme.
-	Think about how wikijs can be done 
-	* [ ] Create new webui backend macro component.
+	* [x] Create new mediawiki backend macro component for wiki render forme.
+		* [x] Make wikitext macros which are compatible with repr markdown macros
+		* [x] Table macro
+		* [x] Automatic post page functionality binded to gdmarp script execution
+	* [ ] Create new webui backend macro component. 
+	(Consider bootstrap with pure javascript for better compatibility)
 
 * [ ] Ergonomic program execution script for both windows and linux.
 	* [ ] Windows powershell execution script.

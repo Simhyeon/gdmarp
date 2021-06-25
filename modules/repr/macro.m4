@@ -21,29 +21,68 @@ define(`m_scaled_img',`<div style="text-align: inherit; flex: 1;"><img src="$1" 
 ')dnl
 # Convert contents into single lined html
 # This was intended for multi line support in csv table
-define(`m_scell', `syscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f $MODULE/repr/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
+define(`m_scell', `esyscmd(`echo "$1" | awk -f $MODULE/repr/md2html.awk | awk -f $MODULE/repr/merge_lines.awk -v d="" | tr -d "\n" ')')dnl
 
 # ==========
 # User interface macros 
+
+# Basic syntax macros
+# Headers
+define(`_h1', `# $1')dnl
+define(`_h2', `## $1')dnl
+define(`_h3', `### $1')dnl
+define(`_h4', `#### $1')dnl
+define(`_h5', `##### $1')dnl
+
+# Bold 
+# define(`_b', `**$1**')dnl
+
+# Italic 
+# define(`_i', `*$1*')dnl
+
+# ItalicBold 
+# define(`_bi', `***$1***')dnl
+
+# Strike through
+define(`_st', `~~$1~~')dnl
+
+# Underline
+define(`_ud', `__$1__')dnl
+
+# Indentation
+define(`_idt', `forloop(`', 1, $1, `  ')')dnl
+
+# Lists
+# Unordered List
+define(`_ul', `forloop(`', 2, $1, `  ')*')dnl
+
+# Ordered list
+define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
+
+# New page
+define(`_newpage', `---')dnl
+
+# Comment
+define(`_cm', `/* $1 */')dnl
 
 # MACRO >>> Get style files' name and paste the content
 # Usage :
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
-foreach(`it', ($*), `_comment(it)
+foreach(`it', ($*), `_cm(it)
 include(esyscmd(`printf $MODULE/repr/')it)
 ')</style>')dnl
 
 # MACRO >>> Awk script to convert csv file's content into github flavored formatted table 
 # Usage :
 # _csv(someCsvFile.csv)
-define(`_csv', `syscmd(`awk -f $MODULE/repr/csvToMd.awk $1')')dnl
+define(`_csv', `esyscmd(`awk -f $MODULE/repr/csvToMd.awk $1')')dnl
 
 # MACRO >>> Extended version of csv macro which gets raw csv conent
 # Usage :
 # _rcsv(Name,Address,ID
 # Simon,Seoul,1)
-define(`_rcsv', `syscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/repr/csvToMd.awk')')dnl
+define(`_rcsv', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/repr/csvToMd.awk')')dnl
 
 # Multiline support csv table related macros
 # Refer macro.md for general usage
@@ -69,7 +108,11 @@ foreach(`it', ($*), `    <td>
 # end table
 define(`_te', `</table>')dnl
 
+# URL
+define(`_url',`[$2]($1)')dnl # $2 is alternate text, $1 is image url
+
 # Image substitue macros
+define(`_img', `m_img($2,$1)')dnl # $2 is alternate text, $1 is image url
 # MACRO >>> Simply substitue all image arguments with compatible form
 define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value

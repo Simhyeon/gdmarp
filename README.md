@@ -1,4 +1,4 @@
-## Marp-cli pptx generation automation script
+## Game documenation automatic generation script
 
 This is a bash script to automate m4 macro pre-processing and marp pptx generation.
 
@@ -9,9 +9,10 @@ structure, new program execution wrapper, new render forms and so on and so fort
 
 This script is very early in stage which means many breaking changes occur.
 
+### How gdmarp works
+
 ### Dependencies
 
-- bash 
 - sed
 - m4 
 - awk (preferably GNU version)
@@ -74,7 +75,7 @@ Edit env.m4 file to define macro variables or frequently used but might changing
 
 ### Usage
 
-#### bash
+#### shell
 
 ```bash
 
@@ -252,3 +253,7 @@ SELECT id_cc()product_id FROM stock WHERE id = 22;)
 not yet
 
 [Todos and issues](docs/meta.md)
+
+### License
+
+[MIT](docs/LICENSE.md)

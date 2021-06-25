@@ -6,20 +6,14 @@ divert(`-1')
 # Useful macro from official GNU source
 include(`foreach.m4')dnl
 divert(`-1')
+include(`forloop2.m4')dnl
+divert(`-1')
 include(`reverse.m4')dnl
 divert(`-1')
 
 # This should be in default m4, init? Not sure why it isn't
 define(`argn', `ifelse(`$1', 1, ``$2'',
   `argn(decr(`$1'), shift(shift($@)))')')dnl
-
-# ===
-# Variables 
-#
-# Followed varaibles are declared in env.m4 file
-# v_basis_height
-# v_font_default
-# v_thead_default
 
 # ===
 # Internal Macros 
@@ -30,23 +24,33 @@ define(`m_bc_calc', `esyscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
 define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk')')dnl
 # Sanitize content, or say temporarily convert content that disturbs sane macro operations
 define(`m_sanitize', `esyscmd(`printf "$*" | sed -f $SCRIPTS/sanitize.sed')')dnl
+# Either enable or disable according to module used
+define(`m_ifmod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 
 # ==========
 # User interface macros 
+#
+# MACRO >>> If mod macros argument should be module name
+define(`_ifmod', ``m_ifmod'`('$1,')dnl
+define(`_elifmod', ``)'`m_ifmod'`('$1,')dnl
+define(`_endif', ``)'')dnl
+
+# ======''
+
+# MACRO >>> Set variable as given name
+# Usage : _setvar(`someurl', `http://google.com')
+# Recommended naming rule is to start name with prefix "lv_" which stands for local variable
+define(`_setvar', `define(`$1',
+`ifelse(`$3', `0', ``$4'', `$2')')')dnl
 
 # MACRO >>> Shorthand version of include macro
 # TODO :::: TODO
 # macro expects path to be inside of "inc" directory
-define(`_inc', `include(esyscmd(`bash $SCRIPTS/parse_inc.bash $1'))')dnl
+define(`_inc', `include(esyscmd(`sh $SCRIPTS/parse_inc.sh $1'))')dnl
 
 # MACRO >>> Comma macro
 # Use _cc to substitute comma or else it will treat comma separated texts as arguments
 define(`_cc', ``,'')dnl
-
-# MACRO >>> Comment macro
-# it justs removes all texts inside comment macro
-define(`_comment', `')dnl
-
 
 # Internal macro for deciding which sqlite to use 
 # Change v_bin_sqlite varaible in env.m4 file to set path for sqlite
