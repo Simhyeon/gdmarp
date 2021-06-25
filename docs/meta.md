@@ -53,17 +53,16 @@ Mature api, large userbase
 
 ### 0.2
 
-* [ ] Modify subcommand usage
-
+* [ ] Test mediawiki\_bin execution
 * [ ] Comment macro 
-
 * [ ] Feature ::: Add "remove all unused macro expression" flag
+* [ ] Make withmods variables can save multiple arguments
 
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
+	* [x] Consider making config format as json
+	* [x] Add environmental variables
 	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
-	* [ ] Consider making config format as json
-	* [ ] Add environmental variables
 
 * [ ] Template functionality
 	* [ ] Make local content template from system design
@@ -74,7 +73,7 @@ Mature api, large userbase
 	* [x] Separate a global basic macro component.
 	* [x] Separate a representation macro component.
 	* [ ] Create new mediawiki backend macro component for wiki render forme.
-		* [ ] Make wikitext macros which are compatible with repr markdown macros
+		* [x] Make wikitext macros which are compatible with repr markdown macros
 		* [ ] Automatic post page functionality binded to gdmarp script execution
 	* [ ] Create new webui backend macro component. 
 	(Consider bootstrap with pure javascript for better compatibility)
