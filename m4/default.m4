@@ -31,8 +31,17 @@ define(`m_ifmod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 # User interface macros 
 #
 # MACRO >>> If mod macros argument should be module name
-define(`IFMOD', ``m_ifmod'`('$1,')dnl
-define(`ENDIF', ``)'')dnl
+define(`_ifmod', ``m_ifmod'`('$1,')dnl
+define(`_elifmod', ``)'`m_ifmod'`('$1,')dnl
+define(`_endif', ``)'')dnl
+
+# ======''
+
+# MACRO >>> Set variable as given name
+# Usage : _setvar(`someurl', `http://google.com')
+# Recommended naming rule is to start name with prefix "lv_" which stands for local variable
+define(`_setvar', `define(`$1',
+`ifelse(`$3', `0', ``$4'', `$2')')')dnl
 
 # MACRO >>> Shorthand version of include macro
 # TODO :::: TODO
@@ -42,11 +51,6 @@ define(`_inc', `include(esyscmd(`sh $SCRIPTS/parse_inc.sh $1'))')dnl
 # MACRO >>> Comma macro
 # Use _cc to substitute comma or else it will treat comma separated texts as arguments
 define(`_cc', ``,'')dnl
-
-# MACRO >>> Comment macro
-# it justs removes all texts inside comment macro
-define(`_comment', `')dnl
-
 
 # Internal macro for deciding which sqlite to use 
 # Change v_bin_sqlite varaible in env.m4 file to set path for sqlite
