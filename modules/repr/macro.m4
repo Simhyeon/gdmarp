@@ -69,7 +69,7 @@ define(`_cm', `/* $1 */')dnl
 # Usage :
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
-foreach(`it', ($*), `_comment(it)
+foreach(`it', ($*), `_cm(it)
 include(esyscmd(`printf $MODULE/repr/')it)
 ')</style>')dnl
 
