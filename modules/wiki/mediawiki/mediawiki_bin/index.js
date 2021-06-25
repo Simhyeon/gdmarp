@@ -37,8 +37,10 @@ class MediaWiki {
 		let csrfResp =  await this.getCsrfResponse(loginCookie);
 		let csrfToken = csrfResp.data.query.tokens.csrftoken
 		
-		let editResponse = this.editPage( title, content, csrfToken, loginCookie);
-		console.log(editResponse.data);
+		let editResponse = await this.editPage( title, content, csrfToken, loginCookie);
+		if (editResponse.data.edit.result == "Success") {
+			console.log("Successly posted page \"" + title +"\" to " + this.baseUrl);
+		}
 	}
 
 	/// GEt 
@@ -106,12 +108,12 @@ class MediaWiki {
 		let bodyData = new URLSearchParams(body).toString();
 		return axios.post( this.apiUrl, bodyData, { 
 			headers: {
-				Cookie: cookie,
-				"Content-Type": "multipart/form-data"
+				Cookie: cookie
+				// I don't know how to enable this...
+				//"Content-Type": "multipart/form-data"
 			} 
 		}).then(response => {
-			let data = response.data;
-			console.log(JSON.stringify(data, null, 4))
+			return response;
 		}).catch(error => {
 			console.log(error);
 		})
@@ -121,12 +123,21 @@ class MediaWiki {
 
 function main() {
 	// Initial Config
+	// dotenv.config();
 	axios.defaults.withCredentials = true;
 
-	const file_path = process.argv0;
-	const file_content = fs.readFileSync(file_path);
-	let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", process.env.bot_id, process.env.bot_pwd);
-	mw.postPage(process.env.page_title, file_content);
+	const file_path = process.argv[2];
+	const config_path = process.argv[3];
+	const file_content = fs.readFileSync(file_path, 'utf-8');
+	const config = JSON.parse(fs.readFileSync(config_path, 'utf-8'));
+
+	let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", config.env.bot_id, config.env.bot_pwd);
+	mw.postPage(config.env.page_title, file_content);
+
+	// Former codes for references
+	//let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", process.env.bot_id, process.env.bot_pwd);
+	//mw.postPage(process.env.page_title, file_content);
+
 }
 
 // -----------------------
