@@ -171,7 +171,11 @@ gd_wiki(){
 			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 0
 
 			# TODO | Currently binary query is not complete
-			# node "$PACKAGE_DIR"/modules/wiki/mediawiki/mediawiki_bin/index.js "$INPUT"/out.md
+			node "$PACKAGE_DIR"/modules/wiki/mediawiki/mediawiki_bin/index.js "$INPUT"/out.md "$INPUT"/config.json
+			;;
+		*)
+			echo "No proper module was given to render a wiki page"
+			exit 0
 			;;
 	esac
 
