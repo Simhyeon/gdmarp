@@ -74,7 +74,9 @@ Mature api, large userbase
 	* [x] Separate a representation macro component.
 	* [ ] Create new mediawiki backend macro component for wiki render forme.
 		* [x] Make wikitext macros which are compatible with repr markdown macros
+		* [x] Table macro
 		* [ ] Automatic post page functionality binded to gdmarp script execution
+		* [ ] Make split macro compliant with mw if possible
 	* [ ] Create new webui backend macro component. 
 	(Consider bootstrap with pure javascript for better compatibility)
 
