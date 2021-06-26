@@ -61,13 +61,6 @@ Mature api, large userbase
 * [ ] Make mediawiki modlue to send useful logs to end users
 * [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
 
-* [ ] Config feature
-	* [x] Modules to include for preprocessing
-	* [x] Consider making config format as json
-	* [x] Add environmental variables
-	* [x] Config option to designate multiple render process. (Similar to MakeFile)
-	* [ ] Config option to designate multiple render process but for test purposes
-
 * [ ] Template functionality
 	* [ ] Make local content template from system design
 	* [ ] Make basic templates functionality which copys templates from bin folder or web 
@@ -134,6 +127,14 @@ Mature api, large userbase
 
 * [x] Comment macro 
 * [x] Set Variable macro
+
+* [x] Config feature
+	* [x] Modules to include for preprocessing
+	* [x] Consider making config format as json
+	* [x] Add environmental variables
+	* [x] Config option to designate multiple render process. (Similar to MakeFile)
+	* [x] Config option to designate multiple render process but for test purposes
+
 
 ### Big TODO
 
