@@ -104,8 +104,8 @@ readconfig(){
 add_sources(){
 	while test $# -gt 0; do
 		case "$1" in 
-			repr)
-				sources="${sources} $MODULE/repr/env.m4 $MODULE/repr/macro.m4"
+			marp)
+				sources="${sources} $MODULE/repr/marp/env.m4 $MODULE/repr/marp/macro.m4"
 				shift
 				;;
 			mw)
