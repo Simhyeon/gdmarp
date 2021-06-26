@@ -131,7 +131,7 @@ function main() {
 	const file_content = fs.readFileSync(file_path, 'utf-8');
 	const config = JSON.parse(fs.readFileSync(config_path, 'utf-8'));
 
-	let mw = new MediaWiki("http://wiki.simoncreek.xyz/w", config.env.bot_id, config.env.bot_pwd);
+	let mw = new MediaWiki(config.env.url, config.env.bot_id, config.env.bot_pwd);
 	mw.postPage(config.env.page_title, file_content);
 
 	// Former codes for references

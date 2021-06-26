@@ -69,7 +69,7 @@ gd_init(){
 		mw)
 			read_config
 
-			CONFIG=$(printf '%s' "$CONFIG" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
+			CONFIG=$(printf '%s' "$CONFIG" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {url: "wiki_url"} + {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
 			printf '%s' "$CONFIG" > "$INPUT"/config.json
 			;;
 	esac
