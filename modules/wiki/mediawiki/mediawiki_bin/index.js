@@ -21,25 +21,31 @@ class MediaWiki {
 			let data = response.data;
 			console.log(JSON.stringify(data.parse.wikitext["*"], null, 4))
 		}).catch(error => {
-			console.log(error);
+			//console.log(error);
+			console.log("Failed to get page");
+			process.exit(1);
 		})
 	}
 
 	/// This always replace page's content with given content
 	async postPage(title, content) {
+		console.log("Requesting a token from url...");
 		let loginTokenResp = await this.getLoginTKResponse();
 		let loginToken = loginTokenResp.data.query.tokens.logintoken;
 		let cookie = loginTokenResp.headers["set-cookie"].join(';');
 
+		console.log("Attempting login...");
 		let loginResp = await this.postLogin(loginToken, cookie);
 		let loginCookie = loginResp.headers["set-cookie"].join(';');
 
+		console.log("Requesting a csrf token...");
 		let csrfResp =  await this.getCsrfResponse(loginCookie);
 		let csrfToken = csrfResp.data.query.tokens.csrftoken
 		
+		console.log("Sending a post request...");
 		let editResponse = await this.editPage( title, content, csrfToken, loginCookie);
 		if (editResponse.data.edit.result == "Success") {
-			console.log("Successly posted page \"" + title +"\" to " + this.baseUrl);
+			console.log("Successly posted a page \"" + title +"\" to " + this.baseUrl);
 		}
 	}
 
@@ -51,7 +57,9 @@ class MediaWiki {
 		}).then(response => {
 			return response;
 		}).catch(error => {
-			console.log(error);
+			//console.log(error);
+			console.log("Failed to get a login token");
+			process.exit(1);
 		})
 	}
 
@@ -71,9 +79,16 @@ class MediaWiki {
 				Cookie: cookie,
 			} 
 		}).then(resp => {
+			let result = resp.data.login.result;
+			if (result != "Success") {
+				console.log("Login failed with result : " + result);
+				process.exit(1);
+			}
 			return resp;
 		}).catch(error => {
-			console.log(error);
+			//console.log(error);
+			console.log("Failed to login");
+			process.exit(1);
 		})
 	}
 
@@ -89,10 +104,11 @@ class MediaWiki {
 				Cookie: cookie
 			}
 		}).then(response => {
-			// return csrfToken
 			return response;
 		}).catch(error => {
-			console.log(error);
+			//console.log(error);
+			console.log("Failed to get csrf token");
+			process.exit(1);
 		})
 	}
 
@@ -115,7 +131,9 @@ class MediaWiki {
 		}).then(response => {
 			return response;
 		}).catch(error => {
-			console.log(error);
+			//console.log(error);
+			console.log("Failed to post a page");
+			process.exit(1);
 		})
 	}
 
