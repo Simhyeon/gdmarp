@@ -4,21 +4,41 @@
 
 # ----------
 # VARIABLES
-INPUT=$PWD
-OUTPUT="$PWD"/build
-INCLUDE=""
-PRESERVE=false
-DEFAULT=true
-DOCKER=false
-CODE=false
-GIT=false
-MAKE=false
-FORMAT=pptx
-WITHMODS=""
-CONFIG=""
-PACKAGE=$(basename "$0")
-PACKAGE_DIR=$(dirname "$(readlink -f "$0")")
-ACTION=""
+input=$PWD
+output="$PWD"/build
+include=""
+sources=""
+flag_preserve=false
+flag_use_default=true
+flag_use_docker=false
+flag_init_code=false
+flag_init_git=false
+flag_init_make=false
+flag_format=pptx
+flag_modules=""
+config=""
+bin_name=$(basename "$0")
+bin_path=$(dirname "$(readlink -f "$0")")
+action=""
+
+reset_var(){
+	input=$PWD
+	output="$PWD"/build
+	include=""
+	sources=""
+	flag_preserve=false
+	flag_use_default=true
+	flag_use_docker=false
+	flag_init_code=false
+	flag_init_git=false
+	flag_init_make=false
+	flag_format=pptx
+	flag_modules=""
+	config=""
+	bin_name=$(basename "$0")
+	bin_path=$(dirname "$(readlink -f "$0")")
+	action=""
+}
 
 # Marp path can be changed with a flat
 marp=marp
@@ -27,7 +47,7 @@ marp=marp
 # FUNCTIONS
 
 help_message(){
-	echo "$PACKAGE - Compile markdown file into pptx file with predefined macro support."
+	echo "$bin_name - Compile markdown file into pptx file with predefined macro support."
 	echo "Usage: [options] action [arguments]"
 	echo " "
 	echo "options:"
@@ -39,14 +59,15 @@ help_message(){
 	echo "-d                    indicate docker usage. Docker image needs loose privilege."
 	echo "-g                    initiate with git after gdmarp init and create gitignore file"
 	echo "-S <TYPE>             add automation script"
-	echo "-F <FORMAT>           repr format to render"
+	echo "-F <flag_format>           repr format to render"
 	echo " "
 	echo "actions:"
+	echo "help                  show brief help messages"
 	echo "init                  initiate file structure"
 	echo "prep                  only pre-process m4 macros"
 	echo "repr                  render representation form"
-	echo "wiki                  Push processed file into wiki website"
-	echo "script                (TODO) Run all scripts configured in config.json file"
+	echo "wiki                  push processed file into wiki website"
+	echo "run                   run all scripts configured in config.json file"
 	echo "check                 check installed dependencies"
 	echo "test                  create html format for testing and preserve out.md file"
 	echo "install-image         install latest gdmarp docker image"
@@ -57,26 +78,26 @@ gd_install(){
 }
 
 gd_init(){
-	cp "$PACKAGE_DIR"/default/basic/* -rf "$INPUT"
+	cp "$bin_path"/default/basic/* -rf "$input"
 
-	[ "$DOCKER" = "true" ] && chmod 777 "$INPUT"/build
-	[ "$GIT" = "true" ] && cd "$INPUT" && git init && printf "build\nout.md" > .gitignore
-	[ "$MAKE" = "true" ] && cp "$PACKAGE_DIR"/default/extra/Makefile -f "$INPUT"/Makefile
-	[ "$CODE" = "true" ] && mkdir "$INPUT"/.vscode && cp "$PACKAGE_DIR"/default/extra/tasks.json -f "$INPUT"/.vscode/tasks.json
+	[ "$flag_use_docker" = "true" ] && chmod 777 "$input"/build
+	[ "$flag_init_git" = "true" ] && cd "$input" && git init && printf "build\nout.md" > .gitignore
+	[ "$flag_init_make" = "true" ] && cp "$bin_path"/default/extra/Makefile -f "$input"/Makefile
+	[ "$flag_init_code" = "true" ] && mkdir "$input"/.vscode && cp "$bin_path"/default/extra/tasks.json -f "$input"/.vscode/tasks.json
 
 	# TODO | Currently withmods are a single item despite the name
-	case $WITHMODS in
+	case $flag_modules in
 		mw)
-			read_config
+			readconfig
 
-			CONFIG=$(printf '%s' "$CONFIG" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
-			printf '%s' "$CONFIG" > "$INPUT"/config.json
+			config=$(printf '%s' "$config" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
+			printf '%s' "$config" > "$input"/config.json
 			;;
 	esac
 }
 
-read_config(){
-	CONFIG=$(cat "$INPUT"/config.json)
+readconfig(){
+	config=$(cat "$input"/config.json)
 }
 
 # Yet to complete
@@ -84,11 +105,11 @@ add_sources(){
 	while test $# -gt 0; do
 		case "$1" in 
 			repr)
-				SOURCES="${SOURCES} $MODULE/repr/env.m4 $MODULE/repr/macro.m4"
+				sources="${sources} $MODULE/repr/env.m4 $MODULE/repr/macro.m4"
 				shift
 				;;
 			mw)
-				SOURCES="${SOURCES} $MODULE/wiki/mediawiki/env.m4 $MODULE/wiki/mediawiki/macro.m4"
+				sources="${sources} $MODULE/wiki/mediawiki/env.m4 $MODULE/wiki/mediawiki/macro.m4"
 				shift
 				;;
 			*)
@@ -100,35 +121,35 @@ add_sources(){
 
 gd_preprocess(){
 	# Literally read the config
-	read_config
+	readconfig
 
 	# Export environment variable
-	export ROOT=$PACKAGE_DIR
-	export MODULE=$PACKAGE_DIR/modules
-	export SCRIPTS=$PACKAGE_DIR/m4/scripts
+	export ROOT=$bin_path
+	export MODULE=$bin_path/modules
+	export SCRIPTS=$bin_path/m4/scripts
 
 	# M4 include path
-	[ -z "$INCLUDE" ] && INCLUDE=$PWD
+	[ -z "$include" ] && include=$PWD
 
 	# Source files array to process
 	# Word splitting is intended because there is no array in posix sh
-	SOURCES="$INPUT"/index.m4
+	sources="$input"/index.m4
 	# If default script is enabled or not disabled
-	[ "$DEFAULT" = "true" ] && SOURCES="${SOURCES} $INPUT/env.m4 $PACKAGE_DIR/m4/default.m4"
+	[ "$flag_use_default" = "true" ] && sources="${sources} $input/env.m4 $bin_path/m4/default.m4"
 	# modules are references from flag option
-	add_sources $WITHMODS
+	add_sources $flag_modules
 
 	# Run main m4 functions
-	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/index.md > "$INPUT"/out.md
+	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/index.md > "$input"/out.md
 
 	# Process again for fragmented macro execution no sources needed
-	m4 -I "$PWD" -I "$PACKAGE_DIR"/m4 -I "$PACKAGE_DIR"/m4/GNU -I "$INCLUDE" $SOURCES "$INPUT"/out.md > "$INPUT"/frag.md
+	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/out.md > "$input"/frag.md
 	# This squahses multiple new lines into single new line
-	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$INPUT"/frag.md > "$INPUT"/out.md
-	rm "$INPUT"/frag.md
+	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$input"/frag.md > "$input"/out.md
+	rm "$input"/frag.md
 
 	# Sed for escape characters restoration
-	sed -i -f "$SCRIPTS"/restore.sed "$INPUT"/out.md
+	sed -i -f "$SCRIPTS"/restore.sed "$input"/out.md
 }
 
 gd_repr(){
@@ -136,17 +157,17 @@ gd_repr(){
 	gd_preprocess
 
 	# Compile with marp-cli
-	if [ "$DOCKER" = "false" ]; then
+	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		mkdir -p "$OUTPUT"
-		$marp --allow-local-files --$FORMAT --html "$INPUT"/out.md -o "$OUTPUT"/out.$FORMAT
+		mkdir -p "$output"
+		$marp --allow-local-files --$flag_format --html "$input"/out.md -o "$output"/out.$flag_format
 	else
 		# With Docker
-		mkdir -p "$OUTPUT"
-		docker run --rm --init -v "$INPUT":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$FORMAT --allow-local-files --html -o build/out.$FORMAT
+		mkdir -p "$output"
+		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o build/out.$flag_format
 	fi
 
-	[ "$PRESERVE" = "false" ] && rm "$INPUT"/out.md
+	[ "$flag_preserve" = "false" ] && rm "$input"/out.md
 }
 
 gd_wiki(){
@@ -155,15 +176,16 @@ gd_wiki(){
 
 	# No Docker code only for now
 	# Make directory if not existant
-	mkdir -p "$OUTPUT"
+	mkdir -p "$output"
 
 	# Utilzie various backends
-	case $WITHMODS in
+	case $flag_modules in
 		mw)
+			# TODO Rename this variables into screaming snake case
 			# Export environment variables
-			export bot_id=$(printf '%s' "$CONFIG" | jq .env.bot_id)
-			export bot_pwd=$(printf '%s' "$CONFIG" | jq .env.bot_pwd)
-			export page_title=$(printf '%s' "$CONFIG" | jq .env.page_title)
+			export bot_id=$(printf '%s' "$config" | jq .env.bot_id)
+			export bot_pwd=$(printf '%s' "$config" | jq .env.bot_pwd)
+			export page_title=$(printf '%s' "$config" | jq .env.page_title)
 
 			# Return early if variable is null
 			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && exit 0
@@ -171,7 +193,7 @@ gd_wiki(){
 			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 0
 
 			# TODO | Currently binary query is not complete
-			node "$PACKAGE_DIR"/modules/wiki/mediawiki/mediawiki_bin/index.js "$INPUT"/out.md "$INPUT"/config.json
+			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$input"/out.md "$input"/config.json
 			;;
 		*)
 			echo "No proper module was given to render a wiki page"
@@ -179,26 +201,41 @@ gd_wiki(){
 			;;
 	esac
 
-	[ "$PRESERVE" = "false" ] && rm "$INPUT"/out.md
+	[ "$flag_preserve" = "false" ] && rm "$input"/out.md
 }
 
-# TODO 
-gd_script(){
-	echo "DUMMY"
+gd_run(){
+	# Read a config
+	readconfig
+
+	# Index
+	i=0
+	runner=$(echo "$config" | jq .script[$i] )
+	while [ "$runner" != "null" ]
+	do
+		printf '> Executing script %s\n' "$runner"
+		# Reset varaibles for fresh run
+		reset_var
+		# !! Do not quote the argument because gd_main expects non quoted arguments
+		gd_main $(echo $runner | tr -d '"')
+		i=$((i+1))
+		runner=$(echo "$config" | jq .script[$i] )
+	done
+	echo "> Run finished"
 }
 
 gd_test(){
 	gd_preprocess
 
 	# Compile with marp-cli
-	if [ "$DOCKER" = "false" ]; then
+	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		mkdir -p "$OUTPUT"
-		$marp --allow-local-files --html "$INPUT"/out.md -o "$OUTPUT"/out.html
+		mkdir -p "$output"
+		$marp --allow-local-files --html "$input"/out.md -o "$output"/out.html
 	else
 		# With Docker
-		mkdir -p "$OUTPUT"
-		docker run --rm --init -v "$INPUT":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
+		mkdir -p "$output"
+		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
 	fi
 }
 
@@ -209,14 +246,14 @@ gd_check(){
 	echo "Checking m4 install..." && [ -z "$(command -v m4)" ] && echo "M4 not installed" && CLEAN=false
 	echo "Checking awk install..." && [ -z "$(command -v awk)" ] && echo "Awk not installed" && CLEAN=false
 
-	if [ "$DOCKER" = "false" ]; then
+	if [ "$flag_use_docker" = "false" ]; then
 		echo "Checking google chrome install..." && [ -z "$(command -v google-chrome)" ] && echo "Chrome browser not installed or not found in path." \
 			&& echo "Checking chromium install instead..." &&[ -z "$(command -v chromium)" ] && echo "Chromium not installed or not found in path". && CLEAN=false
 		echo "Checking marp install..." && [ -z "$(command -v marp)" ] && echo "Marp cli not installed" && CLEAN=false
 		[ "$CLEAN" = "true" ] && echo "Every dependencies are installed"
 	else
 		# Check docker installation
-		# DOCKER CHECK
+		# flag_use_docker CHECK
 		echo "Checking marp-cli docker image installed"
 		if [ "$(docker image ls | grep -c marpteam/marp-cli)" = "0" ]; then
 			echo "ERR : Docker image is not installed"
@@ -236,8 +273,8 @@ gd_main(){
 	# Argument parse
 	while [ $# -gt 0 ] ; do
 		case "$1" in 
-			-h|--help)
-				ACTION=help_message
+			-h)
+				action=help_message
 				break
 				;;
 			-I)
@@ -249,7 +286,7 @@ gd_main(){
 								break
 								;;
 							*)
-								INCLUDE="${INCLUDE} $2"
+								include="${include} $2"
 								shift
 								;;
 						esac
@@ -261,7 +298,7 @@ gd_main(){
 				fi
 				;;
 			-d)
-				export DOCKER=true
+				flag_use_docker=true
 				shift
 				;;
 			-c)
@@ -269,20 +306,20 @@ gd_main(){
 				shift
 				;;
 			-p)
-				PRESERVE=true
+				flag_preserve=true
 				shift
 				;;
 			-n)
-				DEFAULT=false
+				flag_use_default=false
 				shift
 				;;
 			-g)
-				GIT=true
+				flag_init_git=true
 				shift
 				;;
 			-M)
 				if [ -n "$2" ]; then
-					WITHMODS=$2
+					flag_modules=$2
 					shift
 				else
 					printf 'ERROR: "-M" requires a non-empty option argument.\n' >&2
@@ -294,10 +331,10 @@ gd_main(){
 				if [ -n "$2" ]; then
 					case "$2" in
 						"make")
-							MAKE=true
+							flag_init_make=true
 							;;
 						"code")
-							CODE=true
+							flag_init_code=true
 							;;
 					esac
 					shift
@@ -311,10 +348,10 @@ gd_main(){
 				if [ -n "$2" ]; then
 					case "$2" in
 						"pdf")
-							FORMAT=pdf
+							flag_format=pdf
 							;;
 						"pptx")
-							FORMAT=pptx
+							flag_format=pptx
 							;;
 					esac
 					shift
@@ -324,36 +361,40 @@ gd_main(){
 				fi
 				shift
 				;;
+			help)
+				action=help_message
+				break
+				;;
 			init)
-				ACTION=gd_init
+				action=gd_init
 				shift
 				;;
 			repr)
-				ACTION=gd_repr
+				action=gd_repr
 				shift
 				;;
 			wiki)
-				ACTION=gd_wiki
+				action=gd_wiki
 				shift
 				;;
-			script)
-				ACtION=gd_script
+			run)
+				action=gd_run
 				shift
 				;;
 			install-image)
-				ACTION=gd_install
+				action=gd_install
 				shift
 				;;
 			prep)
-				ACTION=gd_preprocess
+				action=gd_preprocess
 				shift
 				;;
 			test)
-				ACTION=gd_test
+				action=gd_test
 				shift
 				;;
 			check)
-				ACTION=gd_check
+				action=gd_check
 				shift
 				;;
 			*)
@@ -361,8 +402,8 @@ gd_main(){
 				;;
 		esac
 	done
-	$ACTION
-	exit 0
+	$action
+	#exit 0
 }
 
 # ----------
