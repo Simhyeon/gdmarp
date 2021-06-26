@@ -1,0 +1,16 @@
+{
+  "name": "bts_bin",
+  "version": "0.0.1",
+  "description": "bootstrap css module binary",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {},
+  "author": "simon creek",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.29.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.0.2"
+  }
+}
