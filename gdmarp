@@ -17,6 +17,7 @@ flag_init_git=false
 flag_init_make=false
 flag_format=pptx
 flag_modules=""
+only_prep=false
 config=""
 bin_name=$(basename "$0")
 bin_path=$(dirname "$(readlink -f "$0")")
@@ -36,6 +37,7 @@ reset_var(){
 	flag_init_make=false
 	flag_format=pptx
 	flag_modules=""
+	only_prep=false
 	config=""
 	bin_name=$(basename "$0")
 	bin_path=$(dirname "$(readlink -f "$0")")
@@ -153,6 +155,8 @@ gd_preprocess(){
 
 	# Sed for escape characters restoration
 	sed -i -f "$SCRIPTS"/restore.sed "$input"/out.md
+
+	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$input"/out.md "$out_dir"/$out_name.md
 }
 
 gd_repr(){
@@ -170,7 +174,14 @@ gd_repr(){
 		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o build/$out_name.$flag_format
 	fi
 
-	[ "$flag_preserve" = "false" ] && rm "$input"/out.md
+	# Previous codes
+	#[ "$flag_preserve" = "false" ] && rm "$input"/out.md
+
+	if [ "$flag_preserve" = "false" ]; then
+		rm "$input"/out.md
+	else
+		mv "$input"/out.md "$out_dir"
+	fi
 }
 
 gd_wiki(){
@@ -233,18 +244,23 @@ gd_run(){
 }
 
 gd_test(){
-	gd_preprocess
+	# Read a config
+	readconfig
 
-	# Compile with marp-cli
-	if [ "$flag_use_docker" = "false" ]; then
-		# No Docker
-		mkdir -p "$out_dir"
-		$marp --allow-local-files --html "$input"/out.md -o "$out_dir"/out.html
-	else
-		# With Docker
-		mkdir -p "$out_dir"
-		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
-	fi
+	# Index
+	i=0
+	runner=$(echo "$config" | jq .test[$i] )
+	while [ "$runner" != "null" ]
+	do
+		printf '> Executing test %s\n' "$runner"
+		# Reset varaibles for fresh run
+		reset_var
+		# !! Do not quote the argument because gd_main expects non quoted arguments
+		gd_main $(echo $runner | tr -d '"')
+		i=$((i+1))
+		runner=$(echo "$config" | jq .test[$i] )
+	done
+	echo "> test finished"
 }
 
 gd_check(){
@@ -411,6 +427,7 @@ gd_main(){
 				;;
 			prep)
 				action=gd_preprocess
+				only_prep=true
 				shift
 				;;
 			test)
