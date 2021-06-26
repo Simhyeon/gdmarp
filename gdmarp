@@ -86,7 +86,7 @@ gd_init(){
 	cp "$bin_path"/default/basic/* -rf "$input"
 
 	[ "$flag_use_docker" = "true" ] && chmod 777 "$input"/build
-	[ "$flag_init_git" = "true" ] && cd "$input" && git init && printf "build\nout.md" > .gitignore
+	[ "$flag_init_git" = "true" ] && cd "$input" && git init && printf "build" > .gitignore
 	[ "$flag_init_make" = "true" ] && cp "$bin_path"/default/extra/Makefile -f "$input"/Makefile
 	[ "$flag_init_code" = "true" ] && mkdir "$input"/.vscode && cp "$bin_path"/default/extra/tasks.json -f "$input"/.vscode/tasks.json
 
@@ -145,18 +145,20 @@ gd_preprocess(){
 	add_sources $flag_modules
 
 	# Run main m4 functions
-	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/index.md > "$input"/out.md
+	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/index.gdt > "$input"/out.gdt
 
 	# Process again for fragmented macro execution no sources needed
-	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/out.md > "$input"/frag.md
+	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/out.gdt > "$input"/frag.gdt
 	# This squahses multiple new lines into single new line
-	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$input"/frag.md > "$input"/out.md
-	rm "$input"/frag.md
+	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$input"/frag.gdt > "$input"/out.gdt
+	rm "$input"/frag.gdt
 
 	# Sed for escape characters restoration
-	sed -i -f "$SCRIPTS"/restore.sed "$input"/out.md
+	sed -i -f "$SCRIPTS"/restore.sed "$input"/out.gdt
 
-	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$input"/out.md "$out_dir"/$out_name.md
+	mv "$input"/out.gdt "$out_dir"/out.gdt
+
+	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_dir"/out.gdt "$out_dir"/$out_name.gdt
 }
 
 gd_repr(){
@@ -167,20 +169,20 @@ gd_repr(){
 	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
 		mkdir -p "$out_dir"
-		$marp --allow-local-files --$flag_format --html "$input"/out.md -o "$out_dir"/$out_name.$flag_format
+		$marp --allow-local-files --$flag_format --html "$input"/out.gdt -o "$out_dir"/$out_name.$flag_format
 	else
 		# With Docker
 		mkdir -p "$out_dir"
-		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o build/$out_name.$flag_format
+		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.gdt --$flag_format --allow-local-files --html -o build/$out_name.$flag_format
 	fi
 
 	# Previous codes
-	#[ "$flag_preserve" = "false" ] && rm "$input"/out.md
+	#[ "$flag_preserve" = "false" ] && rm "$input"/out.gdt
 
 	if [ "$flag_preserve" = "false" ]; then
-		rm "$input"/out.md
+		rm "$input"/out.gdt
 	else
-		mv "$input"/out.md "$out_dir"
+		mv "$input"/out.gdt "$out_dir"
 	fi
 }
 
@@ -207,10 +209,10 @@ gd_wiki(){
 			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 0
 
 			# TODO | Currently binary query is not complete
-			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$input"/out.md "$input"/config.json
+			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$input"/out.gdt "$input"/config.json
 
 			# Change name to given final name and save to 
-			mv "$input"/out.md "$out_dir"/$out_name.wikitext
+			mv "$input"/out.gdt "$out_dir"/$out_name.wikitext
 			;;
 		*)
 			echo "No proper module was given to render a wiki page"
@@ -218,9 +220,9 @@ gd_wiki(){
 			;;
 	esac
 
-	# Previously it simply removed out.md file however I became so sure if is a
+	# Previously it simply removed out.gdt file however I became so sure if is a
 	# sane to remove file while it is not a middle file but final result
-	#[ "$flag_preserve" = "false" ] && rm "$input"/out.md
+	#[ "$flag_preserve" = "false" ] && rm "$input"/out.gdt
 }
 
 gd_run(){
