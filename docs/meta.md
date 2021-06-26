@@ -60,14 +60,12 @@ Mature api, large userbase
 * [ ] Make withmods variables can save multiple arguments
 * [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
 
-* [x] Comment macro 
-* [x] Set Variable macro
-
 * [ ] Config feature
 	* [x] Modules to include for preprocessing
 	* [x] Consider making config format as json
 	* [x] Add environmental variables
-	* [ ] Config option to designate multiple render process. (Similar to MakeFile)
+	* [x] Config option to designate multiple render process. (Similar to MakeFile)
+	* [ ] Config option to designate multiple render process but for test purposes
 
 * [ ] Template functionality
 	* [ ] Make local content template from system design
@@ -93,16 +91,8 @@ Mature api, large userbase
 		* [x] Substitue array with something posix compliant.
 		* [x] Posix sh compliant flag naming which is single character
 
-* [x] Lightweight + ergonomic local project directory
-	* [x] No more local css, m4 extension scripts
-	* [x] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
 
 ### 0.1
-
-* [ ] **Enhance macro ergonomics**
-	- Avoid meaningless verbosity
-	- Improve argument rationale
-	- Macro usage should not be ambiguous
 
 * [ ] Improve documentation
 	* [ ] Update macro.md
@@ -115,9 +105,6 @@ Mature api, large userbase
 * [ ] New features
 	* [ ] Enable cache feature for easy maintenance of temporary files 
 	Save compressed images and out.md in cache directory
-	* [ ] Template feature
-	Create pre-configured project structure
-	* [ ] Auto publish content into python sphinx like web page.
 
 #### Done
 
@@ -140,9 +127,15 @@ Mature api, large userbase
 * [x] Image compression macro (Optipng for png, jpegoptim for jpeg)
 * [x] Documentation is weak, make it happen before even I forget what it does
 
+* [x] Lightweight + ergonomic local project directory
+	* [x] No more local css, m4 extension scripts
+	* [x] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
+
+* [x] Comment macro 
+* [x] Set Variable macro
+
 ### Big TODO
 
-* [ ] Make integrated auto html deployment service such as doxygen or sphinx
 * [ ] Make alternative language for m4 and awk in rust.
 
 #### Dropped todos (However this might change in future)
