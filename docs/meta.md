@@ -58,7 +58,6 @@ Mature api, large userbase
 * [ ] Improve wikitext macros
 * [ ] Prepare for improved readme
 * [ ] Make withmods variables can save multiple arguments
-* [ ] Make mediawiki modlue to send useful logs to end users
 * [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
 
 * [ ] Template functionality
@@ -127,6 +126,7 @@ Mature api, large userbase
 
 * [x] Comment macro 
 * [x] Set Variable macro
+* [x] Make mediawiki module to send useful logs to end users
 
 * [x] Config feature
 	* [x] Modules to include for preprocessing
