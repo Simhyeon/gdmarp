@@ -5,7 +5,8 @@
 # ----------
 # VARIABLES
 input=$PWD
-output="$PWD"/build
+out_dir="$PWD"/build
+out_name="out"
 include=""
 sources=""
 flag_preserve=false
@@ -23,7 +24,8 @@ action=""
 
 reset_var(){
 	input=$PWD
-	output="$PWD"/build
+	out_dir="$PWD"/build
+	out_name="out"
 	include=""
 	sources=""
 	flag_preserve=false
@@ -52,14 +54,15 @@ help_message(){
 	echo " "
 	echo "options:"
 	echo "-h                    show brief help"
-	echo "-I <DIR>              specify a m4 script directory to include"
-	echo "-M <MODULES>          modules to include with execution"
+	echo "-I <dir>              specify a m4 script directory to include"
+	echo "-M <module>           modules to include with execution"
+	echo "-O <file name>        designate file name for final result"
 	echo "-p                    preserve middle format"
 	echo "-n                    do not apply default macro rules"
 	echo "-d                    indicate docker usage. Docker image needs loose privilege."
 	echo "-g                    initiate with git after gdmarp init and create gitignore file"
-	echo "-S <TYPE>             add automation script"
-	echo "-F <flag_format>           repr format to render"
+	echo "-S <type>             add files to include as init"
+	echo "-F <flat foramt>      repr format to render"
 	echo " "
 	echo "actions:"
 	echo "help                  show brief help messages"
@@ -68,8 +71,8 @@ help_message(){
 	echo "repr                  render representation form"
 	echo "wiki                  push processed file into wiki website"
 	echo "run                   run all scripts configured in config.json file"
+	echo "test                  run all test scripts configued in config.json file"
 	echo "check                 check installed dependencies"
-	echo "test                  create html format for testing and preserve out.md file"
 	echo "install-image         install latest gdmarp docker image"
 }
 
@@ -85,7 +88,7 @@ gd_init(){
 	[ "$flag_init_make" = "true" ] && cp "$bin_path"/default/extra/Makefile -f "$input"/Makefile
 	[ "$flag_init_code" = "true" ] && mkdir "$input"/.vscode && cp "$bin_path"/default/extra/tasks.json -f "$input"/.vscode/tasks.json
 
-	# TODO | Currently withmods are a single item despite the name
+	# TODO | Currently flag_modules are a single item despite the name
 	case $flag_modules in
 		mw)
 			readconfig
@@ -159,12 +162,12 @@ gd_repr(){
 	# Compile with marp-cli
 	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		mkdir -p "$output"
-		$marp --allow-local-files --$flag_format --html "$input"/out.md -o "$output"/out.$flag_format
+		mkdir -p "$out_dir"
+		$marp --allow-local-files --$flag_format --html "$input"/out.md -o "$out_dir"/$out_name.$flag_format
 	else
 		# With Docker
-		mkdir -p "$output"
-		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o build/out.$flag_format
+		mkdir -p "$out_dir"
+		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o build/$out_name.$flag_format
 	fi
 
 	[ "$flag_preserve" = "false" ] && rm "$input"/out.md
@@ -176,7 +179,7 @@ gd_wiki(){
 
 	# No Docker code only for now
 	# Make directory if not existant
-	mkdir -p "$output"
+	mkdir -p "$out_dir"
 
 	# Utilzie various backends
 	case $flag_modules in
@@ -194,6 +197,9 @@ gd_wiki(){
 
 			# TODO | Currently binary query is not complete
 			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$input"/out.md "$input"/config.json
+
+			# Change name to given final name and save to 
+			mv "$input"/out.md "$out_dir"/$out_name.wikitext
 			;;
 		*)
 			echo "No proper module was given to render a wiki page"
@@ -201,7 +207,9 @@ gd_wiki(){
 			;;
 	esac
 
-	[ "$flag_preserve" = "false" ] && rm "$input"/out.md
+	# Previously it simply removed out.md file however I became so sure if is a
+	# sane to remove file while it is not a middle file but final result
+	#[ "$flag_preserve" = "false" ] && rm "$input"/out.md
 }
 
 gd_run(){
@@ -230,11 +238,11 @@ gd_test(){
 	# Compile with marp-cli
 	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		mkdir -p "$output"
-		$marp --allow-local-files --html "$input"/out.md -o "$output"/out.html
+		mkdir -p "$out_dir"
+		$marp --allow-local-files --html "$input"/out.md -o "$out_dir"/out.html
 	else
 		# With Docker
-		mkdir -p "$output"
+		mkdir -p "$out_dir"
 		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --allow-local-files --html -o build/out.html
 	fi
 }
@@ -327,6 +335,16 @@ gd_main(){
 				fi
 				shift
 				;;
+			-O)
+				if [ -n "$2" ]; then
+					out_name=$2
+					shift
+				else
+					printf 'ERROR: "-O" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
+				shift
+				;;
 			-S)
 				if [ -n "$2" ]; then
 					case "$2" in
@@ -352,6 +370,12 @@ gd_main(){
 							;;
 						"pptx")
 							flag_format=pptx
+							;;
+						"html")
+							flag_format=html
+							;;
+						*)
+							echo "\"$2\" is not a supported format"
 							;;
 					esac
 					shift
@@ -391,6 +415,8 @@ gd_main(){
 				;;
 			test)
 				action=gd_test
+				flag_modules=marp
+				flag_format=html
 				shift
 				;;
 			check)
