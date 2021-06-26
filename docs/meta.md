@@ -55,9 +55,10 @@ Mature api, large userbase
 
 * [ ] Post installation script for docker usage (Mostly npm install)
 
-* [ ] Improove wikitext macros
-* [ ] Prepare for improoved readme
+* [ ] Improve wikitext macros
+* [ ] Prepare for improved readme
 * [ ] Make withmods variables can save multiple arguments
+* [ ] Make mediawiki modlue to send useful logs to end users
 * [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
 
 * [ ] Config feature
