@@ -1,0 +1,25 @@
+_ui_begin()
+
+_top_space(
+	_top_left(
+		_label(text_content)
+		_icon()
+	)
+	_top_center(
+		_label(text_content)
+	)
+	_top_right(
+		_label()
+		_btn(id_name, interaction, tooltip)
+	)
+)
+
+_container(
+	yatti yatta
+)
+
+_bot_space(
+	yatti yatta
+)
+
+_ui_end()

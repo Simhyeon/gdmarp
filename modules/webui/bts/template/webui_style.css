@@ -1,0 +1,62 @@
+html, body {
+	height: 100%;
+}
+
+.webui {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between; 
+}
+
+/* Container flex direction is customizable */
+.container {
+	display: flex;
+	flex-grow: 1;
+}
+
+.topSpace {
+	display: flex;
+	justify-content: space-between; 
+	margin : v_top_space_margin();
+	padding : v_top_space_padding();
+	flex-grow: 0;
+}
+
+.topCenter {
+	justify-content: center; 
+	display: flex;
+}
+
+.topLeft {
+	display: flex;
+	flex-direction: row;
+}
+
+.topRight {
+	display: flex;
+	flex-direction: row-reverse;
+}
+
+.botSpace {
+	display: flex;
+	justify-content: space-between; 
+	margin : v_bot_space_margin();
+	padding : v_bot_space_padding();
+	flex-grow: 0;
+}
+
+.botCenter {
+	justify-content: center; 
+	display: flex;
+}
+
+.botLeft {
+	display: flex;
+	flex-direction: row;
+}
+
+.botRight {
+	display: flex;
+	flex-direction: row-reverse;
+}
