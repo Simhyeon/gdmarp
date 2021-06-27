@@ -53,17 +53,18 @@ Mature api, large userbase
 
 ### 0.2
 
-* [ ] Post installation script for docker usage (Mostly npm install)
-
 * [ ] Improve wikitext macros
-* [ ] Prepare for improved readme
-* [ ] Make withmods variables can save multiple arguments
-* [ ] Feature ::: Add "remove all unused macro expression" flag -> This is harder than first thought...
+* [ ] Improve README
+* [ ] Consider making withmods variables can save multiple arguments
 
-* [ ] Template functionality
+* [ ] Template functionality -> Maybe module?
 	* [ ] Make local content template from system design
 	* [ ] Make basic templates functionality which copys templates from bin folder or web 
 	Integrate with subcommand flags
+
+* [ ] Webui module
+	* [ ] Complete macros
+	* [ ] Utilize bootstrap for aesthetics + functionality
 
 * [ ] Modular components
 	* [x] Separate a global basic macro component.
@@ -73,7 +74,6 @@ Mature api, large userbase
 		* [x] Table macro
 		* [x] Automatic post page functionality binded to gdmarp script execution
 	* [ ] Create new webui backend macro component. 
-	(Consider bootstrap with pure javascript for better compatibility)
 
 * [ ] Ergonomic program execution script for both windows and linux.
 	* [ ] Windows powershell execution script.
@@ -83,7 +83,6 @@ Mature api, large userbase
 		* [x] Change all bash speicifc syntax into posix compliant.
 		* [x] Substitue array with something posix compliant.
 		* [x] Posix sh compliant flag naming which is single character
-
 
 ### 0.1
 
@@ -127,6 +126,9 @@ Mature api, large userbase
 * [x] Comment macro 
 * [x] Set Variable macro
 * [x] Make mediawiki module to send useful logs to end users
+* [x] Post installation script for docker usage (Mostly npm install)
+* [x] Feature ::: Add "remove all unused macro expression" flag 
+* [x] Implement -i flag to set input file for better extendability
 
 * [x] Config feature
 	* [x] Modules to include for preprocessing
