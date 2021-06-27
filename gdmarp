@@ -2,29 +2,8 @@
 
 # Reference source : https://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash
 
-# ----------
-# VARIABLES
-input=$PWD
-out_dir="$PWD"/build
-out_name="out"
-include=""
-sources=""
-flag_preserve=false
-flag_use_default=true
-flag_use_docker=false
-flag_init_code=false
-flag_init_git=false
-flag_init_make=false
-flag_format=pptx
-flag_modules=""
-only_prep=false
-config=""
-bin_name=$(basename "$0")
-bin_path=$(dirname "$(readlink -f "$0")")
-action=""
-
-reset_var(){
-	input=$PWD
+init_var(){
+	cwd=$PWD
 	out_dir="$PWD"/build
 	out_name="out"
 	include=""
@@ -37,11 +16,17 @@ reset_var(){
 	flag_init_make=false
 	flag_format=pptx
 	flag_modules=""
+	flag_input_file="index.gdt"
+	flag_retain_unused=false
 	only_prep=false
 	config=""
 	bin_name=$(basename "$0")
 	bin_path=$(dirname "$(readlink -f "$0")")
 	action=""
+
+	# This is rather temporary for convenience
+	out_file="$out_dir"/out.gdt
+	frag_file="$out_dir"/frag.gdt
 }
 
 # Marp path can be changed with a flat
@@ -55,27 +40,30 @@ help_message(){
 	echo "Usage: [options] action [arguments]"
 	echo " "
 	echo "options:"
-	echo "-h                    show brief help"
+	echo "-F <repr format>      repr a format to render"
+	echo "-N <file name>        designate a file name for input"
 	echo "-I <dir>              specify a m4 script directory to include"
-	echo "-M <module>           modules to include with execution"
-	echo "-O <file name>        designate file name for final result"
-	echo "-p                    preserve middle format"
+	echo "-M <module>           a module to include with execution"
+	echo "-O <file name>        designate a file name for final result"
+	echo "-S <type>             add a file type to include for initiation"
+	echo "-d                    indicate a docker usage. Docker image needs a loose privilege."
+	echo "-g                    initiate with git after gdmarp init and create a gitignore file"
+	echo "-h                    show brief help"
 	echo "-n                    do not apply default macro rules"
-	echo "-d                    indicate docker usage. Docker image needs loose privilege."
-	echo "-g                    initiate with git after gdmarp init and create gitignore file"
-	echo "-S <type>             add files to include as init"
-	echo "-F <flat foramt>      repr format to render"
+	echo "-p                    preserve a middle format"
+	echo "-r                    retain unusesd macro usages if not given a flag, all unused macros are discarded"
 	echo " "
 	echo "actions:"
-	echo "help                  show brief help messages"
-	echo "init                  initiate file structure"
-	echo "prep                  only pre-process m4 macros"
-	echo "repr                  render representation form"
-	echo "wiki                  push processed file into wiki website"
-	echo "run                   run all scripts configured in config.json file"
-	echo "test                  run all test scripts configued in config.json file"
 	echo "check                 check installed dependencies"
-	echo "install-image         install latest gdmarp docker image"
+	echo "help                  show brief help messages"
+	echo "init                  construct a default file structure"
+	echo "install-image         install a latest gdmarp docker image"
+	echo "prep                  only pre-process m4 macros"
+	echo "repr                  render a representation form"
+	echo "run                   run all scripts configured in config.json file"
+	echo "test                  run all test scripts configued in config.json file, test automatcially enables preserve flag and don't overwrite middle file"
+	echo "wiki                  push the processed file into the given wiki website"
+	echo "wui                   create a web ui html"
 }
 
 gd_install(){
@@ -83,12 +71,12 @@ gd_install(){
 }
 
 gd_init(){
-	cp "$bin_path"/default/basic/* -rf "$input"
+	cp "$bin_path"/default/basic/* -rf "$cwd"
 
-	[ "$flag_use_docker" = "true" ] && chmod 777 "$input"/build
-	[ "$flag_init_git" = "true" ] && cd "$input" && git init && printf "build" > .gitignore
-	[ "$flag_init_make" = "true" ] && cp "$bin_path"/default/extra/Makefile -f "$input"/Makefile
-	[ "$flag_init_code" = "true" ] && mkdir "$input"/.vscode && cp "$bin_path"/default/extra/tasks.json -f "$input"/.vscode/tasks.json
+	[ "$flag_use_docker" = "true" ] && chmod 777 "$cwd"/build
+	[ "$flag_init_git" = "true" ] && cd "$cwd" && git init && printf "build" > .gitignore
+	[ "$flag_init_make" = "true" ] && cp "$bin_path"/default/extra/Makefile -f "$cwd"/Makefile
+	[ "$flag_init_code" = "true" ] && mkdir "$cwd"/.vscode && cp "$bin_path"/default/extra/tasks.json -f "$cwd"/.vscode/tasks.json
 
 	# TODO | Currently flag_modules are a single item despite the name
 	case $flag_modules in
@@ -96,13 +84,13 @@ gd_init(){
 			readconfig
 
 			config=$(printf '%s' "$config" | jq --arg bot_id id --arg bot_pwd password --arg page_title title '.env += {url: "wiki_url"} + {bot_id: $bot_id} + {bot_pwd: $bot_pwd } + {page_title: $page_title}')
-			printf '%s' "$config" > "$input"/config.json
+			printf '%s' "$config" > "$cwd"/config.json
 			;;
 	esac
 }
 
 readconfig(){
-	config=$(cat "$input"/config.json)
+	config=$(cat "$cwd"/config.json)
 }
 
 # Yet to complete
@@ -117,6 +105,10 @@ add_sources(){
 				sources="${sources} $MODULE/wiki/mediawiki/env.m4 $MODULE/wiki/mediawiki/macro.m4"
 				shift
 				;;
+			bts)
+				sources="${sources} $MODULE/webui/bts/env.m4 $MODULE/webui/bts/macro.m4"
+				shift
+				;;
 			*)
 				shift
 				;;
@@ -128,61 +120,71 @@ gd_preprocess(){
 	# Literally read the config
 	readconfig
 
+	# Create build directory if not existent
+	mkdir -p "$out_dir"
+
 	# Export environment variable
 	export ROOT=$bin_path
 	export MODULE=$bin_path/modules
 	export SCRIPTS=$bin_path/m4/scripts
 
 	# M4 include path
-	[ -z "$include" ] && include=$PWD
+	# If -I flag option was not given set current working directory as include directory
+	[ -z "$include" ] && include=$cwd
 
-	# Source files array to process
-	# Word splitting is intended because there is no array in posix sh
-	sources="$input"/index.m4
-	# If default script is enabled or not disabled
-	[ "$flag_use_default" = "true" ] && sources="${sources} $input/env.m4 $bin_path/m4/default.m4"
-	# modules are references from flag option
+	# Construct source files to process
+	# Word splitting for sources varaible is intended because there is no array in posix sh
+	sources="$cwd"/index.m4
+	# If default script is enabled(default) include it
+	[ "$flag_use_default" = "true" ] && sources="${sources} $cwd/env.m4 $bin_path/m4/default.m4"
+	# Add sources according to given modules
 	add_sources $flag_modules
 
-	# Run main m4 functions
-	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/index.gdt > "$input"/out.gdt
+	# Run main m4 functions $sources should be expanded
+	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$cwd"/"$flag_input_file" > "$out_file"
 
 	# Process again for fragmented macro execution no sources needed
-	m4 -I "$PWD" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$input"/out.gdt > "$input"/frag.gdt
+	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$out_file" > "$frag_file"
+
+	# First sed removes all contents inside brackets including nested brackets
+	# Second sed removes all macro names start with underscore which is convention of end user macros
+	# These sed scripts are scraped from internet, and it happends to doesn't work in conjunction thus, separate command usage is needed.
+	[ "$flag_retain_unused" = "false" ] && sed -i ':again;$!N;$!b again; :b; s/([^()]*)//g; t b' "$frag_file" && sed -i 's/\<_[^ ]*\>//' "$frag_file"
+
 	# This squahses multiple new lines into single new line
-	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$input"/frag.gdt > "$input"/out.gdt
-	rm "$input"/frag.gdt
+	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"
 
 	# Sed for escape characters restoration
-	sed -i -f "$SCRIPTS"/restore.sed "$input"/out.gdt
+	sed -i -f "$SCRIPTS"/restore.sed "$out_file"
 
-	mv "$input"/out.gdt "$out_dir"/out.gdt
+	# If this is prep subcommand then set file's name to given name
+	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_file" -f "$out_dir"/$out_name.gdt
 
-	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_dir"/out.gdt "$out_dir"/$out_name.gdt
+	# Remove frag file because it is not used anymore
+	[ "$flag_preserve" = "false" ] && rm "$frag_file"
 }
 
 gd_repr(){
 	# Preprocessing before marp compilation
 	gd_preprocess
 
+	# Change out.gdt to out.md because marp expects markdown file
+	mv "$out_file" "$out_dir"/out.md
+
 	# Compile with marp-cli
 	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		mkdir -p "$out_dir"
-		$marp --allow-local-files --$flag_format --html "$input"/out.gdt -o "$out_dir"/$out_name.$flag_format
+		$marp --allow-local-files --$flag_format --html "$out_dir"/out.md -o "$out_dir"/$out_name.$flag_format
 	else
 		# With Docker
-		mkdir -p "$out_dir"
-		docker run --rm --init -v "$input":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.gdt --$flag_format --allow-local-files --html -o build/$out_name.$flag_format
+		docker run --rm --init -v "$cwd":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli "$out_dir"/out.md --$flag_format --allow-local-files --html -o "$out_dir"/$out_name.$flag_format
 	fi
 
-	# Previous codes
-	#[ "$flag_preserve" = "false" ] && rm "$input"/out.gdt
-
 	if [ "$flag_preserve" = "false" ]; then
-		rm "$input"/out.gdt
+		rm "$out_dir"/out.md
 	else
-		mv "$input"/out.gdt "$out_dir"
+		# For test subcommand compatibility
+		mv "$out_dir"/out.md "$out_file"
 	fi
 }
 
@@ -191,8 +193,6 @@ gd_wiki(){
 	gd_preprocess
 
 	# No Docker code only for now
-	# Make directory if not existant
-	mkdir -p "$out_dir"
 
 	# Utilzie various backends
 	case $flag_modules in
@@ -204,25 +204,56 @@ gd_wiki(){
 			export page_title=$(printf '%s' "$config" | jq .env.page_title)
 
 			# Return early if variable is null
-			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && exit 0
-			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && exit 0
-			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 0
+			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && exit 1
+			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && exit 1
+			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 1
 
 			# TODO | Currently binary query is not complete
-			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$input"/out.gdt "$input"/config.json
+			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$out_file" "$cwd"/config.json
 
 			# Change name to given final name and save to 
-			mv "$input"/out.gdt "$out_dir"/$out_name.wikitext
+			mv "$out_file" -f "$out_dir"/$out_name.wikitext
 			;;
 		*)
 			echo "No proper module was given to render a wiki page"
-			exit 0
+			exit 1
 			;;
 	esac
 
 	# Previously it simply removed out.gdt file however I became so sure if is a
 	# sane to remove file while it is not a middle file but final result
-	#[ "$flag_preserve" = "false" ] && rm "$input"/out.gdt
+	#[ "$flag_preserve" = "false" ] && rm "$out_file"
+}
+
+gd_wui(){
+	# Preprocessing before sending out file
+	gd_preprocess
+
+	# No Docker code only for now
+
+	# Utilzie various backends
+	case $flag_modules in
+		bts)
+			# Add divert directives in first line and last line of the file
+			# so that all texts within out.gdt will be ignored in final html file
+			sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
+
+			# Process macros, kind of template engine
+			m4 -I "$bin_path"/m4/GNU -I "$MODULE"/webui/bts/template \
+			-I "$cwd" \
+			"$MODULE"/webui/bts/env.m4 "$cwd"/env.m4 \
+			"$bin_path"/m4/default.m4 "$out_file" \
+			"$MODULE"/webui/bts/template/main.html | awk -f \
+			"$SCRIPTS"/rmExtNewLines.awk > "$out_dir"/"$out_name".html
+
+			# Remove middle file
+			[ "$flag_preserve" = "false" ] && rm "$out_file"
+			;;
+		*)
+			echo "No proper module was given to yield a web ui page"
+			exit 1
+			;;
+	esac
 }
 
 gd_run(){
@@ -235,10 +266,21 @@ gd_run(){
 	while [ "$runner" != "null" ]
 	do
 		printf '> Executing script %s\n' "$runner"
+
+		# cut off comma from the runner
+		runner=$(echo $runner | tr -d '"')
+		subcommand=$(echo $runner | awk '{print $1}')
+
+		# Run or test cannot be nested to prevent infinite loop
+		if [ "$subcommand" = "test" ] || [ "$subcommand" = "run" ]; then
+			echo "Test or run subcommand cannot be nested"
+			exit 1
+		fi
+
 		# Reset varaibles for fresh run
-		reset_var
+		init_var
 		# !! Do not quote the argument because gd_main expects non quoted arguments
-		gd_main $(echo $runner | tr -d '"')
+		gd_main $runner
 		i=$((i+1))
 		runner=$(echo "$config" | jq .script[$i] )
 	done
@@ -256,15 +298,38 @@ gd_test(){
 	do
 		printf '> Executing test %s\n' "$runner"
 		# Reset varaibles for fresh run
-		reset_var
+		init_var
+
+		# cut off comma from the runner
+		runner=$(echo $runner | tr -d '"')
+		subcommand=$(echo $runner | awk '{print $1}')
+
+		# Run or test cannot be nested to prevent infinite loop
+		if [ "$subcommand" = "test" ] || [ "$subcommand" = "run" ]; then
+			echo "Test or run subcommand cannot be nested"
+			exit 1
+		fi
+
+		# Also attach module name if module name was given in test script
+		module_name=$(echo $runner | awk '{for (I=1;I<NF;I++) if ($I == "-M") print $(I+1)}')
+		[ "$module_name" != "" ] && module_name=_"$module_name"
+
+		# Set a test middle file's name differnt from a normal middle file
+		out_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_out_"$i".gdt
+		frag_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_frag_"$i".gdt
+
+		# Always turn on preserve to preserve all miscellaenous files
+		flag_preserve=true
+
 		# !! Do not quote the argument because gd_main expects non quoted arguments
-		gd_main $(echo $runner | tr -d '"')
+		gd_main $runner
 		i=$((i+1))
 		runner=$(echo "$config" | jq .test[$i] )
 	done
 	echo "> test finished"
 }
 
+# This function is somewhat incomplete and rather useless
 gd_check(){
 	# Check binary installation
 	# Currently m4 and awk is necessary regardless of docker image
@@ -299,11 +364,11 @@ gd_main(){
 	# Argument parse
 	while [ $# -gt 0 ] ; do
 		case "$1" in 
-			-h)
+			-h) # help
 				action=help_message
 				break
 				;;
-			-I)
+			-I) # Include
 				if [ -n "$2" ]; then
 					while [ -n "$2" ]; do
 						case "$2" in
@@ -323,27 +388,46 @@ gd_main(){
 					exit 1
 				fi
 				;;
-			-d)
+			-N) # iNput file
+				if [ -n "$2" ]; then
+					while [ -n "$2" ]; do
+						case "$2" in
+							-*)
+								break
+								;;
+							*)
+								flag_input_file=$2
+								shift
+								;;
+						esac
+					done
+					shift 
+				else
+					printf 'ERROR: "-N" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
+				;;
+			-d) # docker
 				flag_use_docker=true
 				shift
 				;;
-			-c)
-				marp="node /home/marp/.cli/marp-cli.js"
+			-r) # retain
+				flag_retain_unused=true
 				shift
 				;;
-			-p)
+			-p) # preserve
 				flag_preserve=true
 				shift
 				;;
-			-n)
+			-n) # no default, negate or I don't any negatation word
 				flag_use_default=false
 				shift
 				;;
-			-g)
+			-g) # git
 				flag_init_git=true
 				shift
 				;;
-			-M)
+			-M) # Module
 				if [ -n "$2" ]; then
 					flag_modules=$2
 					shift
@@ -353,7 +437,7 @@ gd_main(){
 				fi
 				shift
 				;;
-			-O)
+			-O) # Output
 				if [ -n "$2" ]; then
 					out_name=$2
 					shift
@@ -363,7 +447,7 @@ gd_main(){
 				fi
 				shift
 				;;
-			-S)
+			-S) # Script
 				if [ -n "$2" ]; then
 					case "$2" in
 						"make")
@@ -380,7 +464,7 @@ gd_main(){
 				fi
 				shift
 				;;
-			-F)
+			-F) # Format
 				if [ -n "$2" ]; then
 					case "$2" in
 						"pdf")
@@ -411,12 +495,18 @@ gd_main(){
 				action=gd_init
 				shift
 				;;
-			repr)
+			repr) # representation
 				action=gd_repr
 				shift
 				;;
 			wiki)
 				action=gd_wiki
+				shift
+				;;
+			wui) # web ui
+				action=gd_wui
+				# This is necessary because wui expands m4 for triple times
+				flag_retain_unused=true
 				shift
 				;;
 			run)
@@ -453,5 +543,7 @@ gd_main(){
 
 # ----------
 # MAIN
-# No quote is needed
+# Initiate variables
+init_var
+# No quote is needed because argument should be expanded
 gd_main $*
