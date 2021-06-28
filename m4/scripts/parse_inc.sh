@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PATH=$1
-CAND=inc/"$PATH".md
+CAND=inc/"$PATH".gdt
 
 # If candiate file doesn't exist
 if [ -f "$CAND" ]; then
