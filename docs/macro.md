@@ -1,5 +1,7 @@
 ### Macro rules (WIP)
 
+**Currently gdmarp 0.2 is comfing and this document is very oudated.**
+
 Macro starts with underscore. There are several macro rules that don't start with underscore which are mostly intended for internal usage.
 
 ### Comma rules
