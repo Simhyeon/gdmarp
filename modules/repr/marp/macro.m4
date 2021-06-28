@@ -12,7 +12,7 @@ divert(`-1')
 # Internal Macros 
 
 # Substitue class name with marp compatible class form
-define(`m_class', `<!-- _class: $1 -->')dnl # white space between _class: and $1 is necessary
+define(`m_class', `<!-- \_class: $1 -->')dnl # white space between _class: and $1 is necessary
 # Subsitue with markdown compatible image form
 define(`m_img', `
 ![$1]($2)')dnl
@@ -47,7 +47,7 @@ define(`_h5', `##### $1')dnl
 define(`_st', `~~$1~~')dnl
 
 # Underline
-define(`_ud', `__$1__')dnl
+define(`_ud', `\_\_$1\_\_')dnl
 
 # Indentation
 define(`_idt', `forloop(`', 1, $1, `  ')')dnl

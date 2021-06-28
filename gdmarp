@@ -141,9 +141,11 @@ gd_preprocess(){
 	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$out_file" > "$frag_file"
 
 	# First sed removes all contents inside brackets including nested brackets
-	# Second sed removes all macro names start with underscore which is convention of end user macros
+	# Second sed removes all macro names start with underscore which is
+	# convention of end user macros but negates words start with "\_" which means
+	# "_" before word is literal not a mcro
 	# These sed scripts are scraped from internet, and it happends to doesn't work in conjunction thus, separate command usage is needed.
-	[ "$flag_retain_unused" = "false" ] && sed -i ':again;$!N;$!b again; :b; s/([^()]*)//g; t b' "$frag_file" && sed -i 's/\<_[^ ]*\>//' "$frag_file"
+	[ "$flag_retain_unused" = "false" ] && sed -i ':again;$!N;$!b again; :b; s/([^()]*)//g; t b' "$frag_file" && sed -i '/\_/! s/\<_[^ ]*\>//' "$frag_file"
 
 	# This squahses multiple new lines into single new line
 	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"
