@@ -1,30 +1,45 @@
-## Game documenation automatic generation script
+## Gdmarp, the game documenation automatic generation script
 
-This is a bash script to automate m4 macro pre-processing and marp pptx generation.
+This is a shell script to automate m4 macro pre-processing and various documenation redering with automated publishing.
 
 ### Caution
 
-**Big update is planned for 0.2 version which modifies working project
-structure, new program execution wrapper, new render forms and so on and so forth.**
-
-This script is very early in stage which means many breaking changes occur.
+This script is in very early stage which means many breaking changes can occur.
 
 ### How gdmarp works
 
+Gdmarp is a script that combines sets of several text processing and macro
+expansion for easy game design documentation creation. It utilizes various unix
+tools with m4 macro processor as a protagonist.
+
+Init subcommand creates a necessary file structure in a current working
+directory. In the directory gdmarp can render multiple documentation formats
+such as representation forms, wiki page and webui.
+
+There are many pre-defined macros that expands to lengthy codes of html,css or
+wikitexts. Some macros are defined in various modules at the same time which
+enables you to write macros once and render multiple formes without changing
+any of them.
+
+After writing all macros, simply call subcommand with proper backend modules
+and gdmarp will render output files into build directory.
+
 ### Dependencies
 
-- sed
+- sed (GNU version)
 - m4 
-- awk (preferably GNU version)
+- awk (GNU version)
 - marp-cli (node package)
 - google chrome or chromium (pptx creation dependencies)
+- jq (config parsing)
+- tr
 
 ### Optional dependencies
 
 - git (git flag)
 - bc (sized image macros)
 - sqlite3 (sql macro)
-- curl + jq (web api)
+- curl (web api)
 - jpegoptim (jpeg compression)
 - optipng (png compression)
 
@@ -35,7 +50,7 @@ This script is very early in stage which means many breaking changes occur.
 Pull docker image from dockerhub
 
 ```bash
-docker pull simoncreek/gdmarp
+docker pull simoncreek/gdmarp:latest
 ```
 
 Docker image includes all dependencies including optional ones.
@@ -61,59 +76,63 @@ alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 
 You can use windows subsystem linux2. However you have to configure chrome installation path with wsl2 option.
 
-This is a bash script, so theoritically windows bash can execute this script. However it is not guaranteed to work with cygwin or similar unix layer.
+This is a shell script, so theoritically windows bash can execute this script. However it is not guaranteed to work with cygwin or similar unix layer.
 
 I strongly recommend using docker image especially on windows.
 
-+ CR/LF triggers wrong formatted macro substitution. Therefore every file's EOL should be formatted as CR(\n). e.g. visual studio code support config to set default EOL to CR.
+P.S. CR/LF('\n\r') triggers wrong formatted macro substitutions. Therefore every file's EOL should be formatted as CR('\n'). e.g. visual studio code support a config to set default EOL to CR.
 
 ### Customization
 
 Edit index.m4 to define custom macros other than default macro rules
 
-Edit env.m4 file to define macro variables or frequently used but might changing numbers. e.g) default font size or current products stock ETC...
+Edit env.m4 file to define macro variables or frequently used but might changing numbers. 
+e.g.) default font size or current products stock ETC...
+
+You can simply use setvar macro to set varaibles inside any gdt files.
+e.g.) 
+```gdt
+_setvar(`v_url',`http://google.com/some_img_path')dnl
+
+// "v_url" varaible is expanded within image macro during macro processing
+_img(v_url())
+```
 
 ### Usage
+
+Usages of shell are mostly applicable to docker verison's but the difference of docker commands preceding real program arguments.
 
 #### shell
 
 ```bash
-
 # To get help messages
 gdmarp
 gdmarp -h
-gdmarp --help
+gdmarp help
 
-# Check dependencies for local install or docker environment
-# This only checkes binary files' names as they are. e.g) chrome or chromium is ok but chrome-browser or chromium-browser might not get detected. However it doesn't mean marp-cli cannot detect chrome binary file.
+# Check dependencies for local installation
 gdmarp check
-gdmarp --docker check
 
 # Initialize current working directory with desired file structure.
-# docker option does not install docker image but creates build folder with specific authority
-# git flag initialize folder and create .gitignore file
-# code flag creates vs code compliant tasks.json for easy build
+# Git flag, "-g" initialize folder and create .gitignore file
 gdmarp init
-gdmarp --docker init
-gdmarp --git init
-gdmarp --code init 
+gdmarp init -g
 
-# To compile within initiated directory
-gdmarp compile
-gdmarp --docker compile
+# To render presentation forms (pdf, pptx, html)
+gdmarp repr -M marp -F pdf
 
-# To preserve m4 pre-processed file (out.md) use --preserve option or -p in short
-gdmarp compile --preserve
+# To render wikitext and send page to mediawiki ( requires confis.json to be configured )
+gdmarp wiki -M mw
 
-# To create pdf file instead of pptx
-gdmarp compile --pdf
+# To render webui
+gdmarp wui -M bts
 
-# To create html when you want to tweak and test csv formats, this automatically preserves medium file
-# This may not include local files
+# To run test scripts in config.json
+# This enables preserve flag("-f") and creates distinctive middle files in build directory
 gdmarp test
 
-# To disable default macro, use --no-defualt option
-gdmarp compile --no-default
+# To run scripts in config.json
+gdmarp run
 ```
 #### docker
 
@@ -124,126 +143,11 @@ for example,
 ```bash
 <!-- Linux-->
 <!-- Linux needs to set user id manually-->
-docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp init --git --code
+docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp init -g 
 
 <!-- Windows Powershell-->
-docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init --git --code
-
-<!--If you dont' set alias for docker command using --make or --code flag can be handy-->
-
-<!-- Creates makefile(Linux) -->
-docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp init --git --code
-
-make cnprep
-make cncompile
-make cnpdf
-
-<!-- Creates vs code tasks.json file(Windows) -->
-docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init --git --code
-
-<!-- Press "Ctrl(Cmd) + Shift + b" to trigger aliased build tasks -->
+docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
 ```
-
-### Using without init command
-
-**Highly recommend using init command before using gdmarp script.**
-
-It is similar to use git without git init command.
-
-Init command creates a file structure looks like this
-
-```
-TargetDirectory
-|- inc
-|- res
-|- css
-    |- *.css
-|- build
-|- m4_ext
-    |- *.awk
-|- index.md
-|- index.m4
-|- env.m4
-```
-
-It is okay to not 'init' a directory, however there are several fixed rules.
-
-- Main file should be called **'index.md'**
-- Files you want to include should be located inside of a directory named **'inc'**
-- Built pptx or pdf files are always saved in directory named 'build' and the directory will be created if not existent.
-- use --no-default option to prevent unexpected error if the directory was not initiated.
-
-Other than that you can call compile commands regardless of init command usage. However you cannot extension macros. 
-
-I recommend at least copy m4\_ext folder into desired location to utilize frequently used macros.
-
-### Basic syntax
-
-```markdown
-<!-- Do not escape underscore. Underscore means it's a macro -->
-<!-- If a macro doesn't expect arguments parenthesis is optional -->
-_styles(css/layout.css, css/table.css)
-
-<!-- Make this slide a title slide-->
-_title(Title Text, Subtitle text)
-
-<!-- Add horizontal line to start new slide -->
----
-
-<!--Text macro with font size-->
-_text(0, 
-This is some sample texts
-)
-
----
-
-<!-- Add class to current section. Content can be multiple classes delimted by spaces -->
-_cls(split gdtable)
-
-# Slide title
-
-<!-- Column macros properly works only when split class was added -->
-<!-- Start left column -->
-_left
-
-## Left column title
-
-<!-- Imgs macro-->
-_imgs(res/sample.jpeg, res/gdmarp.png)
-
-<!-- Start right column -->
-_right
-
-<!-- Currently doesn't support font-size change in macro-->
-<!-- csv macro converts csv file into gfm flavored table format automatically -->
-_csv(example_table.csv)
-
-<!-- Raw csv conversion -->
-_rcsv(
-name,mail,address
-simon,123@g.com,somesome
-creek,345@n.com,anywhere
-)
-
-<!-- End double column slide -->
-_end
-
----
-<!-- Include inc/other_file.md into index.md -->
-_inc(other_file)
-
----
-<!-- Read csv file into sqlite and print query results -->
-<!-- _cc means comma because comma is treated as argument delimters-->
-<!-- therefore needs escaping -->
-_sql(stock.csv, stock,
-SELECT id _cc product_id FROM stock WHERE id = 22;)
-
-<!--You can use _cc() if you don't like whitespaces -->
-_sql(stock.csv, stock,
-SELECT id_cc()product_id FROM stock WHERE id = 22;)
-```
-
 ### Macro rules
 
 [Macro rules](docs/macro.md)
