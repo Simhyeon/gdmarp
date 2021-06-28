@@ -115,20 +115,22 @@ gdmarp check
 
 # Initialize current working directory with desired file structure.
 # Git flag, "-g" initialize folder and create .gitignore file
+# Init with module so that necessary config can be defined in config.json
 gdmarp init
 gdmarp init -g
+gdmarp init -M mw # This module is mediawiki backend
 
 # To render presentation forms (pdf, pptx, html)
 gdmarp repr -M marp -F pdf
 
-# To render wikitext and send page to mediawiki ( requires confis.json to be configured )
+# To render wikitext and send page to mediawiki ( requires config.json to be configured )
 gdmarp wiki -M mw
 
 # To render webui
 gdmarp wui -M bts
 
 # To run test scripts in config.json
-# This enables preserve flag("-f") and creates distinctive middle files in build directory
+# This enables preserve flag("-p") and creates distinctive middle files in build directory
 gdmarp test
 
 # To run scripts in config.json
