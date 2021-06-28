@@ -421,6 +421,10 @@ gd_main(){
 				flag_use_default=false
 				shift
 				;;
+			-c) # This is Container only usage not for end user
+				marp="node /home/marp/.cli/marp-cli.js"
+				shift
+				;;
 			-g) # git
 				flag_init_git=true
 				shift
@@ -519,6 +523,7 @@ gd_main(){
 		esac
 	done
 	$action
+	[ "$action" = "" ] && echo "No proper subcommand was given"
 	#exit 0
 }
 
