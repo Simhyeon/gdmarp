@@ -37,6 +37,8 @@ define(`_endif', ``)'')dnl
 
 # ======''
 
+define(`_cm', `')dnl
+
 # MACRO >>> Set variable as given name
 # Usage : _setvar(`someurl', `http://google.com')
 # Recommended naming rule is to start name with prefix "lv_" which stands for local variable
