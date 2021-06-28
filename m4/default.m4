@@ -25,15 +25,15 @@ define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk')')d
 # Sanitize content, or say temporarily convert content that disturbs sane macro operations
 define(`m_sanitize', `esyscmd(`printf "$*" | sed -f $SCRIPTS/sanitize.sed')')dnl
 # Either enable or disable according to module used
-define(`m_ifmod', `ifdef(`mod_$1',`shift($*)', `')')dnl
+define(`m_if_mod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 
 # ==========
 # User interface macros 
 #
 # MACRO >>> If mod macros argument should be module name
-define(`_ifmod', ``m_ifmod'`('$1,')dnl
-define(`_elifmod', ``)'`m_ifmod'`('$1,')dnl
-define(`_endif', ``)'')dnl
+define(`_if_mod', ``m_if_mod'`('$1,')dnl
+define(`_elif_mod', ``)'`m_if_mod'`('$1,')dnl
+define(`_if_end', ``)'')dnl
 
 # ======''
 
@@ -42,7 +42,7 @@ define(`_cm', `')dnl
 # MACRO >>> Set variable as given name
 # Usage : _setvar(`someurl', `http://google.com')
 # Recommended naming rule is to start name with prefix "lv_" which stands for local variable
-define(`_setvar', `define(`$1',
+define(`_set_var', `define(`$1',
 `ifelse(`$3', `0', ``$4'', `$2')')')dnl
 
 # MACRO >>> Shorthand version of include macro
@@ -57,7 +57,7 @@ define(`_cc', ``,'')dnl
 # Internal macro for deciding which sqlite to use 
 # Change v_bin_sqlite varaible in env.m4 file to set path for sqlite
 # or you can set your own custom sql program if it's command is compatible with sqlite
-define(`_sqlquery', `esyscmd(`printf ".mode csv\n.headers on\n.import $1 $2\n$3\n.exit" | $4')')dnl
+define(`_sql_query', `esyscmd(`printf ".mode csv\n.headers on\n.import $1 $2\n$3\n.exit" | $4')')dnl
 
 # MACRO >>> Web api macro
 # Call curl function and parse it with jq specific command after then, print the result

@@ -82,7 +82,7 @@ define(`_grid',`')dnl
 # collection, simply collection of aligned div items
 # collection doesn't expand but srhik while list view can be expanded with scroll bars
 # _coll(orientation=["row" or "col"] ,loopCount, class, content)
-define(`_collauto',`<div class="gdCollection $1Flex">
+define(`_coll_auto',`<div class="gdCollection $1Flex">
 forloop(`i', 1, $2, `<div class="collItem $3">shift(shift(shift($*)))</div>')
 </div>')dnl 
 # Manual collection

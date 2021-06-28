@@ -60,7 +60,7 @@ define(`_ul', `forloop(`', 2, $1, `  ')*')dnl
 define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 
 # New page
-define(`_newpage', `---')dnl
+define(`_new_page', `---')dnl
 
 # Comment
 define(`_cm', `/* $1 */')dnl
@@ -176,7 +176,7 @@ define(`_end', `</div>')dnl
 # MACRO >>> Sql macro 
 # Invoke sql query and get result as gfm formatted csv file 
 # through sqlite in-memory csv virtual table.
-define(`_sqltable', `_rcsv(_sqlquery(ifelse(`$#', `3', `$@,v_bin_sqlite', `$*')))')dnl
+define(`_sql_table', `_rcsv(_sql_query(ifelse(`$#', `3', `$@,v_bin_sqlite', `$*')))')dnl
 
 # MACRO >>> Web api with csv auto formatting
 # Not tested

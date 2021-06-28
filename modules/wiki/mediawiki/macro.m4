@@ -29,8 +29,8 @@ define(`_ud', `<u>$1</u>')dnl
 define(`_cm', `<!-- $1 -->')dnl
 
 # Other wiki page link 
-define(`_wikipage',`[[$1]]')dnl
-define(`_wikipageAlt',`_wikipage($1|$2)')dnl # Wikipage link with alternative text
+define(`_wiki_page',`[[$1]]')dnl
+define(`_wiki_page_alt',`_wikipage($1|$2)')dnl # Wikipage link with alternative text
 
 # Unordered List
 define(`_ul', `forloop(`', 1, $1, ``*'')')dnl
