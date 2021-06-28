@@ -36,37 +36,62 @@ $*
 
 # =====
 # Container macros
-define(`_container',`<div id="container" class="container">
-$*
+define(`_container',`<div class="gdContainer $1Flex">
+shift($*)
 </div>')dnl
 
 # =====
-# Vertical layout macros
-# However this can be used with nested horizontal macros
+# Layout macros
 
 # sub containers
-define(`_header', `')dnl # Has fixed size or ratio
-define(`_content', `')dnl # Has fixed size or ratio
-define(`_footer', `')dnl # Has fixed size or ratio
-define(`_vsplit', `')dnl
+define(`_header', `<div class="gdHeader" style="flex-basis: $1">
+shift($*)
+</div>')dnl # Has fixed size or ratio
 
-# content formats
-define(`_list_view',`')dnl
+# _hcontent(alignment, ...)
+# _vcontent(alignment, ...)
+define(`_hcontent', `<div class="gdContent rowFlex $1" style="width: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_vcontent', `<div class="gdContent colFlex $1" style="height: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_footer', `<div class="gdFooter" style="flex-basis: $1">
+shift($*)
+</div>')dnl # Has fixed size or ratio
 
 # =====
 # Horizontal macros
-
-# sub containers
-define(`_hsplit', `')dnl
-
-# content formats
 define(`_carr', `')dnl # carrousel
 
 # =====
 # General
-define(`_item', `')dnl
+define(`_img',`<div class="imgContainer"><img class="img" style="width :$2 !important;" src="$1" alt="Img : $3"></img></div>')dnl
+define(`_icon', `<i class="bi bi-$1"></i>')dnl
+define(`_par', `<p>$*</p>')dnl
+# _btn(type, classes, content)
+define(`_btn', `<button class="flexGrow btn btn-$1 $2">shift(shift($*))</button>')dnl
+# _label(Text label content)
+define(`_label',`<div class="flexGrow gdLabel $1">
+m_trim_nl(m_sanitize(shift($*)))
+</div>')dnl
+
 define(`_grid',`')dnl
-define(`_coll',`')dnl # collection, simply collection of aligned div items
+# collection, simply collection of aligned div items
+# collection doesn't expand but srhik while list view can be expanded with scroll bars
+# _coll(orientation=["row" or "col"] ,loopCount, class, content)
+define(`_collauto',`<div class="gdCollection $1Flex">
+forloop(`i', 1, $2, `<div class="collItem $3">shift(shift(shift($*)))</div>')
+</div>')dnl 
+# Manual collection
+define(`_coll',`<div class="gdCollection $1Flex">
+shift($*)
+</div>')dnl 
+# Simple list view
+define(`_list_view',`<div class="gdListView">
+</div>')dnl
 
 # =====
 # Bottom space macros
@@ -86,13 +111,6 @@ define(`_bot_right', `<div id="botRight" class="botRight">
 $*
 </div>')dnl
 
-# =====
-# Component macros
-define(`_label',`<span>$1</span>')dnl
-
-define(`_btn',`<button id="$1">$2</button>')dnl
-
-define(`_icon', `<span><i>$1</i></span>')dnl
 
 # MISC
 define(`_screen_touch', `fullcreen touch input, which intercepts user input')dnl
