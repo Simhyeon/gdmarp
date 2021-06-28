@@ -2,6 +2,23 @@ html, body {
 	height: 100%;
 }
 
+.imgContainer {
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+}
+.img {
+	padding : v_img_padding();
+	.width: 100%;
+}
+
+.fontl {
+	font-size: 1.5rem;
+}
+.fontlg {
+	font-size: 2rem;
+}
+
 .webui {
 	height: 100%;
 	display: flex;
@@ -10,9 +27,47 @@ html, body {
 }
 
 /* Container flex direction is customizable */
-.container {
+.gdContainer {
 	display: flex;
 	flex-grow: 1;
+}
+
+.gdHeader {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 0;
+}
+
+.gdCollection {
+	display: flex;
+	flex-grow: 1;
+	justify-content: space-evenly;
+}
+
+.gdCollection > button, .gdCollection > div {
+	margin : 5px;
+}
+
+.collItem, .gdLabel {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+}
+
+.center_items {
+	align-items: center; 
+}
+
+.gdFooter {
+	display: flex;
+	flex-grow: 0;
+}
+
+.gdContent {
+	display: flex;
+	flex-grow: 1;
+	padding : v_content_padding();
 }
 
 .topSpace {
@@ -21,6 +76,7 @@ html, body {
 	margin : v_top_space_margin();
 	padding : v_top_space_padding();
 	flex-grow: 0;
+	flex-basis: 10%;
 }
 
 .topCenter {
@@ -44,6 +100,7 @@ html, body {
 	margin : v_bot_space_margin();
 	padding : v_bot_space_padding();
 	flex-grow: 0;
+	flex-basis: 10%;
 }
 
 .botCenter {
@@ -56,7 +113,29 @@ html, body {
 	flex-direction: row;
 }
 
+.hsplit > * {
+	width: 50%; !important
+	flex-grow : 0; !important
+}
+
+.vsplit > * {
+	height: 50%; !important
+	flex-grow : 0; !important
+}
+
 .botRight {
 	display: flex;
 	flex-direction: row-reverse;
+}
+
+.rowFlex {
+	flex-direction: row;
+}
+
+.colFlex {
+	flex-direction: column;
+}
+
+.flexGrow {
+	flex-grow : 1;
 }
