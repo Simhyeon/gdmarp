@@ -1,6 +1,16 @@
-## Gdmarp, the game documenation automatic generation script
+## Gdmarp, an automatic game document generation script
 
-This is a shell script to automate m4 macro pre-processing and various documenation redering with automated publishing.
+This is a shell script to automate m4 macro pre-processing and various
+documenation rederings with automated publishing. Gdmarp can create pdf, 
+pptx, html slide, wikitext file for mediawiki instance and webui html
+page for UI/UX demo usage.
+
+Gdmarp uses a gdt filetype which is an abbreviation of a game design text. GDT
+consists of complex macro usages which are defined by various modules. Such
+module expands macros into properly formatted texts. 
+
+Therefore you don't have to write separate files for separate formats, just write
+once and export with one gdmarp command.
 
 ### Caution
 
@@ -21,8 +31,13 @@ wikitexts. Some macros are defined in various modules at the same time which
 enables you to write macros once and render multiple formes without changing
 any of them.
 
+You can edit "index.gdt" which is created by init subcommand however you can also
+create new file and give the file to gdmarp with -N command followed by file name.
+
 After writing all macros, simply call subcommand with proper backend modules
-and gdmarp will render output files into build directory.
+and gdmarp will render output files insdie of the build directory. Or simply
+set all commands in config.json file so that "run" subcommand can call multiple
+commands at the same time.
 
 ### Dependencies
 
@@ -91,6 +106,7 @@ e.g.) default font size or current products stock ETC...
 
 You can simply use setvar macro to set varaibles inside any gdt files.
 e.g.) 
+
 ```gdt
 _setvar(`v_url',`http://google.com/some_img_path')dnl
 
@@ -120,6 +136,10 @@ gdmarp init
 gdmarp init -g
 gdmarp init -M mw # This module is mediawiki backend
 
+# Simpley preprocess and don't publish to final format
+gdmarp prep -M marp
+gdmarp prep -M mw # wiki's prep doesn't post wikipage to given url
+
 # To render presentation forms (pdf, pptx, html)
 gdmarp repr -M marp -F pdf
 
@@ -127,6 +147,8 @@ gdmarp repr -M marp -F pdf
 gdmarp wiki -M mw
 
 # To render webui
+# Currently this doesn't post the page to an url. Thus, this command is same
+# with prep for now.
 gdmarp wui -M bts
 
 # To run test scripts in config.json
@@ -150,6 +172,28 @@ docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdm
 <!-- Windows Powershell-->
 docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
 ```
+
+### Sample config.json
+
+```json
+{
+    "env": {
+        "url": "http://urlToMediaWikiInstance",
+        "bot_id": "UserName@thisIsBotName",
+        "bot_pwd": "LongAndHardToRememberBotPassword",
+        "page_title": "PageTitleToPost"
+    },
+    "test": [
+		"prep -M marp -F html",
+        "wui -M bts -N webui_test.gdt -O webui"
+    ],
+    "script": [
+        "repr -M marp -F html -O repr",
+        "wui -M bts -N webui_test.gdt -O webui"
+    ]
+}
+```
+
 ### Macro rules
 
 [Macro rules](docs/macro.md)
