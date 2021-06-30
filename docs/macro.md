@@ -14,6 +14,12 @@ General rule of thumb is to use comma literals only in text related macros and t
 Text macro and flex box macros handle comma literal so it is ok to use comma literal in such macros. However csv macros or sql
 macros currently doesn't support comma literal so you should always escape comma to use comma as text. 
 
+### Quote and backtick rules
+
+Same thing applies to quote and backticks use "\;" for quote and "\~" for backtick.
+
+### Representaion macros (Marp module)
+
 #### Styles 
 
 Multiple styles are supported. Simply type multiple css stylesheets delimtied by comma. Styles macro can be included only one time.
@@ -412,3 +418,7 @@ _inc(other_file_name)
 In this case inc/other\_file\_name.md file's content will be pasted into where macro was called.
 
 #### Web api(WIP)
+
+### Wikitext macros (mw module)
+
+### WebUI macros (bts module)

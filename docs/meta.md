@@ -2,9 +2,9 @@
 
 * [ ] Misc
 	* [x] Make a naming convention consistent for real
-	* [ ] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
+	* [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
 	* [ ] Improve wikitext macros
-	* [ ] Improve README
+	* [x] Improve README
 	* [ ] Consider making withmods variables can save multiple arguments
 
 * [ ] Modular components
