@@ -134,6 +134,7 @@ gd_preprocess(){
 	# Add sources according to given modules
 	add_sources $flag_modules
 
+
 	# Run main m4 functions $sources should be expanded
 	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$cwd"/"$flag_input_file" > "$out_file"
 
@@ -146,6 +147,9 @@ gd_preprocess(){
 	# "_" before word is literal not a mcro
 	# These sed scripts are scraped from internet, and it happends to doesn't work in conjunction thus, separate command usage is needed.
 	[ "$flag_retain_unused" = "false" ] && sed -i ':again;$!N;$!b again; :b; s/([^()]*)//g; t b' "$frag_file" && sed -i '/\\_/! s/\<_[^ ]*\>//' "$frag_file"
+
+	# Remove all comments (which is a line starts with double forward slash "//")
+	sed -i -f "$SCRIPTS/rm_comments.sed" "$frag_file"
 
 	# This squahses multiple new lines into single new line
 	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"

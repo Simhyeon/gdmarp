@@ -25,9 +25,6 @@ define(`_st', `<s>$1</s>')dnl
 # Underline
 define(`_ud', `<u>$1</u>')dnl
 
-# Comment
-define(`_cm', `<!-- $1 -->')dnl
-
 # Other wiki page link 
 define(`_wiki_page',`[[$1]]')dnl
 define(`_wiki_page_alt',`_wikipage($1|$2)')dnl # Wikipage link with alternative text

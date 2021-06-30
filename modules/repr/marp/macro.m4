@@ -62,14 +62,11 @@ define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 # New page
 define(`_new_page', `---')dnl
 
-# Comment
-define(`_cm', `/* $1 */')dnl
-
 # MACRO >>> Get style files' name and paste the content
 # Usage :
 # _styles(css/image.css, css/layout.css)
 define(`_styles', `<style>
-foreach(`it', ($*), `_cm(it)
+foreach(`it', ($*), `/* it */
 include(esyscmd(`printf $MODULE/repr/marp/')it)
 ')</style>')dnl
 
