@@ -64,8 +64,12 @@ define(`_header', `<div class="gdHeader $1">
 shift($*)
 </div>')dnl # Has fixed size or ratio
 
-# _hcontent(alignment, ...)
-# _vcontent(alignment, ...)
+define(`_content', `<div id="$1" class="gdContent $2" style="$3">
+shift(shift(shift($*)))
+</div>')dnl
+
+# _hcontent(class, width, ...)
+# _vcontent(class, height, ...)
 define(`_hcontent', `<div class="gdContent rowFlex $1" style="width: $2;">
 shift(shift($*))
 </div>')dnl
@@ -98,21 +102,30 @@ m_trim_nl(m_sanitize(shift(shift($*))))
 define(`_grid',`')dnl
 
 # ==========
-# Selection
-# Btn for selecting, area for selected div representation
-# _sel_btn(target_id, Button text)
-define(`_sel_btn',`<a class="btn" data-bs-toggle="collapse" href="#$1" role="button" aria-expanded="false" aria-controls="$1">
-$2
-</a>')dnl
-
-# _sel_area(id) 
-define(`_sel_area',`<div class="collapse" id="$1">
-shift($*)
+# Swappable area
+# Swapp button radio group
+define(`_swap_buttons', `<div id="$1" class="btn-group" role="group">
+foreach(`it', (shift($*)), `m_swap_button($1, it)')
 </div>')dnl
 
+define(`m_swap_button',`
+<input type="radio" class="btn-check" name="$1" value="no" id="$2"
+       aria-expanded="false"
+       aria-controls="$2"
+       data-bs-toggle="collapse"
+       data-bs-target="\3$2">
+<label class="btn" for="$2">$2</label>
+')dnl
+
+define(`_swap_item',`
+<div id="$1" class="collapse" data-bs-parent="\3$2">
+	shift(shift($*))
+</div>
+')dnl
+
 # Card component
-define(`_card',`<div class="card card-body">
-$*
+define(`_card',`<div id="$1" class="card card-body">
+shift($*)
 </div>')dnl
 
 # collection, simply collection of aligned div items
