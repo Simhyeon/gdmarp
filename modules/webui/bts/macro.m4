@@ -51,35 +51,38 @@ $*
 
 # =====
 # Container macros
-define(`_container',`<div class="gdContainer $1Flex">
-shift($*)
+define(`_vcontainer',`<div id="container" class="gdContainer colFlex">
+$*
+</div>')dnl
+
+define(`_hcontainer',`<div id="container" class="gdContainer rowFlex">
+$*
 </div>')dnl
 
 # =====
 # Layout macros
 
-# DEBUG ::: ref, define(`_header', `<div class="gdHeader" style="flex-basis: $1">
 # sub containers
-define(`_header', `<div class="gdHeader $1">
-shift($*)
+define(`_header', `<div id="header" class="gdHeader">
+$*
 </div>')dnl # Has fixed size or ratio
 
-define(`_content', `<div id="$1" class="gdContent $2" style="$3">
-shift(shift(shift($*)))
-</div>')dnl
-
-# _hcontent(class, width, ...)
-# _vcontent(class, height, ...)
-define(`_hcontent', `<div class="gdContent rowFlex $1" style="width: $2;">
-shift(shift($*))
-</div>')dnl
-
-define(`_vcontent', `<div class="gdContent colFlex $1" style="height: $2;">
-shift(shift($*))
-</div>')dnl
-
-define(`_footer', `<div class="gdFooter $1">
+define(`_content', `<div id="$1" class="gdContent">
 shift($*)
+</div>')dnl
+
+# _hcontent(id, width, ...)
+# _vcontent(id, height, ...)
+define(`_hcontent', `<div id="$1" class="gdContent rowFlex" style="width: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_vcontent', `<div id="$1" class="gdContent colFlex" style="height: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_footer', `<div id="footer" class="gdFooter">
+$*
 </div>')dnl # Has fixed size or ratio
 
 # =====
@@ -88,14 +91,20 @@ define(`_car', `')dnl # carousel
 
 # =====
 # General
+# TODO Consider making image compat and make sized container macro
 define(`_img',`<div class="imgContainer"><img id="$1" class="img" style="width :$3 !important;" src="$2" alt="Img : $4"></img></div>')dnl
+# Icon
 define(`_icon', `<i class="bi bi-$1"></i>')dnl
+# Paragraph
 define(`_par', `<p>$*</p>')dnl
+
+# Button
 # _btn(id, classes, content)
-define(`_btn', `<button id="$1" class="flexGrow btn $2">shift(shift($*))</button>')dnl
+define(`_btn', `<button id="$1" class="flexGrow btn">shift($*)</button>')dnl
+
 # _label(Text label content)
-define(`_label',`<div id="$1" class="flexGrow gdLabel $2">
-m_trim_nl(m_sanitize(shift(shift($*))))
+define(`_label',`<div id="$1" class="flexGrow gdLabel">
+shift($*)
 </div>')dnl
 
 # TODO 
@@ -108,6 +117,7 @@ define(`_swap_buttons', `<div id="$1" class="btn-group" role="group">
 foreach(`it', (shift($*)), `m_swap_button($1, it)')
 </div>')dnl
 
+# Single swap button
 define(`m_swap_button',`
 <input type="radio" class="btn-check" name="$1" value="no" id="$2"
        aria-expanded="false"
@@ -130,14 +140,15 @@ shift($*)
 
 # collection, simply collection of aligned div items
 # collection doesnt expand but srhik while list view can be expanded with scroll bars
-# _coll(orientation=["row" or "col"] ,loopCount, class, content)
-define(`_coll_auto',`<div class="gdCollection $1Flex">
-forloop(`i', 1, $2, `<div class="collItem $3">shift(shift(shift($*)))</div>')
+# _coll(id ,loopCount, content)
+define(`_hcoll',`<div id="$1" class="gdCollection">
+forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
-# Manual collection
-define(`_coll',`<div class="gdCollection $1Flex">
-shift($*)
+
+define(`_vcoll',`<div id="$1" class="gdCollection">
+forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
+
 # Simple list view
 define(`_list_view',`<div class="gdListView">
 </div>')dnl
