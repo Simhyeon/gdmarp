@@ -2,12 +2,22 @@ divert(`-1')
 # =====
 # Intenal macros
 # Gets all contents into something other magic... I don't know
+# ===> Start of m_webui macro
 define(`m_webui', `
 `divert(`-1')'
-`_setvar(`m_webui_title', `$1')'
-`_setvar(`m_webui_content', `shift($*)')'
+`_set_var(`m_webui_title', `$1')'
+`_set_var(`m_webui_content', `shift($*)')'
 `divert`'dnl'
 ')dnl
+# <=== End of m_webui macro
+
+# ===> Start of script macro
+define(`m_script', `
+`divert(`-1')'
+`_set_var(`m_webui_script', `$*')'
+`divert`'dnl'
+')dnl
+# <=== End of script macro
 
 # =====
 # Directives macro
@@ -15,6 +25,11 @@ define(`m_webui', `
 define(`_ui_begin', ``m_webui'`('$1, 
 ')dnl
 define(`_ui_end', ``)'')dnl
+
+# "$1," is necessary for the macro "m_webui" to operate
+define(`_script_begin', ``m_script'`(' 
+')dnl
+define(`_script_end', ``)'')dnl
 
 # =====
 # Top space macros
@@ -68,14 +83,14 @@ define(`_carr', `')dnl # carrousel
 
 # =====
 # General
-define(`_img',`<div class="imgContainer"><img class="img" style="width :$2 !important;" src="$1" alt="Img : $3"></img></div>')dnl
+define(`_img',`<div class="imgContainer"><img id="$1" class="img" style="width :$3 !important;" src="$2" alt="Img : $4"></img></div>')dnl
 define(`_icon', `<i class="bi bi-$1"></i>')dnl
 define(`_par', `<p>$*</p>')dnl
-# _btn(type, classes, content)
-define(`_btn', `<button class="flexGrow btn btn-$1 $2">shift(shift($*))</button>')dnl
+# _btn(id, classes, content)
+define(`_btn', `<button id="$1" class="flexGrow btn $2">shift(shift($*))</button>')dnl
 # _label(Text label content)
-define(`_label',`<div class="flexGrow gdLabel $1">
-m_trim_nl(m_sanitize(shift($*)))
+define(`_label',`<div id="$1" class="flexGrow gdLabel $2">
+m_trim_nl(m_sanitize(shift(shift($*))))
 </div>')dnl
 
 define(`_grid',`')dnl
@@ -119,5 +134,34 @@ define(`_screen_touch', `fullcreen touch input, which intercepts user input')dnl
 define(`_popup', `')dnl
 # Can be positioned in anywhere this is floating menu
 define(`_menu', `')dnl
+
+# ==========
+# Scripts
+
+# Add callback for event
+# Origin id, eventType, callbackMacro 
+define(`_add_call', `addCallback`('"$1", "$2",`('e`)' => {$3}`)'')dnl
+
+# Add tooltip to element 
+define(`_add_tooltip',`addProperties`('"$1"\.{"data-bs-toggle":"tooltip"\."data-bs-placement":"top"\."title":"$2"}`)'')dnl
+
+# Call alert function
+# e.g.) _add_call(alert, click, _call_alert(This is new text))
+define(`_call_alert',`alert`('"$1"`)'')dnl
+
+# Call element toggle function
+define(`_call_toggle',`toggleElement`('"$1"`)'')dnl
+
+# Call sync value function
+define(`_call_sync', `')dnl
+
+# Go to url
+define(`_call_visit', `')dnl
+
+# Call specific event on target
+define(`_call_event', `')dnl
+
+# Call update, or say set properties on target
+define(`_call_update',`')dnl
 
 divert`'dnl
