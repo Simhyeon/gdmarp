@@ -37,7 +37,7 @@ define(`_if_end', ``)'')dnl
 
 # ======''
 # MACRO >>> Set variable as given name
-# Usage : _setvar(`someurl', `http://google.com')
+# Usage : _set_var(`someurl', `http://google.com')
 # Recommended naming rule is to start name with prefix "lv_" which stands for local variable
 define(`_set_var', `define(`$1',
 `ifelse(`$3', `0', ``$4'', `$2')')')dnl
