@@ -2,6 +2,15 @@ html, body {
 	height: 100%;
 }
 
+* {
+	font-size: 1.3rem;
+}
+
+#header > *, #footer > * {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .collapsing {
 	transition: none !important;
 }

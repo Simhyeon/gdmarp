@@ -2,7 +2,7 @@ function addCallback(triggerId, eventType, callback) {
 	document.getElementById(triggerId).addEventListener(eventType, callback);
 }
 
-function addProperties(id, props) {
+function setProperties(id, props) {
 	let elem = document.getElementById(id);
 	for (key in props) {
 		elem.setAttribute(key, props[key]);
@@ -27,5 +27,11 @@ function toggleElement(id) {
 
 // TODO Make sync value function
 function syncValue(id, ev) {
+	let elem = document.getElementById(id);
+	elem.textContent = ev.target.value;
+}
 
+function triggerEvent(id, eventType) {
+	let elem = document.getElementById(id);
+	elem.dispatchEvent(new Event(eventType, { 'bubbles': true }))
 }

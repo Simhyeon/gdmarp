@@ -38,11 +38,7 @@
       * [ ] List view macro
       * [ ] Menu macro(Bootstrap offspace)
       * [ ] Modal macro(Both fullscreen and pop-up style)
-    * [ ] Complete js macro placeholders
-      - Go to url
-      - Sync value to target's value
-      - Change target's properties
-      - Call specific event
+    * [x] Complete js macro placeholders
     * [ ] Btn pressed status feature
   * [ ] Wikitext
 

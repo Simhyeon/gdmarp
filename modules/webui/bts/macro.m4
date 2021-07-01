@@ -100,7 +100,7 @@ define(`_par', `<p>$*</p>')dnl
 
 # Button
 # _btn(id, classes, content)
-define(`_btn', `<button id="$1" class="flexGrow btn">shift($*)</button>')dnl
+define(`_btn', `<button id="$1" class="flexGrow btn btn-primary">shift($*)</button>')dnl
 
 # _label(Text label content)
 define(`_label',`<div id="$1" class="flexGrow gdLabel">
@@ -124,7 +124,7 @@ define(`m_swap_button',`
        aria-controls="$2"
        data-bs-toggle="collapse"
        data-bs-target="\3$2">
-<label class="btn" for="$2">$2</label>
+<label class="btn btn-outline-primary" for="$2">$2</label>
 ')dnl
 
 define(`_swap_item',`
@@ -185,10 +185,10 @@ define(`_menu', `')dnl
 
 # Add callback for event
 # Origin id, eventType, callbackMacro 
-define(`_add_call', `addCallback`('"$1", "$2",`('e`)' => {$3}`)'')dnl
+define(`_add_call', `addCallback`('"$1", "$2",`('ev`)' => {$3}`)'')dnl
 
 # Add tooltip to element 
-define(`_add_tooltip',`addProperties`('"$1"\.{"data-bs-toggle":"tooltip"\."data-bs-placement":"top"\."title":"$2"}`)'')dnl
+define(`_add_tooltip',`setProperties`('"$1"\.{"data-bs-toggle":"tooltip"\."data-bs-placement":"top"\."title":"$2"}`)'')dnl
 
 # Call alert function
 # e.g.) _add_call(alert, click, _call_alert(This is new text))
@@ -198,15 +198,15 @@ define(`_call_alert',`alert`('"$1"`)'')dnl
 define(`_call_toggle',`toggleElement`('"$1"`)'')dnl
 
 # Call sync value function
-define(`_call_sync', `')dnl
+define(`_call_sync', `syncValue`('"$1"\.ev`)'')dnl
 
 # Go to url
-define(`_call_visit', `')dnl
+define(`_call_visit', `window.location="$1"')dnl
 
 # Call specific event on target
-define(`_call_event', `')dnl
+define(`_call_event', `triggerEvent`('"$1" \. "$2"`)'')dnl
 
 # Call update, or say set properties on target
-define(`_call_update',`')dnl
+define(`_call_update',`setProperties`("$1"\.{'"$2" : "$3"}`)'')dnl
 
 divert`'dnl
