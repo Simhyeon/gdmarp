@@ -16,9 +16,16 @@
 			m_webui_title()
 		</title>
 	</head>
-	<body>
+	<body onload="init()">
 		<div class="webui">
 			m_webui_content()
 		</div>
 	</body>
+	<script charset="utf-8">
+		include(index.js)
+
+		function init() {
+			m_webui_script()
+		}
+	</script>
 </html>
