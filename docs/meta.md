@@ -3,33 +3,42 @@
 * [ ] Misc
 	* [x] Make a naming convention consistent for real
 	* [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
-	* [ ] Improve wikitext macros
 	* [x] Improve README
+	* [ ] Improve wikitext macros
 	* [ ] Consider making withmods variables can save multiple arguments
+	* [ ] Complete macro.md for better accessibility
+	* [ ] Who would've known gdt file extension already exists? Consider migrating to gddlt(Game Design Document Text)
 
 * [ ] Modular components
 	* [ ] Create new webui backend macro component. 
-		* [ ] Complete macros
+		* [ ] Complete macros for javascript callbacks
 		* [ ] Utilize bootstrap for aesthetics + functionality
 	* [ ] Template module
 		* [ ] Template macro sets
 		* [ ] Template related configs
+	* [ ] Docx(Microsoft word) module
+		* [ ] Simple conversion
+		* [ ] Formatting(Attribute) option
 
 * [ ] Ergonomic program execution script for both windows and linux.
 	* [ ] Windows powershell execution script.
 	This is technically a wrapper around docker commands
 	* [ ] New posix sh script for install and docker execution only
 
+* [ ] Check if windows can run gdmarp without docker
+
 * [ ] New macros
 	* [ ] Repr
 		* [ ] Background image macro
 		* [ ] Fixed position image(or textbox) macro
+		* [ ] pptx template feature
 	* [ ] Wui
 	* [ ] Wikitext
 
 * [ ] New features
 	* [ ] Enable cache feature for easy maintenance of temporary files 
-	Save compressed images and out.md in cache directory
+	Save compressed images and out.md in cache directory and middle files into
+	cache to make build directory clean
 
 #### Done
 
