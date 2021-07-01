@@ -58,8 +58,9 @@ shift($*)
 # =====
 # Layout macros
 
+# DEBUG ::: ref, define(`_header', `<div class="gdHeader" style="flex-basis: $1">
 # sub containers
-define(`_header', `<div class="gdHeader" style="flex-basis: $1">
+define(`_header', `<div class="gdHeader $1">
 shift($*)
 </div>')dnl # Has fixed size or ratio
 
@@ -73,13 +74,13 @@ define(`_vcontent', `<div class="gdContent colFlex $1" style="height: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_footer', `<div class="gdFooter" style="flex-basis: $1">
+define(`_footer', `<div class="gdFooter $1">
 shift($*)
 </div>')dnl # Has fixed size or ratio
 
 # =====
 # Horizontal macros
-define(`_carr', `')dnl # carrousel
+define(`_car', `')dnl # carousel
 
 # =====
 # General
@@ -93,9 +94,29 @@ define(`_label',`<div id="$1" class="flexGrow gdLabel $2">
 m_trim_nl(m_sanitize(shift(shift($*))))
 </div>')dnl
 
+# TODO 
 define(`_grid',`')dnl
+
+# ==========
+# Selection
+# Btn for selecting, area for selected div representation
+# _sel_btn(target_id, Button text)
+define(`_sel_btn',`<a class="btn" data-bs-toggle="collapse" href="#$1" role="button" aria-expanded="false" aria-controls="$1">
+$2
+</a>')dnl
+
+# _sel_area(id) 
+define(`_sel_area',`<div class="collapse" id="$1">
+shift($*)
+</div>')dnl
+
+# Card component
+define(`_card',`<div class="card card-body">
+$*
+</div>')dnl
+
 # collection, simply collection of aligned div items
-# collection doesn't expand but srhik while list view can be expanded with scroll bars
+# collection doesnt expand but srhik while list view can be expanded with scroll bars
 # _coll(orientation=["row" or "col"] ,loopCount, class, content)
 define(`_coll_auto',`<div class="gdCollection $1Flex">
 forloop(`i', 1, $2, `<div class="collItem $3">shift(shift(shift($*)))</div>')
