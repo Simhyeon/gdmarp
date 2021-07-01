@@ -7,7 +7,6 @@
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
   * [ ] Complete macro.md for better accessibility
-  * [ ] Maybe webui_style.css is better than webui_custom.css
   * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
 
 * [ ] Modular components
@@ -35,7 +34,7 @@
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Component macros
-      * [ ] Carrousel macro
+      * [x] Swappable area macro
       * [ ] List view macro
       * [ ] Menu macro(Bootstrap offspace)
       * [ ] Modal macro(Both fullscreen and pop-up style)
