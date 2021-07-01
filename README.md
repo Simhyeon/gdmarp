@@ -108,7 +108,7 @@ You can simply use setvar macro to set varaibles inside any gdt files.
 e.g.) 
 
 ```gdt
-_setvar(`v_url',`http://google.com/some_img_path')dnl
+_set_var(`v_url',`http://google.com/some_img_path')dnl
 
 // "v_url" varaible is expanded within image macro during macro processing
 _img(v_url())
