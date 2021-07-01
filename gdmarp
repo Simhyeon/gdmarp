@@ -130,7 +130,7 @@ gd_preprocess(){
 	# Word splitting for sources varaible is intended because there is no array in posix sh
 	sources="$cwd"/index.m4
 	# If default script is enabled(default) include it
-	[ "$flag_use_default" = "true" ] && sources="${sources} $cwd/env.m4 $bin_path/m4/default.m4"
+	[ "$flag_use_default" = "true" ] && sources="$cwd/env.m4 $bin_path/m4/default.m4 ${sources}"
 	# Add sources according to given modules
 	add_sources $flag_modules
 
@@ -242,6 +242,8 @@ gd_wui(){
 			sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
 
 			# Process macros, kind of template engine
+			# This doesn't uitilze webui's macro because it is not used internally
+			# however this might change in the future, who knows
 			m4 -I "$bin_path"/m4/GNU -I "$MODULE"/webui/bts/template \
 			-I "$cwd" \
 			"$MODULE"/webui/bts/env.m4 "$cwd"/env.m4 \
