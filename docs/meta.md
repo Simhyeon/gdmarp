@@ -1,44 +1,59 @@
 ### TODO
 
 * [ ] Misc
-	* [x] Make a naming convention consistent for real
-	* [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
-	* [x] Improve README
-	* [ ] Improve wikitext macros
-	* [ ] Consider making withmods variables can save multiple arguments
-	* [ ] Complete macro.md for better accessibility
-	* [ ] Who would've known gdt file extension already exists? Consider migrating to gddlt(Game Design Document Text)
+  * [x] Make a naming convention consistent for real
+  * [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
+  * [x] Improve README
+  * [ ] Improve wikitext macros
+  * [ ] Consider making withmods variables can save multiple arguments
+  * [ ] Complete macro.md for better accessibility
+  * [ ] Maybe webui_style.css is better than webui_custom.css
+  * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
 
 * [ ] Modular components
-	* [ ] Create new webui backend macro component. 
-		* [ ] Complete macros for javascript callbacks
-		* [ ] Utilize bootstrap for aesthetics + functionality
-	* [ ] Template module
-		* [ ] Template macro sets
-		* [ ] Template related configs
-	* [ ] Docx(Microsoft word) module
-		* [ ] Simple conversion
-		* [ ] Formatting(Attribute) option
+  * [ ] Create new webui backend macro component. 
+    * [ ] Complete macros for javascript callbacks
+    * [ ] Utilize bootstrap for aesthetics + functionality
+  * [ ] Template module
+    * [ ] Template macro sets
+    * [ ] Template related configs
+  * [ ] Docx(Microsoft word) module
+    * [ ] Simple conversion
+    * [ ] Formatting(Attribute) option
 
 * [ ] Ergonomic program execution script for both windows and linux.
-	* [ ] Windows powershell execution script.
-	This is technically a wrapper around docker commands
-	* [ ] New posix sh script for install and docker execution only
+  * [ ] Windows powershell execution script.
+  This is technically a wrapper around docker commands
+  * [ ] New posix sh script for install and docker execution only
 
 * [ ] Check if windows can run gdmarp without docker
 
 * [ ] New macros
-	* [ ] Repr
-		* [ ] Background image macro
-		* [ ] Fixed position image(or textbox) macro
-		* [ ] pptx template feature
-	* [ ] Wui
-	* [ ] Wikitext
+  * [ ] Repr
+    * [ ] Background image macro
+    * [ ] Fixed position image(or textbox) macro
+    * [ ] pptx template feature
+  * [ ] Wui
+    * [ ] Component macros
+      * [ ] Carrousel macro
+      * [ ] List view macro
+      * [ ] Menu macro(Bootstrap offspace)
+      * [ ] Modal macro(Both fullscreen and pop-up style)
+    * [ ] Complete js macro placeholders
+      - Go to url
+      - Sync value to target's value
+      - Change target's properties
+      - Call specific event
+    * [ ] Btn pressed status feature
+  * [ ] Wikitext
 
 * [ ] New features
-	* [ ] Enable cache feature for easy maintenance of temporary files 
-	Save compressed images and out.md in cache directory and middle files into
-	cache to make build directory clean
+  * [ ] Enable cache feature for easy maintenance of temporary files 
+  Save compressed images and out.md in cache directory and middle files into
+  cache to make build directory clean
+
+* [ ] Language server or snippet extension for vim and vs-code
+This is kind of big todo though...
 
 #### Done
 
@@ -62,8 +77,8 @@
 * [x] Documentation is weak, make it happen before even I forget what it does
 
 * [x] Lightweight + ergonomic local project directory
-	* [x] No more local css, m4 extension scripts
-	* [x] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
+  * [x] No more local css, m4 extension scripts
+  * [x] An ergonomic include macro path processing which supports files that don't belong to an "inc" directory.
 
 * [x] Comment macro 
 * [x] Set Variable macro
@@ -73,19 +88,19 @@
 * [x] Implement -i flag to set input file for better extendability
 
 * [x] Config feature
-	* [x] Modules to include for preprocessing
-	* [x] Consider making config format as json
-	* [x] Add environmental variables
-	* [x] Config option to designate multiple render process. (Similar to MakeFile)
-	* [x] Config option to designate multiple render process but for test purposes
+  * [x] Modules to include for preprocessing
+  * [x] Consider making config format as json
+  * [x] Add environmental variables
+  * [x] Config option to designate multiple render process. (Similar to MakeFile)
+  * [x] Config option to designate multiple render process but for test purposes
 
 * [x] Modular components
-	* [x] Separate a global basic macro component.
-	* [x] Separate a representation macro component.
-	* [x] Create new mediawiki backend macro component for wiki render forme.
-		* [x] Make wikitext macros which are compatible with repr markdown macros
-		* [x] Table macro
-		* [x] Automatic post page functionality binded to gdmarp script execution
+  * [x] Separate a global basic macro component.
+  * [x] Separate a representation macro component.
+  * [x] Create new mediawiki backend macro component for wiki render forme.
+    * [x] Make wikitext macros which are compatible with repr markdown macros
+    * [x] Table macro
+    * [x] Automatic post page functionality binded to gdmarp script execution
 
 * [x] Posix compliant binary
 This was intended for alpine linux usage... however I found that I was extensively using gnu version of awk scripts and sed scripts. Thus a sole achievement of this refactor was docker size got slightly smaller. (Amount of bash's binary size) 
