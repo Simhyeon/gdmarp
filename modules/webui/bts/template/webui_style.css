@@ -2,6 +2,10 @@ html, body {
 	height: 100%;
 }
 
+.collapsing {
+	transition: none !important;
+}
+
 .imgContainer {
 	display: flex;
 	justify-content: center; /* align horizontal */
