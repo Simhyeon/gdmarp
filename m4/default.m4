@@ -44,6 +44,10 @@ define(`_if_end', ``)'')dnl
 define(`_set_var', `define(`$1',
 `ifelse(`$3', `0', ``$4'', `$2')')')dnl
 
+# MACRO >>> Random texts macros for dev usage
+# There are many spaces for improvements
+define(`_rand_text',`esyscmd(`sh $SCRIPTS/random_text.sh $1')')dnl
+
 # MACRO >>> Shorthand version of include macro
 # TODO :::: TODO
 # macro expects path to be inside of "inc" directory
