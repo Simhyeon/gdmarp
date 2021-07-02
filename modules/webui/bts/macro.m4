@@ -51,11 +51,11 @@ $*
 
 # =====
 # Container macros
-define(`_container',`<div id="container" class="gdContainer rowFlex">
+define(`_container',`<div id="container" class="gdContainer rowFlex hiddenFlow">
 $*
 </div>')dnl
 
-define(`_vcontainer',`<div id="container" class="gdContainer colFlex">
+define(`_vcontainer',`<div id="container" class="gdContainer colFlex hiddenFlow">
 $*
 </div>')dnl
 
@@ -69,25 +69,31 @@ $*
 
 # _content(id, width, ...)
 # _vcontent(id, height, ...)
-define(`_content', `<div id="$1" class="gdContent rowFlex fullSize m_default($2, flexGrow)" style="width: $2;">
+define(`_content', `<div id="$1" class="gdContent rowFlex fullSize hiddenFlow m_default($2, flexGrow)" style="width: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_content_center', `<div id="$1" class="gdContent rowFlex fullSize flexCenter m_default($2, flexGrow)" style="width: $2;">
+define(`_content_center', `<div id="$1" class="gdContent rowFlex fullSize flexCenter hiddenFlow m_default($2, flexGrow)" style="width: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_vcontent', `<div id="$1" class="gdContent colFlex fullSize m_default($2, flexGrow)" style="height: $2;">
+define(`_vcontent', `<div id="$1" class="gdContent colFlex fullSize hiddenFlow m_default($2, flexGrow)" style="height: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter fullSize m_default($2, flexGrow)" style="height: $2;">
+define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter fullSize hiddenFlow m_default($2, flexGrow)" style="height: $2;">
 shift(shift($*))
 </div>')dnl
 
 # TODO ::: This is technically listView
-define(`_content_scroll',`')dnl
-define(`_vcontent_scroll',`')dnl
+define(`_content_scroll',`
+<div id="$1" class="fullSize" style="width: $2; overflow-x: scroll;">
+shift(shift($*))
+</div>')dnl
+define(`_vcontent_scroll',`
+<div id="$1" class="fullSize" style="height: $2; overflow-y: scroll;">
+shift(shift($*))
+</div>')dnl
 
 define(`_footer', `<div id="footer" class="gdFooter">
 $*
@@ -211,8 +217,12 @@ define(`_swap_item',`
 
 # Card component
 define(`_card',`<div id="$1" class="card card-body">
-shift($*)
+<h5 class="card-title">$2</h5>
+shift(shift($*))
 </div>')dnl
+
+# TODO Card with image
+define(`_card_img',`')dnl
 
 # collection, simply collection of aligned div items
 # collection doesnt expand but srhik while list view can be expanded with scroll bars

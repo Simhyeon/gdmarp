@@ -1,5 +1,7 @@
 html, body {
 	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 * {
@@ -179,4 +181,8 @@ html, body {
 .inlineGroup .form-check {
 	display: inline-block;
 	margin-right: 1rem;
+}
+
+.hiddenFlow {
+	overflow: hidden;
 }
