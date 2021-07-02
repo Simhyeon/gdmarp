@@ -152,3 +152,7 @@ html, body {
 .flexGrow {
 	flex-grow : 1;
 }
+
+.modal-tp {
+	background: transparent;
+}

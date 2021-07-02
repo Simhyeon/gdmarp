@@ -141,17 +141,47 @@ shift($*)
 # collection, simply collection of aligned div items
 # collection doesnt expand but srhik while list view can be expanded with scroll bars
 # _coll(id ,loopCount, content)
-define(`_hcoll',`<div id="$1" class="gdCollection">
+define(`_hcoll',`<div id="$1" class="gdCollection rowFlex">
 forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
 
-define(`_vcoll',`<div id="$1" class="gdCollection">
+define(`_vcoll',`<div id="$1" class="gdCollection colFlex">
 forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
 
 # Simple list view
 define(`_list_view',`<div class="gdListView">
 </div>')dnl
+
+# Modal macros
+# Modal Header
+define(`m_modal_header', `
+<div class="modal-header">
+	<h5 class="modal-title" id="exampleModalLabel">$1</h5>
+	<button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>')dnl
+# Modal body
+define(`m_modal_body', `
+<div class="modal-body">
+	$1
+</div>')dnl
+# Modal footer
+define(`m_modal_footer', `
+<div class="modal-footer">
+	$1
+</div>')dnl
+# Modal user macros
+define(`_modal',`
+<div class="modal fade" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			m_modal_header($2)
+			m_modal_body($3)
+			m_modal_footer($4)
+		</div>
+	</div>
+</div>
+')dnl
 
 # =====
 # Bottom space macros
@@ -173,7 +203,22 @@ $*
 
 
 # MISC
-define(`_screen_touch', `fullcreen touch input, which intercepts user input')dnl
+# There were too much things to modify I just forced full html tags bc, why not
+define(`_screen_touch', `
+		<div class="modal" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onclick="``hideModal(this)''">
+	<div class="modal-dialog modal-fullscreen">
+		<div class="modal-content modal-tp text-white">
+			<button type="button" style="display: none;" class="modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-body" style="display: flex; justify-content: center; align-items: center;">
+			$2
+			</div>
+			<div class="modal-footer" style="border: 0; justify-content: center;">
+				Click to dismiss
+			</div>
+		</div>
+	</div>
+</div>
+')dnl
 
 # center popup
 define(`_popup', `')dnl
@@ -208,5 +253,11 @@ define(`_call_event', `triggerEvent`('"$1" \. "$2"`)'')dnl
 
 # Call update, or say set properties on target
 define(`_call_update',`setProperties`("$1"\.{'"$2" : "$3"}`)'')dnl
+
+# Show Modal
+define(`_call_modal',`callModal`('"$1"`)'')dnl
+
+# Show Modal
+define(`_hide_modal',`hideModal`('"$1"`)'')dnl
 
 divert`'dnl

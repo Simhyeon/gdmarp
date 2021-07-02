@@ -25,7 +25,6 @@ function toggleElement(id) {
 	}
 }
 
-// TODO Make sync value function
 function syncValue(id, ev) {
 	let elem = document.getElementById(id);
 	elem.textContent = ev.target.value;
@@ -34,4 +33,15 @@ function syncValue(id, ev) {
 function triggerEvent(id, eventType) {
 	let elem = document.getElementById(id);
 	elem.dispatchEvent(new Event(eventType, { 'bubbles': true }))
+}
+
+function callModal(id) {
+	let elem = document.getElementById(id);
+	let modal = new bootstrap.Modal(elem, {keyboard: false});
+	modal.show();
+}
+
+function hideModal(caller) {
+	let elem = document.querySelector("#" + caller.id + " .modal-close")
+	elem.dispatchEvent(new Event('click'), {'bubbles': true})
 }
