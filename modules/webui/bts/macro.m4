@@ -69,33 +69,101 @@ $*
 
 # _content(id, width, ...)
 # _vcontent(id, height, ...)
-define(`_content', `<div id="$1" class="gdContent rowFlex fullWidth m_default($2, flexGrow)" style="width: $2;">
+define(`_content', `<div id="$1" class="gdContent rowFlex fullSize m_default($2, flexGrow)" style="width: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_content_center', `<div id="$1" class="gdContent rowFlex flexCenter m_default($2, flexGrow)" style="width: $2;">
+define(`_content_center', `<div id="$1" class="gdContent rowFlex fullSize flexCenter m_default($2, flexGrow)" style="width: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_vcontent', `<div id="$1" class="gdContent colFlex fullHeight m_default($2, flexGrow)" style="height: $2;">
+define(`_vcontent', `<div id="$1" class="gdContent colFlex fullSize m_default($2, flexGrow)" style="height: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter fullHeight m_default($2, flexGrow)" style="height: $2;">
+define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter fullSize m_default($2, flexGrow)" style="height: $2;">
 shift(shift($*))
 </div>')dnl
+
+# TODO ::: This is technically listView
+define(`_content_scroll',`')dnl
+define(`_vcontent_scroll',`')dnl
 
 define(`_footer', `<div id="footer" class="gdFooter">
 $*
 </div>')dnl # Has fixed size or ratio
 
-# =====
-# Horizontal macros
+# ==========
+# Form macros
+# Text input
+define(`_tinput', `
+<input id="$1" type="text" class="form-control" placeholder="$2" aria-label="Username" aria-describedby="basic-addon1">
+')dnl
+# Text input with labels
+define(`_tinput_label', `
+<div class="input-group mb-3">
+  <span class="input-group-text" id="$1Label">$3</span>
+  <input id="$1" type="text" class="form-control" placeholder="$2" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+')dnl
+
+# Input Inline
+define(`_inline',`<div class="inlineGroup">
+$*
+</div>')dnl
+
+# Switch
+define(`_switch',`
+<div class="form-check form-switch">
+	<input class="form-check-input" type="checkbox" id="$1">
+	<label class="form-check-label" for="flexSwitchCheckDefault" id="$1Label">shift($*)</label>
+</div>
+')dnl
+
+# Radio select
+define(`_radio', `<div id="$1" class="">
+foreach(`it', (shift($*)), `m_radio($1, it)')
+</div>')dnl
+# Radio internal macro
+define(`m_radio',`
+<div class="form-check $3">
+	<input class="form-check-input" type="radio" name="$1" id="$2" value="$2">
+	<label class="form-check-label" for="exampleRadios1" id="$2Label">$2</label>
+</div>
+')dnl
+
+# Selection(Dropdown)
+define(`_sel',`
+<select id="$1" class="form-select" aria-label="Default select example">
+	shift($*)
+</select>
+')dnl
+# Selection items
+define(`_sel_item',`
+<option value="$1">$1</option>
+')dnl
+
+# Checkboxes
+define(`_checkbox',`
+<div class="form-check">
+	<input class="form-check-input" type="checkbox" value="" id="$1">
+	<label class="form-check-label" for="flexCheckDefault" id="$1Label">
+		shift($*)
+	</label>
+</div>
+')dnl
+
+# Range
+define(`_range',`
+<label for="customRange1" class="form-label" id="$1Label">$2</label>
+<input type="range" class="form-range" id="$1" min="$3" max="$4">
+')dnl
+
+# TODO
 define(`_car', `')dnl # carousel
 
 # =====
 # General
-# TODO Consider making image compat and make sized container macro
 define(`_img',`<img id="$1" class="img" style="width: $2; height: $2;" src="$3" alt="!!Image Not FOUND!!"></img>')dnl
 # Icon
 define(`_icon', `<i class="bi bi-$1"></i>')dnl
@@ -107,7 +175,11 @@ define(`_par', `<p>$*</p>')dnl
 define(`_btn', `<button id="$1" class="flexGrow btn btn-primary">shift($*)</button>')dnl
 
 # _label(Text label content)
-define(`_label',`<div id="$1" class="flexGrow gdLabel">
+define(`_label',`<div id="$1" class="">
+shift($*)
+</div>')dnl
+# Label but center text
+define(`_label_center',`<div id="$1" class="flexGrow gdLabel">
 shift($*)
 </div>')dnl
 
@@ -162,7 +234,7 @@ define(`_list_view',`<div class="gdListView">
 # Modal Header
 define(`m_modal_header', `
 <div class="modal-header">
-	<h5 class="modal-title" id="exampleModalLabel">$1</h5>
+	<h5 class="modal-title">$1</h5>
 	<button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>')dnl
 # Modal body
@@ -177,7 +249,7 @@ define(`m_modal_footer', `
 </div>')dnl
 # Modal user macros
 define(`_modal',`
-<div class="modal fade" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="$1" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			m_modal_header($2)
@@ -210,7 +282,7 @@ $*
 # MISC
 # There were too much things to modify I just forced full html tags bc, why not
 define(`_screen_touch', `
-<div class="modal" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onclick="``hideModal(this)''">
+<div class="modal" id="$1" tabindex="-1" aria-hidden="true" onclick="``hideModal(this)''">
 	<div class="modal-dialog modal-fullscreen">
 		<div class="modal-content modal-tp text-white">
 			<button type="button" style="display: none;" class="modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -228,7 +300,7 @@ define(`_screen_touch', `
 # Sidebar
 # Sidebar Left
 define(`_sidebar_left', `
-<div class="offcanvas offcanvas-start" tabindex="-1" id="$1" aria-labelledby="offcanvasWithBackdropLabel">
+<div class="offcanvas offcanvas-start" tabindex="-1" id="$1">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="$1Label"></h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -241,7 +313,7 @@ define(`_sidebar_left', `
 
 # Sidebar Right
 define(`_sidebar_right', `
-<div class="offcanvas offcanvas-end" tabindex="-1" id="$1" aria-labelledby="offcanvasWithBackdropLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="$1">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="$1Label"></h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
