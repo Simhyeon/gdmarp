@@ -37,9 +37,10 @@
       * [x] Swappable area macro
       * [ ] List view macro
       * [ ] Menu macro(Bootstrap offspace)
-      * [ ] Modal macro(Both fullscreen and pop-up style)
+      * [x] Modal macro
+	  	* [x] Pop Up Style
+	  	* [x] Screen touch
     * [x] Complete js macro placeholders
-    * [ ] Btn pressed status feature
   * [ ] Wikitext
 
 * [ ] New features
