@@ -45,3 +45,9 @@ function hideModal(caller) {
 	let elem = document.querySelector("#" + caller.id + " .modal-close")
 	elem.dispatchEvent(new Event('click'), {'bubbles': true})
 }
+
+function toggleSidebar(id) {
+	let elem = document.getElementById(id);
+	let canvas = new bootstrap.Offcanvas(elem);
+	canvas.toggle();
+}
