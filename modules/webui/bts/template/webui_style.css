@@ -20,9 +20,10 @@ html, body {
 	justify-content: center; /* align horizontal */
 	align-items: center; /* align vertical */
 }
+
 .img {
 	padding : v_img_padding();
-	.width: 100%;
+	width: 100%;
 }
 
 .fontl {
@@ -79,7 +80,7 @@ html, body {
 
 .gdContent {
 	display: flex;
-	flex-grow: 1;
+	/*flex-grow: 1;*/
 	padding : v_content_padding();
 }
 
@@ -127,13 +128,13 @@ html, body {
 }
 
 .hsplit > * {
-	width: 50%; !important
-	flex-grow : 0; !important
+	width: 50% !important;
+	flex-grow : 0 !important;
 }
 
 .vsplit > * {
-	height: 50%; !important
-	flex-grow : 0; !important
+	height: 50% !important;
+	flex-grow : 0 !important;
 }
 
 .botRight {
@@ -155,4 +156,17 @@ html, body {
 
 .modal-tp {
 	background: transparent;
+}
+
+.flexCenter {
+	justify-content: center;
+	align-items: center;
+}
+
+.fullWidth {
+	width: 100%;
+}
+
+.fullHeight {
+	height: 100%;
 }
