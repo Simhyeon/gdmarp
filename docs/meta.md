@@ -28,19 +28,22 @@
 * [ ] Check if windows can run gdmarp without docker
 
 * [ ] New macros
+  * [ ] Basic
+  	* [ ] Lorem ipsum macro (Text placeholder generation macro)
   * [ ] Repr
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Component macros
+	  * [ ] Input forms
+	    * [ ] Slider(Progress bar)
       * [x] Swappable area macro
       * [ ] List view macro
-      * [ ] Menu macro(Bootstrap offspace)
+      * [x] Menu macro(Sidebar)
       * [x] Modal macro
 	  	* [x] Pop Up Style
 	  	* [x] Screen touch
-    * [x] Complete js macro placeholders
   * [ ] Wikitext
 
 * [ ] New features
