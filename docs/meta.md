@@ -35,10 +35,11 @@
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
   * [ ] Wui
-    * [ ] Component macros
+  	* [ ] Complete todos
+    * [x] Component macros
 	  * [x] Input forms
       * [x] Swappable area macro
-      * [ ] List view macro (Scrollable Content)
+      * [x] List view macro (Scrollable Content)
       * [x] Menu macro(Sidebar)
       * [x] Modal macro
 	  	* [x] Pop Up Style
