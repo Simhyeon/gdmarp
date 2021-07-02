@@ -24,6 +24,8 @@ define(`m_bc_calc', `esyscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
 define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk')')dnl
 # Sanitize content, or say temporarily convert content that disturbs sane macro operations
 define(`m_sanitize', `esyscmd(`printf "$*" | sed -f $SCRIPTS/sanitize.sed')')dnl
+# Set to default value if given value is empty
+define(`m_default', `esyscmd(`sh $SCRIPTS/default.sh $1 $2')')dnl
 # Either enable or disable according to module used
 define(`m_if_mod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 
