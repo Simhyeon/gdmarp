@@ -29,17 +29,16 @@
 
 * [ ] New macros
   * [ ] Basic
-  	* [ ] Lorem ipsum macro (Text placeholder generation macro)
+  	* [x] Random text macro for test usage
   * [ ] Repr
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Component macros
-	  * [ ] Input forms
-	    * [ ] Slider(Progress bar)
+	  * [x] Input forms
       * [x] Swappable area macro
-      * [ ] List view macro
+      * [ ] List view macro (Scrollable Content)
       * [x] Menu macro(Sidebar)
       * [x] Modal macro
 	  	* [x] Pop Up Style
