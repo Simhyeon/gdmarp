@@ -261,6 +261,8 @@ define(`_add_call', `addCallback`('"$1", "$2",`('ev`)' => {$3}`)'')dnl
 
 # Add tooltip to element 
 define(`_add_tooltip',`setProperties`('"$1"\.{"data-bs-toggle":"tooltip"\."data-bs-placement":"top"\."title":"$2"}`)'')dnl
+# TODO ::: Add tooltips to multiple items with one macro
+define(`_add_tooltips', `')dnl
 
 # Call alert function
 # e.g.) _add_call(alert, click, _call_alert(This is new text))
@@ -269,8 +271,11 @@ define(`_call_alert',`alert`('"$1"`)'')dnl
 # Call element toggle function
 define(`_call_toggle',`toggleElement`('"$1"`)'')dnl
 
-# Call sync value function
+# Call sync value function, while this says value but it syncs text
 define(`_call_sync', `syncValue`('"$1"\.ev`)'')dnl
+
+# TODO ::: Call sync value which really syncs value
+define(`_call_sync_value', `syncValue`('"$1"\.ev`)'')dnl
 
 # Go to url
 define(`_call_visit', `window.location="$1"')dnl
