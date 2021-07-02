@@ -51,11 +51,11 @@ $*
 
 # =====
 # Container macros
-define(`_vcontainer',`<div id="container" class="gdContainer colFlex">
+define(`_container',`<div id="container" class="gdContainer rowFlex">
 $*
 </div>')dnl
 
-define(`_hcontainer',`<div id="container" class="gdContainer rowFlex">
+define(`_vcontainer',`<div id="container" class="gdContainer colFlex">
 $*
 </div>')dnl
 
@@ -67,17 +67,21 @@ define(`_header', `<div id="header" class="gdHeader">
 $*
 </div>')dnl # Has fixed size or ratio
 
-define(`_content', `<div id="$1" class="gdContent">
-shift($*)
-</div>')dnl
-
-# _hcontent(id, width, ...)
+# _content(id, width, ...)
 # _vcontent(id, height, ...)
-define(`_hcontent', `<div id="$1" class="gdContent rowFlex" style="width: $2;">
+define(`_content', `<div id="$1" class="gdContent rowFlex fullWidth m_default($2, flexGrow)" style="width: $2;">
 shift(shift($*))
 </div>')dnl
 
-define(`_vcontent', `<div id="$1" class="gdContent colFlex" style="height: $2;">
+define(`_content_center', `<div id="$1" class="gdContent rowFlex flexCenter m_default($2, flexGrow)" style="width: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_vcontent', `<div id="$1" class="gdContent colFlex fullHeight m_default($2, flexGrow)" style="height: $2;">
+shift(shift($*))
+</div>')dnl
+
+define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter fullHeight m_default($2, flexGrow)" style="height: $2;">
 shift(shift($*))
 </div>')dnl
 
@@ -92,7 +96,7 @@ define(`_car', `')dnl # carousel
 # =====
 # General
 # TODO Consider making image compat and make sized container macro
-define(`_img',`<div class="imgContainer"><img id="$1" class="img" style="width :$3 !important;" src="$2" alt="Img : $4"></img></div>')dnl
+define(`_img',`<img id="$1" class="img" style="width: $2; height: $2;" src="$3" alt="!!Image Not FOUND!!"></img>')dnl
 # Icon
 define(`_icon', `<i class="bi bi-$1"></i>')dnl
 # Paragraph
@@ -141,7 +145,7 @@ shift($*)
 # collection, simply collection of aligned div items
 # collection doesnt expand but srhik while list view can be expanded with scroll bars
 # _coll(id ,loopCount, content)
-define(`_hcoll',`<div id="$1" class="gdCollection rowFlex">
+define(`_coll',`<div id="$1" class="gdCollection rowFlex">
 forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
 
@@ -149,6 +153,7 @@ define(`_vcoll',`<div id="$1" class="gdCollection colFlex">
 forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
 
+# Todo
 # Simple list view
 define(`_list_view',`<div class="gdListView">
 </div>')dnl
@@ -205,7 +210,7 @@ $*
 # MISC
 # There were too much things to modify I just forced full html tags bc, why not
 define(`_screen_touch', `
-		<div class="modal" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onclick="``hideModal(this)''">
+<div class="modal" id="$1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onclick="``hideModal(this)''">
 	<div class="modal-dialog modal-fullscreen">
 		<div class="modal-content modal-tp text-white">
 			<button type="button" style="display: none;" class="modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -220,10 +225,32 @@ define(`_screen_touch', `
 </div>
 ')dnl
 
-# center popup
-define(`_popup', `')dnl
-# Can be positioned in anywhere this is floating menu
-define(`_menu', `')dnl
+# Sidebar
+# Sidebar Left
+define(`_sidebar_left', `
+<div class="offcanvas offcanvas-start" tabindex="-1" id="$1" aria-labelledby="offcanvasWithBackdropLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="$1Label"></h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+	$2
+  </div>
+</div>
+')dnl
+
+# Sidebar Right
+define(`_sidebar_right', `
+<div class="offcanvas offcanvas-end" tabindex="-1" id="$1" aria-labelledby="offcanvasWithBackdropLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="$1Label"></h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+	$2
+  </div>
+</div>
+')dnl
 
 # ==========
 # Scripts
@@ -259,5 +286,8 @@ define(`_call_modal',`callModal`('"$1"`)'')dnl
 
 # Show Modal
 define(`_hide_modal',`hideModal`('"$1"`)'')dnl
+
+# Toggle sidebar
+define(`_call_sidebar', `toggleSidebar`('"$1"`)'')dnl
 
 divert`'dnl
