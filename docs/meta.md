@@ -10,9 +10,7 @@
   * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
 
 * [ ] Modular components
-  * [ ] Create new webui backend macro component. 
-    * [ ] Complete macros for javascript callbacks
-    * [ ] Utilize bootstrap for aesthetics + functionality
+  * [x] Create new webui backend macro component. 
   * [ ] Template module
     * [ ] Template macro sets
     * [ ] Template related configs
@@ -28,22 +26,11 @@
 * [ ] Check if windows can run gdmarp without docker
 
 * [ ] New macros
-  * [ ] Basic
-  	* [x] Random text macro for test usage
   * [ ] Repr
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
   * [ ] Wui
-  	* [ ] Complete todos
-    * [x] Component macros
-	  * [x] Input forms
-      * [x] Swappable area macro
-      * [x] List view macro (Scrollable Content)
-      * [x] Menu macro(Sidebar)
-      * [x] Modal macro
-	  	* [x] Pop Up Style
-	  	* [x] Screen touch
   * [ ] Wikitext
 
 * [ ] New features
@@ -104,6 +91,20 @@ This is kind of big todo though...
 * [x] Posix compliant binary
 This was intended for alpine linux usage... however I found that I was extensively using gnu version of awk scripts and sed scripts. Thus a sole achievement of this refactor was docker size got slightly smaller. (Amount of bash's binary size) 
 
+* [x] New macros
+  * [x] Basic
+  	* [x] Random text macro for test usage
+  * [x] Repr
+  * [x] Wui
+  	* [x] Complete todos
+    * [x] Component macros
+	  * [x] Input forms
+      * [x] Swappable area macro
+      * [x] List view macro (Scrollable Content)
+      * [x] Menu macro(Sidebar)
+      * [x] Modal macro
+	  	* [x] Pop Up Style
+	  	* [x] Screen touch
 
 ### Big TODO
 
