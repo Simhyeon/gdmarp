@@ -50,7 +50,7 @@ define(`_st', `~~$1~~')dnl
 define(`_ud', `\_\_$1\_\_')dnl
 
 # Indentation
-define(`_idt', `forloop(`', 1, $1, `  ')')dnl
+define(`_idt', ` forloop(`', 2, $1, `  ')')dnl
 
 # Lists
 # Unordered List
@@ -64,7 +64,7 @@ define(`_new_page', `---')dnl
 
 # MACRO >>> Get style files' name and paste the content
 # Usage :
-# _styles(css/image.css, css/layout.css)
+# _styles(image.css, layout.css)
 define(`_styles', `<style>
 foreach(`it', ($*), `/* it */
 include(esyscmd(`printf $MODULE/repr/marp/')it)
