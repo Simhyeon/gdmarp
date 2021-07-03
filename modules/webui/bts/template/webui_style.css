@@ -186,3 +186,31 @@ html, body {
 .hiddenFlow {
 	overflow: hidden;
 }
+
+/* I have no idea how square grid works...*/
+/*https://stackoverflow.com/questions/46548987/a-grid-layout-with-responsive-squares*/
+.gridContainer {
+	display: grid;
+	/*grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));*/
+	/* Try not to use gap because gap can break consistency in minmax calculation */
+	/*grid-gap: 10px;*/
+}
+
+.grid {
+	position: relative;
+	/*border: 1px solid;*/
+	box-sizing: border-box;
+}
+
+.grid::before {
+	content: '';
+	display: block;
+	padding-top: 100%;
+}
+
+.grid .gridContent {
+	position: absolute;
+	top: 0; left: 0;
+	height: 100%;
+	width: 100%;
+}

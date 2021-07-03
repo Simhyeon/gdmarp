@@ -25,7 +25,7 @@ function toggleElement(id) {
 	}
 }
 
-function syncValue(id, ev) {
+function syncText(id, ev) {
 	let elem = document.getElementById(id);
 	elem.textContent = ev.target.value;
 }
@@ -50,4 +50,13 @@ function toggleSidebar(id) {
 	let elem = document.getElementById(id);
 	let canvas = new bootstrap.Offcanvas(elem);
 	canvas.toggle();
+}
+
+function onlyNumberKey(evt) {
+
+	// Only ASCII character in that range allowed
+	var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+	if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+		return false;
+	return true;
 }

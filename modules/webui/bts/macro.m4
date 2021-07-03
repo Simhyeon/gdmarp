@@ -85,7 +85,8 @@ define(`_vcontent_center', `<div id="$1" class="gdContent colFlex flexCenter ful
 shift(shift($*))
 </div>')dnl
 
-# TODO ::: This is technically listView
+# Content scrollable
+# This is technically listView
 define(`_content_scroll',`
 <div id="$1" class="fullSize" style="width: $2; overflow-x: scroll;">
 shift(shift($*))
@@ -110,6 +111,17 @@ define(`_tinput_label', `
 <div class="input-group mb-3">
   <span class="input-group-text" id="$1Label">$3</span>
   <input id="$1" type="text" class="form-control" placeholder="$2" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+')dnl
+# Number input
+define(`_ninput', `
+<input id="$1" type="number" class="form-control" placeholder="$2" aria-label="Username" aria-describedby="basic-addon1" onkeypress="return onlyNumberKey\9event\0">
+')dnl
+# Text input with labels
+define(`_ninput_label', `
+<div class="input-group mb-3">
+  <span class="input-group-text" id="$1Label">$3</span>
+  <input id="$1" type="number" class="form-control" placeholder="$2" aria-label="Username" aria-describedby="basic-addon1" onkeypress="return onlyNumberKey\9event\0">
 </div>
 ')dnl
 
@@ -165,7 +177,7 @@ define(`_range',`
 <input type="range" class="form-range" id="$1" min="$3" max="$4">
 ')dnl
 
-# TODO
+# TODO carousel
 define(`_car', `')dnl # carousel
 
 # =====
@@ -189,8 +201,16 @@ define(`_label_center',`<div id="$1" class="flexGrow gdLabel">
 shift($*)
 </div>')dnl
 
-# TODO 
-define(`_grid',`')dnl
+# MACRO >>> Squre grid macro
+define(`_grid',`
+<div class="gridContainer" id="$1" style="grid-template-columns: repeat\9auto-fill\. minmax\9 m_bc_calc(100 / $2)%\. 1fr\0\0;">
+shift(shift($*))
+</div>
+')dnl
+define(`_grid_cell', `
+<div id="$1" class="grid"><div class="gridContent">
+shift($*)
+</div></div>')dnl
 
 # ==========
 # Swappable area
@@ -220,9 +240,12 @@ define(`_card',`<div id="$1" class="card card-body">
 <h5 class="card-title">$2</h5>
 shift(shift($*))
 </div>')dnl
-
-# TODO Card with image
-define(`_card_img',`')dnl
+# Card with image
+define(`_card_img',`<div id="$1" class="card card-body">
+<img src="$3" class="card-img-top" alt="!!Card Image is not found!!">
+<h5 class="card-title">$2</h5>
+$4
+</div>')dnl
 
 # collection, simply collection of aligned div items
 # collection doesnt expand but srhik while list view can be expanded with scroll bars
@@ -343,8 +366,9 @@ define(`_add_call', `addCallback`('"$1", "$2",`('ev`)' => {$3}`)'')dnl
 
 # Add tooltip to element 
 define(`_add_tooltip',`setProperties`('"$1"\.{"data-bs-toggle":"tooltip"\."data-bs-placement":"top"\."title":"$2"}`)'')dnl
-# TODO ::: Add tooltips to multiple items with one macro
-define(`_add_tooltips', `')dnl
+define(`_add_tooltips', `
+foreach(`it', ($*), `_add_tooltip(m_parse_pair(it))
+')')dnl
 
 # Call alert function
 # e.g.) _add_call(alert, click, _call_alert(This is new text))
@@ -354,10 +378,7 @@ define(`_call_alert',`alert`('"$1"`)'')dnl
 define(`_call_toggle',`toggleElement`('"$1"`)'')dnl
 
 # Call sync value function, while this says value but it syncs text
-define(`_call_sync', `syncValue`('"$1"\.ev`)'')dnl
-
-# TODO ::: Call sync value which really syncs value
-define(`_call_sync_value', `syncValue`('"$1"\.ev`)'')dnl
+define(`_call_sync_text', `syncText`('"$1"\.ev`)'')dnl
 
 # Go to url
 define(`_call_visit', `window.location="$1"')dnl
