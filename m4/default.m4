@@ -48,8 +48,11 @@ define(`_set_var', `define(`$1',
 # There are many spaces for improvements
 define(`_rand_text',`esyscmd(`sh $SCRIPTS/random_text.sh $1')')dnl
 
+# MACRO >>> Parse pair delmited by colon
+# e.g. key:value
+define(`m_parse_pair', `esyscmd(`sh $SCRIPTS/parse_pair.sh $1')')dnl
+
 # MACRO >>> Shorthand version of include macro
-# TODO :::: TODO
 # macro expects path to be inside of "inc" directory
 define(`_inc', `include(esyscmd(`sh $SCRIPTS/parse_inc.sh $1'))')dnl
 
