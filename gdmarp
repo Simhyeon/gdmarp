@@ -211,7 +211,6 @@ gd_wiki(){
 			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && exit 1
 			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 1
 
-			# TODO | Currently binary query is not complete
 			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$out_file" "$cwd"/config.json
 
 			# Change name to given final name and save to 
