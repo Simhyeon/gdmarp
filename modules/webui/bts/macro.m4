@@ -258,11 +258,6 @@ define(`_vcoll',`<div id="$1" class="gdCollection colFlex">
 forloop(`i', 1, $2, `shift(shift($*))')
 </div>')dnl 
 
-# Todo
-# Simple list view
-define(`_list_view',`<div class="gdListView">
-</div>')dnl
-
 # Modal macros
 # Modal Header
 define(`m_modal_header', `
