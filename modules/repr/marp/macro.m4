@@ -118,7 +118,6 @@ define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( i
 define(`_fimg',`<div style="position: fixed; top: $1; left: $2;">
 <img style="width: $3;" src="$4"></img>
 </div>')dnl
-# TODO >>> Compress only the first time, if compressed file already exists do not compress
 # MACRO >>> Compress image, only for jpeg and png 
 # Example :
 # _simgs(0.8, _comp(res/img.jpeg), _comp(res/emoji.png))
