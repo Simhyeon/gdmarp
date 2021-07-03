@@ -39,6 +39,16 @@ and gdmarp will render output files insdie of the build directory. Or simply
 set all commands in config.json file so that "run" subcommand can call multiple
 commands at the same time.
 
+### Available modules
+
+- marp (pptx, pdf, html creation)
+- bts (web ui html page with bootstrap cdn)
+- mw (mediawiki page)
+
+To be updated
+- pandoc ( docs creation )
+- template ( for gdt generation )
+
 ### Dependencies
 
 - sed (GNU version)
@@ -47,12 +57,12 @@ commands at the same time.
 - marp-cli (node package)
 - google chrome or chromium (pptx creation dependencies)
 - jq (config parsing)
+- bc
 - tr
 
 ### Optional dependencies
 
 - git (git flag)
-- bc (sized image macros)
 - sqlite3 (sql macro)
 - curl (web api)
 - jpegoptim (jpeg compression)
