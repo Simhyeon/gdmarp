@@ -34,9 +34,6 @@
   * [ ] Wikitext
 
 * [ ] New features
-  * [ ] Enable cache feature for easy maintenance of temporary files 
-  Save compressed images and out.md in cache directory and middle files into
-  cache to make build directory clean
 
 * [ ] Language server or snippet extension for vim and vs-code
 This is kind of big todo though...
