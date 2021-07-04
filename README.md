@@ -200,7 +200,7 @@ docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
         "page_title": "PageTitleToPost"
     },
     "test": [
-		"prep -M marp -F html",
+        "prep -M marp -F html",
         "wui -M bts -N webui_test.gdt -O webui"
     ],
     "script": [

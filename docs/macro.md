@@ -21,15 +21,15 @@ m_not_intended_for_user()
 
 M4 translates comma as argument delimiter so you cannot put comma literal
 without escaping.  There are two ways to escape comma literal. First is
-```\\.``` and second is ```\_cc``` macro. First way is to escape character with
+```\.``` and second is ```_cc``` macro. First way is to escape character with
 sed script. This is useful when you need to escape character so that the
 character should be included in final generated file content. Second is a macro
 that converts string literal and redirects comma literal to other internal
-macro. Thus ```\_cc``` macro simply postpone direct evaluation for once and
+macro. Thus ```_cc``` macro simply postpone direct evaluation for once and
 should be used if comma should be printed in final result.
 
 General rule of thumb is to use comma literals only in text related macros and
-us ```\\.``` in other macros.
+us ```\.``` in other macros.
 
 ### Other escape rules
 
@@ -1143,6 +1143,8 @@ After
 <input type="range" class="form-range" id="inputId" min="minNumber" max="maxNumber">
 ```
 
+**Inline group**
+
 Elements except radio is all "outlined", which means they don't reside in same
 lines. You can inline elements with inline macro.
 
@@ -1236,7 +1238,7 @@ After
 
 **Grid**
 
-Grid macro is sqaure grids macro or say uniformly distributed grid.
+The grid macro creates a sqaure grid, which is an uniformly distributed grid.
 
 Before
 ```
