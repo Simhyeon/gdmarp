@@ -26,7 +26,7 @@ sed script. This is useful when you need to escape character so that the
 character should be included in final generated file content. Second is a macro
 that converts string literal and redirects comma literal to other internal
 macro. Thus ```_cc``` macro simply postpone direct evaluation for once and
-should be used if comma should be printed in final result.
+should not be used if comma is required to be printed in final result.
 
 General rule of thumb is to use comma literals only in text related macros and
 us ```\.``` in other macros.
