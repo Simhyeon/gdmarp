@@ -17,6 +17,10 @@ html, body {
 	transition: none !important;
 }
 
+img {
+	text-align: center;
+}
+
 .imgContainer {
 	display: flex;
 	justify-content: center; /* align horizontal */
