@@ -42,7 +42,7 @@ define(`_idt', `forloop(`', 1, $1, `:')')dnl
 define(`_url',`[$1 $2]')dnl
 
 # Image Link
-define(`_image',`[[File:$1|alt=$2]]')dnl
+define(`_img',`[[File:$1|alt=$2]]')dnl
 
 # Table (normal reading + raw csv)
 # Read from csv file Second parameter is caption. Caption cannot include spaces use underscore instead
