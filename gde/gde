@@ -1,0 +1,4 @@
+#!/bin/sh
+
+[ "$1" = "install-image" ] && install_docker && exit 0
+docker run --rm -v "$PWD":/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdmarp $*
