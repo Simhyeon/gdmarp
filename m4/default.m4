@@ -52,6 +52,9 @@ define(`_rand_text',`esyscmd(`sh $SCRIPTS/random_text.sh $1')')dnl
 # e.g. key:value
 define(`m_parse_pair', `esyscmd(`sh $SCRIPTS/parse_pair.sh $1')')dnl
 
+# MACRO >>> Repeat given arguments for given times
+define(`_repeat',`forloop(`_i_', 1, $1, `shift($*)')')dnl
+
 # MACRO >>> Shorthand version of include macro
 # macro expects path to be inside of "inc" directory
 define(`_inc', `include(esyscmd(`sh $SCRIPTS/parse_inc.sh $1'))')dnl
