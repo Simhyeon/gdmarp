@@ -134,19 +134,19 @@ $*
 define(`_switch',`
 <div class="form-check form-switch">
 	<input class="form-check-input" type="checkbox" id="$1">
-	<label class="form-check-label" for="flexSwitchCheckDefault" id="$1Label">shift($*)</label>
+	<label class="form-check-label" for="$1" id="$1Label">shift($*)</label>
 </div>
 ')dnl
 
 # Radio select
-define(`_radio', `<div id="$1" class="">
+define(`_radio', `<div id="$1" class="radioGroup">
 foreach(`it', (shift($*)), `m_radio($1, it)')
 </div>')dnl
 # Radio internal macro
 define(`m_radio',`
 <div class="form-check $3">
 	<input class="form-check-input" type="radio" name="$1" id="$2" value="$2">
-	<label class="form-check-label" for="exampleRadios1" id="$2Label">$2</label>
+	<label class="form-check-label" for="$2" id="$2Label">$2</label>
 </div>
 ')dnl
 
@@ -173,7 +173,7 @@ define(`_checkbox',`
 
 # Range
 define(`_range',`
-<label for="customRange1" class="form-label" id="$1Label">$2</label>
+<label for="$1" class="form-label" id="$1Label">$2</label>
 <input type="range" class="form-range" id="$1" min="$3" max="$4">
 ')dnl
 
@@ -229,6 +229,8 @@ define(`m_swap_button',`
 <label class="btn btn-outline-primary" for="$2">$2</label>
 ')dnl
 
+# Swappable items
+# second argument or target parent should be same with parent div, element or _content's id
 define(`_swap_item',`
 <div id="$1" class="collapse" data-bs-parent="\3$2">
 	shift(shift($*))
@@ -365,32 +367,33 @@ define(`_add_tooltips', `
 foreach(`it', ($*), `_add_tooltip(m_parse_pair(it))
 ')')dnl
 
+# TODO : Make this consistent with escaped parenthesis
 # Call alert function
 # e.g.) _add_call(alert, click, _call_alert(This is new text))
-define(`_call_alert',`alert`('"$1"`)'')dnl
+define(`_call_alert',`alert\9"$1"\0')dnl
 
 # Call element toggle function
-define(`_call_toggle',`toggleElement`('"$1"`)'')dnl
+define(`_call_toggle',`toggleElement\9"$1"\0')dnl
 
 # Call sync value function, while this says value but it syncs text
-define(`_call_sync_text', `syncText`('"$1"\.ev`)'')dnl
+define(`_call_sync_text', `syncText\9"$1"\.ev\0')dnl
 
 # Go to url
 define(`_call_visit', `window.location="$1"')dnl
 
 # Call specific event on target
-define(`_call_event', `triggerEvent`('"$1" \. "$2"`)'')dnl
+define(`_call_event', `triggerEvent\9"$1" \. "$2"\0')dnl
 
 # Call update, or say set properties on target
-define(`_call_update',`setProperties`("$1"\.{'"$2" : "$3"}`)'')dnl
+define(`_call_update',`setProperties\9"$1"\.{"$2" : "$3"}\0')dnl
 
 # Show Modal
-define(`_call_modal',`callModal`('"$1"`)'')dnl
+define(`_call_modal',`callModal\9"$1"\0')dnl
 
 # Show Modal
-define(`_hide_modal',`hideModal`('"$1"`)'')dnl
+define(`_hide_modal',`hideModal\9"$1"\0')dnl
 
 # Toggle sidebar
-define(`_call_sidebar', `toggleSidebar`('"$1"`)'')dnl
+define(`_call_sidebar', `toggleSidebar\9"$1"\0')dnl
 
 divert`'dnl
