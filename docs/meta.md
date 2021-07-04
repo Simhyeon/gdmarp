@@ -1,13 +1,11 @@
 ### TODO
 
 * [ ] Misc
-  * [ ] Removing all unused parenthses separately is stupid and very limiting, make sed script smarter to remove parenthses with prefixed macro names
   * [x] Make a naming convention consistent for real
   * [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
   * [x] Improve README
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
-  * [ ] Complete macro.md for better accessibility
   * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
 
 * [ ] Modular components
