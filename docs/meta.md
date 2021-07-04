@@ -27,6 +27,7 @@
 * [ ] Check if windows can run gdmarp without docker
 
 * [ ] New macros
+  * [ ] Basic
   * [ ] Repr
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
@@ -95,6 +96,7 @@ This was intended for alpine linux usage... however I found that I was extensive
 * [x] New macros
   * [x] Basic
   	* [x] Random text macro for test usage
+    * [x] Make repeat macro
   * [x] Repr
   * [x] Wui
   	* [x] Complete todos

@@ -19,14 +19,14 @@ m_not_intended_for_user()
 
 ### Comma rules
 
-M4 translates comma as argument delimiter so you cannot put comma literal without escaping. 
-There are two ways to escape comma literal. First is "\\." and second is _cc
-macro. First way is to escape character with sed script. This is useful when
-you need to escape character so that the character should be included in final
-generated file content. Second is a macro that converts string literal and
-redirects comma literal to other internal macro. Thus _cc macro simply postpone
-direct evaluation for once and should be used if comma should be printed in
-final result.
+M4 translates comma as argument delimiter so you cannot put comma literal
+without escaping.  There are two ways to escape comma literal. First is "\\."
+and second is \_cc macro. First way is to escape character with sed script. This
+is useful when you need to escape character so that the character should be
+included in final generated file content. Second is a macro that converts
+string literal and redirects comma literal to other internal macro. Thus \_cc
+macro simply postpone direct evaluation for once and should be used if comma
+should be printed in final result.
 
 General rule of thumb is to use comma literals only in text related macros and
 us "\\." in other macros.
@@ -37,11 +37,28 @@ us "\\." in other macros.
 - Quote(') : \\~
 - Parenthesis( "("and ")" ) : \\9 and \\0
 - Hash(#) : \\3
-- Underscore(_) : \\_
+- Underscore(\_) : \\\_
 
 ### Basic macros
 
 Basic macros are included regardless of given macro modules.
+
+**Repeat macro**
+
+Repeat given content for given times.
+
+Before
+```
+_repeat(5,_icon(star-fill))
+
+<!-- while _icon(star-fill) yields ... -->
+<i class="bi bi-star-fill">
+```
+After
+```
+<!-- gdmarp wui -M bts  -->
+<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+```
 
 **If mod macro**
 
@@ -77,7 +94,7 @@ No repr is in here.
 There are two ways to define variables in gdmarp. First is to define a macro in
 env.m4 file. Other is to use _set_var macros inside of gdt files.
 
-Please be aware that _set_var is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro.
+Please be aware that "_set_var"'s syntax is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro too.
 
 ```
 <!-- Arg order is "Varaible name" followed by "substituted text" -->
@@ -92,32 +109,37 @@ Some repeated text that is a waste of typing and readability
 
 **Random text macro**
 
-While this is not so complete as a lorem ipsum generator. It is enough test a text occupied situation.
+While this is not so complete as a lorem ipsum generator. It is enough test a
+text occupied situation.
 
+Before
 ```
 <!-- Argument is character count -->
 _rand_text(30)
 ```
-converts to
+After
 ```
 xtnjewq oslebt ejgffo eae renk
 ```
 
 **Comma macro**
 
-Comma macro is a very specific macro and currently only used by a _sql_table macro. This converts into a comma literal which should be consumed as it is by a parent macro.
+Comma macro is a very specific macro and currently only used by a _sql_table
+macro. This converts into a comma literal which should be consumed as it is by
+a parent macro.
 
+Before
 ```
 _cc
 ```
-converts to
+After
 ```
 ,
 ```
 
 **Web api macro**
 
-Get response from url and parse the response with "jq" program.
+Get a response from a given url and parse the response with "jq" program.
 
 ```
 _wapi(http://url/api/get, .env.value)
@@ -136,11 +158,11 @@ Some value
 
 **Include other files**
 
-Include macro to include other markdown files into index.md. You can only give
-file name without extension if given file is markdown file and resides inside
-of inc directory, else you should give a full file name. Lastly, include files
-should be positioned inside of a directory given to the program as an
-argument of a "-I" option.
+Include macro to include other markdown files' content.  You can only give file
+name without extension if given file is gdt file and resides inside of inc
+directory, else you should give a full file name. Lastly, include files should
+be positioned inside of a directory given to the program as an argument of a
+"-I" option.
 
 e.g.)
 Let's assume the file structure is as followed
@@ -148,13 +170,16 @@ Let's assume the file structure is as followed
 .
 ├── ...
 ├── inc
-│   └── new_file.md
-└── outside.md
+│   └── new_file.gdt
+└── outside.gdt
 ```
 
 _inc(new_file) -> This is OK
-_inc(new_file.md) -> This is OK
-_inc(outside.md) -> This is OK
+
+_inc(new_file.gdt) -> This is OK
+
+_inc(outside.gdt) -> This is OK
+
 _inc(outside) -> This is Error
 
 Macro usage:
@@ -172,9 +197,6 @@ Preceding lines
 Included lines
 Following lines
 ```
-
-In this case other_file_name.md file's content will be pasted into where
-macro was called.
 
 ### Representaion macros (Marp module)
 
@@ -229,7 +251,8 @@ _idt(2) Indented2
 ```
 After
 ```
-  Indented <!-- Indentation is two spaces in markdown -->
+<!-- Indentation is two spaces in markdown -->
+  Indented 
     Indented2
 ```
 
@@ -251,6 +274,9 @@ After
 ```
 
 **New Page**
+
+Normally triple dash is a horizontal line, but marp, which is a markdown to
+slide generator, treates horizontal line as page separator.
 
 Before
 ```
@@ -299,9 +325,9 @@ The built-in css files list is follwed as
 
 #### Texts
 
-Multiline texts are supported. Starting and trailing new lines are all removed from input.
-First argument is font-size. 0 means default font-size which is 22px.
-You can edit default font size in env.m4 file.
+Multiline texts are supported. Leading and trailing new lines are all removed
+from input.  First argument is a font-size. 0 means default font-size which is
+22px. You can edit default font size in env.m4 file.
 
 ```
 _text(30, Big texts are printed)
@@ -335,7 +361,7 @@ This is simple text
 
 #### Img macro
 
-Simple img macros creates markdown img list.
+Simple img macros creates markdown imgs list.
 
 Sized img macro creates markdown image text with marp favored attribute. First
 argument scale of image and last elements are image file pathes.
@@ -351,6 +377,8 @@ nor original index.md file. It just changes out.md file and final product's
 image source. 
 
 ```
+_img(1.jpeg)
+
 _imgs(1.jpeg, 2.png)
 
 _simgs(0 ,1.jpeg, 2.png)
@@ -365,6 +393,8 @@ _imgs(_comp(1.jpeg), _comp(2.png))
 converts to
 
 ```
+![](1.jpeg)
+
 ![](1.jpeg)
 ![](2.png)
 
@@ -541,9 +571,9 @@ converts to
 
 This macro reads csv file from local path and read into in-memory sqlite3 database. You can set query statement and substitute macro with query result formatted as github flavored table.
 
-M4 macro converts comma as delimiter you can use _cc to input comma literal.
+M4 macro converts comma as delimiter. You can use _cc to input comma literal.
 Text macro handles comma easily however sql macro is actually building another
-macro and gets surplus arguments thus it may need different approach to allow
+macro and gets surplus arguments, thus it needs different approach to allow
 comma literal.
 
 Sql macro doesn't sanitize macro becuase it only read csv file as in-memory
@@ -773,21 +803,23 @@ Converts to
 External link
 
 ```
-_url(http://url, MnemonicName)
+_url(http://url)
+_url(http://url,MnemonicName)
 ```
 Converts to
 
 ```
+[http://url]
 [http://url MnemonicName]
 ```
 
 #### Imags
 
-Keep in mind that mediawiki can display image that is uploaded to the server
-and cannot reference web url image.
+Keep in mind that mediawiki can only display an image that is uploaded to the
+server and cannot reference web url image.
 
 ```
-_image(file/path, MnemonicName)
+_img(file/path, MnemonicName)
 ```
 
 Converts to
@@ -882,6 +914,9 @@ rather hard to read.
 This example uses top space but bot(bottom) space's syntax is identical to top
 space while bot space is positioned in bottom of the screen.
 
+You have to give all "top|bot_left", "top|bot_center", "top|bot_right" for
+proper formatting.
+
 Before
 ```
 _top_space(
@@ -942,6 +977,9 @@ After
 
 Content macro is a simple wrapper or division with flexible composition. Use
 nested content macros to create a desired layout.
+
+Width and height is hard to measure with fixed unit. Use percent for sanity.
+e.g.) _content(id,50%, content)
 
 Basic content syntax is 
 ```
@@ -1086,7 +1124,8 @@ After
 <input type="range" class="form-range" id="inputId" min="minNumber" max="maxNumber">
 ```
 
-Elements wihtout radio is all "outlined", or say they don't reside in same lines. You can inline elements with inline macro.
+Elements except radio is all "outlined", which means they don't reside in same
+lines. You can inline elements with inline macro.
 
 Before
 ```
@@ -1268,7 +1307,7 @@ After
 **Collection**
 
 This name sounds somewhat fancy, but this is actually a helper macro to create
-multiple elements without atuomated generation of given element.
+multiple elements with atuomated generation of given element.
 
 Before
 ```
@@ -1293,11 +1332,17 @@ After
 
 **Modal**
 
-Modal is a modal. There are two types of modal. One is an traditional modal and other is full screen modal that intercepts of all input until user clicks a screen aka screen touch.
+Modal is a modal. There are two types of modal. One is a traditional modal and
+other is a full screen modal that intercepts of all input until user clicks a
+screen aka screen touch.
 
-Modals are not visible in a page and you have to add trigger(callbacks) to show modals. Refer script section. Or even better, you can define you own javascript callback functions with event listener.
+Modals are not visible in a page and you have to add trigger(callbacks) to show
+modals. Refer a script section. Or even better, you can define your own
+javascript callback functions with event listener.
 
-You can decare modal or screen touch anywhere, but I recommend separte it from normal elements that are always shown to evade some artifacts. General rule of thumb is to declare hidden elements right before _ui_end macro.
+You can declare a modal or screen touch anywhere, but I recommend separating it
+from other normal elements that are always shown so that artifacts don't occur.
+A general rule of thumb is to declare hidden elements right before "_ui_end" macro.
 
 Before
 ```
@@ -1343,7 +1388,7 @@ After
 
 **Sidebar**
 
-Sidebar is a floating sidemenu that doesn't push main contents aside. You should add a trigger to toggle sidebar.
+Sidebar is a floating sidemenu that doesn't push main contents aside. You should add a trigger to toggle the sidebar.
 
 Before
 ```
@@ -1382,14 +1427,17 @@ After
 
 Script macros add functionality to existing elements. 
 
-Every webui's script(function) macros should be positioned between script start
-and script end macro.
+Every webui's script(function) macros should be positioned between the script
+start and script end macro.
 
-Every script macro expands to javascript functions that are defined by the bts module.
+Every script macro expands to javascript functions that are defined by the bts
+module.
 
 **Set properties**
 
-Whlie this macro was intended for callback usage. But you can directly invoke a macro to change html tag's properties. You know what you are doing if you can understand what properties do.
+Whlie this macro was intended as a callback. But you can directly invoke a
+macro to change html tag's properties. You know what you are doing if you can
+understand what properties do.
 
 Before
 ```
@@ -1434,7 +1482,8 @@ addCallback("targetId", "click",(ev) => {alert("Yo yo, you pressed "the" button.
 
 **Callbacks**
 
-There are several pre-defined macros for setting callback for an element. Callback macros are used with conjuction of "_add_call" macro's argument.
+There are several pre-defined macros for setting callback for an element.
+Callback macros are used as conjuction with "_add_call" macro's argument.
 
 Before
 ```
