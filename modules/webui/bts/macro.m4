@@ -367,7 +367,6 @@ define(`_add_tooltips', `
 foreach(`it', ($*), `_add_tooltip(m_parse_pair(it))
 ')')dnl
 
-# TODO : Make this consistent with escaped parenthesis
 # Call alert function
 # e.g.) _add_call(alert, click, _call_alert(This is new text))
 define(`_call_alert',`alert\9"$1"\0')dnl
