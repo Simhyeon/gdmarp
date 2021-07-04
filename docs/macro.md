@@ -1,12 +1,8 @@
 ### Macro rules (WIP)
 
-**Currently gdmarp 0.2 is comfing and this document is very oudated.**
-
-Macro starts with underscore. There are several macro rules that don't start with underscore which are mostly intended for internal usage.
-
 ### Naming convention
 
-End user macro is in snake case. 
+End user macro is in snake case with underscore prefix.
 ```
 _macro_name_with_long_text()
 ```
@@ -24,24 +20,24 @@ m_not_intended_for_user()
 ### Comma rules
 
 M4 translates comma as argument delimiter so you cannot put comma literal without escaping. 
-There are two ways to escape comma literal. First is \. and second is _cc
+There are two ways to escape comma literal. First is "\\." and second is _cc
 macro. First way is to escape character with sed script. This is useful when
 you need to escape character so that the character should be included in final
-generated file content. Second is macro that converts string literal and
-redirects to internal macro. Such usage is sql macro because sql queries' comma
-should be consumed by sqlbuilder macro and redirected to sqlite3 binary.
+generated file content. Second is a macro that converts string literal and
+redirects comma literal to other internal macro. Thus _cc macro simply postpone
+direct evaluation for once and should be used if comma should be printed in
+final result.
 
 General rule of thumb is to use comma literals only in text related macros and
-try not to use comma in other macros other than sql macro.
+us "\\." in other macros.
 
-Text macro and flex box macros handle comma literal so it is ok to use comma
-literal in such macros. However csv macros or sql
-macros currently doesn't support comma literal so you should always escape
-comma to use comma as text. 
+### Other escape rules
 
-### Quote and backtick rules
-
-Same thing applies to quote and backticks use "\;" for quote and "\~" for backtick.
+- Backtick(`) : \\;
+- Quote(') : \\~
+- Parenthesis( "("and ")" ) : \\9 and \\0
+- Hash(#) : \\3
+- Underscore(_) : \\_
 
 ### Basic macros
 
@@ -52,8 +48,8 @@ Basic macros are included regardless of given macro modules.
 This includes the given texts only when a specific module was given to the
 program. Argument should be a module name not a subcommand name.
 
-_elif_mod is not necessary but you can only use _if_mod with _if_end, however
-_if_mod without _if_end is a panic.
+"_elif_mod" is not necessary and you can only use "_if_mod" with "_if_end",
+however "_if_mod" without "_if_end" is a panic.
 
 ```
 _h3(Global Header)
@@ -71,7 +67,7 @@ Converts to
 No wiki allowed in here
 
 <!-- When the execution was : "gdmarp prep -M mw" -->
-### Global Header
+===Global Header===
 
 No repr is in here.
 ```
@@ -148,11 +144,13 @@ argument of a "-I" option.
 
 e.g.)
 Let's assume the file structure is as followed
+```
 .
 ├── ...
 ├── inc
 │   └── new_file.md
 └── outside.md
+```
 
 _inc(new_file) -> This is OK
 _inc(new_file.md) -> This is OK
@@ -177,7 +175,6 @@ Following lines
 
 In this case other_file_name.md file's content will be pasted into where
 macro was called.
-
 
 ### Representaion macros (Marp module)
 
@@ -876,79 +873,613 @@ _set_var(`m_webui_script', `
 
 #### Component macros
 
+This part illustrates how macros are expanded rather than how it should be
+used. I fixed a formatting aftward for better readabiltity. Raw output is
+rather hard to read.
+
 **Space**
 
-- top space
-  - top left
-  - top center
-  - top right
-- bot space
-  - bot left
-  - bot center
-  - bot right
+This example uses top space but bot(bottom) space's syntax is identical to top
+space while bot space is positioned in bottom of the screen.
+
+Before
+```
+_top_space(
+	_top_left(Left)
+	_top_center(Center)
+	_top_right(Right)
+)
+```
+After
+```
+<div id="topSpace" class="topSpace">
+	<div id="topLeft" class="topLeft">
+		Left
+	</div>
+	<div id="topCenter" class="topCenter">
+		Center
+	</div>
+	<div id="topRight" class="topRight">
+		Right
+	</div>
+</div>
+```
 
 **Container**
 
-- header
-- container
-- vcontainer
-- footer
+Container is used only once unlike content macro. Container macro is a semantic
+indicator how space is used for. Actually container also determineds page's
+orientation too. Header and footer are used inside of a container.
+
+Before
+```
+<!-- vcontainer makes vertically aligned page while container makes
+horizontally aligned page -->
+_vcontainer(
+	_header(
+		Header Content
+	)
+	Other contents
+	_footer(
+		Footer Content
+	)
+)
+```
+After
+```
+<div id="container" class="gdContainer colFlex hiddenFlow">
+	<div id="header" class="gdHeader">
+		Header Content
+	</div>
+	Other contents
+	<div id="footer" class="gdFooter">
+		Footer Content
+	</div>
+</div>
+```
 
 **Content, aka flex container**
 
-- content
-- content center
-- vcontent
-- vcontent center
-- content scroll
-- vcontent scroll
+Content macro is a simple wrapper or division with flexible composition. Use
+nested content macros to create a desired layout.
+
+Basic content syntax is 
+```
+<!-- Vertical content gets height while (horizontal) content gets width-->
+_content_name(Id of content,Width or height,Content to be displayed)
+
+<!-- Give empty arguments to set no id or sest size to 100% -->
+_content(,,Content to be displayed)
+```
+
+Before
+```
+_content(contentId,width,
+	This is content
+)
+_content_center(contentId,width,
+	This is content with centering
+)
+_vcontent(contentId,height,
+	This is vertcial content
+)
+_vcontent_center(contentId,height,
+	This is vertcial content with centering
+)
+_content_scroll(contentId,width,
+	This is content with scroll view
+)
+_vcontent_scroll(contentId,height,
+	This is vertical content with scroll view
+)
+```
+After
+```
+<div id="contentId" class="gdContent rowFlex fullSize hiddenFlow width" style="width: width;">
+	This is content
+</div>
+<div id="contentId" class="gdContent rowFlex fullSize flexCenter hiddenFlow width" style="width: width;">
+	This is content with centering
+</div>
+<div id="contentId" class="gdContent colFlex fullSize hiddenFlow height" style="height: height;">
+	This is vertcial content
+</div>
+<div id="contentId" class="gdContent colFlex flexCenter fullSize hiddenFlow height" style="height: height;">
+	This is vertcial content with centering
+</div>
+<div id="contentId" class="fullSize" style="width: width; overflow-x: scroll;">
+	This is content with scroll view
+</div>
+<div id="contentId" class="fullSize" style="height: height; overflow-y: scroll;">
+	This is vertical content with scroll view
+</div>
+```
 
 **Forms**
 
-- inline group
-- text input (with label)
-- number input (with label)
-- switch
-- radio
-- select
-- checkbox
-- range
+Forms are interactive ui element to input data.
+
+Before
+```
+<!-- Text input -->
+_tinput(inputId,Placeholder texts)
+<!-- Text input with a label -->
+_tinput_label(inputId,Placeholder texts,Label for input)
+<!-- Number input -->
+_ninput(inputId,Placeholder number)
+<!-- Number input with a label -->
+_ninput_label(inputId,Placeholder number, Label for input)
+<!-- On/Off switch -->
+_switch(inputId,Label for switch)
+<!-- Buttons that turn off each other -->
+_radio(inputId,radio1,radio2,radio3)
+<!-- This is called selection but identical to drop down menu -->
+_sel(inputId,
+	_sel_item(Value1)
+	_sel_item(Value2)
+	_sel_item(Value3)
+)
+<!-- Literally, a checkbox-->
+_checkbox(inputId,Label for checkbox)
+<!-- Slider that you can drag between min and max numbers -->
+_range(inputId,Label for range,minNumber,maxNumber)
+```
+After
+```
+<!-- Text input -->
+<input id="inputId" type="text" class="form-control" placeholder="Placeholder texts" aria-label="Username" aria-describedby="basic-addon1">
+
+<!-- Text input with a label-->
+<div class="input-group mb-3">
+	<span class="input-group-text" id="inputIdLabel">Label for input</span>
+	<input id="inputId" type="text" class="form-control" placeholder="Placeholder texts" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+
+<!-- Number input -->
+<input id="inputId" type="number" class="form-control" placeholder="Placeholder number" aria-label="Username" aria-describedby="basic-addon1" onkeypress="return onlyNumberKey(event)">
+
+<!-- Number input with a label-->
+<div class="input-group mb-3">
+	<span class="input-group-text" id="inputIdLabel">Label for input</span>
+	<input id="inputId" type="number" class="form-control" placeholder="Placeholder number" aria-label="Username" aria-describedby="basic-addon1" onkeypress="return onlyNumberKey(event)">
+</div>
+
+<!-- Switch-->
+<div class="form-check form-switch">
+	<input class="form-check-input" type="checkbox" id="inputId">
+	<label class="form-check-label" for="inputId" id="inputIdLabel">Label for switch</label>
+</div>
+
+<!-- Radio -->
+<div id="inputId" class="radioGroup">
+	<div class="form-check ">
+		<input class="form-check-input" type="radio" name="inputId" id="radio1" value="radio1">
+		<label class="form-check-label" for="radio1" id="radio1Label">radio1</label>
+	</div>
+	<div class="form-check ">
+		<input class="form-check-input" type="radio" name="inputId" id="radio2" value="radio2">
+		<label class="form-check-label" for="radio2" id="radio2Label">radio2</label>
+	</div>
+	<div class="form-check ">
+		<input class="form-check-input" type="radio" name="inputId" id="radio3" value="radio3">
+		<label class="form-check-label" for="radio3" id="radio3Label">radio3</label>
+	</div>
+</div>
+
+<!-- Select -->
+<select id="inputId" class="form-select" aria-label="Default select example">
+	<option value="Value1">Value1</option>
+	<option value="Value2">Value2</option>
+	<option value="Value3">Value3</option>
+</select>
+
+<!-- Checkbox -->
+<div class="form-check">
+	<input class="form-check-input" type="checkbox" value="" id="inputId">
+	<label class="form-check-label" for="flexCheckDefault" id="inputIdLabel">
+		Label for checkbox
+	</label>
+</div>
+
+<!-- Range -->
+<label for="inputId" class="form-label" id="inputIdLabel">Label for range</label>
+<input type="range" class="form-range" id="inputId" min="minNumber" max="maxNumber">
+```
+
+Elements wihtout radio is all "outlined", or say they don't reside in same lines. You can inline elements with inline macro.
+
+Before
+```
+_inline(
+	_checkbox(1,1)
+	_checkbox(2,2)
+	_checkbox(3,3)
+)
+```
+After
+```
+<div class="inlineGroup">
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" value="" id="1">
+		<label class="form-check-label" for="flexCheckDefault" id="1Label">
+			1
+		</label>
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" value="" id="2">
+		<label class="form-check-label" for="flexCheckDefault" id="2Label">
+			2
+		</label>
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" value="" id="3">
+		<label class="form-check-label" for="flexCheckDefault" id="3Label">
+			3
+		</label>
+	</div>
+</div>
+```
 
 **Misc**
 
-- image
-- icon
-- paragraph
-- button
-- label
-- centered label
-- card
+Miscellaneous macros for various components.
+
+Before
+```
+<!-- Image -->
+_img(imgId, ratio, imgSrcUrl)
+<!-- Button -->
+_btn(btnId, ButtonLabel)
+<!-- Icon -->
+<!-- IconType is a bootstrap icon class with preceding "bi-" stripped  -->
+_icon(iconType)
+<!-- Card form component -->
+_card(cardId,cardTitle,cardContent)
+<!-- Card with image on top -->
+_card_img(cardId,cardTitle,imgSrcUrl,cardContent)
+<!-- Paragraph -->
+_par(Content)
+<!-- Simple text label -->
+_label(labelId,text)
+<!-- Simple text label with centering-->
+_label_center(labelId,text)
+
+```
+After
+```
+<!-- Image -->
+<img id="imgId" class="img" style="width: ratio; height: ratio;" src="imgSrcUrl" alt="!!Image Not FOUND!!"></img>
+<!-- Button -->
+<button id="btnId" class="flexGrow btn btn-primary">ButtonLabel</button>
+<!-- Icon -->
+<i class="bi bi-iconType"></i>
+<!-- Card -->
+<div id="cardId" class="card card-body">
+	<h5 class="card-title">cardTitle</h5>
+	cardContent
+</div>
+<!-- Card with image -->
+<div id="cardId" class="card card-body">
+	<img src="imgSrcUrl" class="card-img-top" alt="!!Card Image is not found!!">
+	<h5 class="card-title">cardTitle</h5>
+	cardContent
+</div>
+<!-- Paragraph -->
+<p>Content</p>
+<!-- Label -->
+<div id="labelId" class="">
+	text
+</div>
+<!-- Label center -->
+<div id="labelId" class="flexGrow gdLabel">
+	text
+</div>
+```
 
 **Grid**
 
+Grid macro is sqaure grids macro or say uniformly distributed grid.
+
+Before
+```
+_grid(grid,3,
+	_grid_cell(g1,1)
+	_grid_cell(g2,2)
+	_grid_cell(g3,3)
+	_grid_cell(g4,4)
+	_grid_cell(g5,5)
+)
+```
+After
+```
+<div class="gridContainer" id="grid" style="grid-template-columns: repeat(auto-fill, minmax( 33%, 1fr));">
+	<div id="g1" class="grid"><div class="gridContent">
+		1
+	</div></div>
+	<div id="g2" class="grid"><div class="gridContent">
+		2
+	</div></div>
+	<div id="g3" class="grid"><div class="gridContent">
+		3
+	</div></div>
+	<div id="g4" class="grid"><div class="gridContent">
+		4
+	</div></div>
+	<div id="g5" class="grid"><div class="gridContent">
+		5
+	</div></div>
+</div>
+```
+
 **Swap area**
+
+Note : I'm not sure if there is any existing terminology to refer a "Swap" ui, but I'm no expert in UI, so I'll just stitck to a term swap.
+
+Swap areas are like a deriative of a accordian ui but with remote control. Swap consists of two parts, swap buttons and swap areas. Swap buttons control which content to show in swap areas.
+
+Before
+```
+_swap_buttons(swapGroupId,swap1,swap2,swap3)
+
+<!-- Important: swap item's second argument should be parent element's id -->
+<!-- Important: swap item's id should be same with swap_buttons' id -->
+_content(parentId,,
+		_swap_item(swap1,parentId,This is first)
+		_swap_item(swap2,parentId,This is first)
+		_swap_item(swap3,parentId,This is first)
+)
+```
+After
+```
+<div id="swapGroupId" class="btn-group" role="group">
+	<input type="radio" class="btn-check" name="swapGroupId" value="no" id="swap1"
+	       aria-expanded="false"
+	       aria-controls="swap1"
+	       data-bs-toggle="collapse"
+	       data-bs-target="#swap1">
+	<label class="btn btn-outline-primary" for="swap1">swap1</label>
+	<input type="radio" class="btn-check" name="swapGroupId" value="no" id="swap2"
+	       aria-expanded="false"
+	       aria-controls="swap2"
+	       data-bs-toggle="collapse"
+	       data-bs-target="#swap2">
+	<label class="btn btn-outline-primary" for="swap2">swap2</label>
+	<input type="radio" class="btn-check" name="swapGroupId" value="no" id="swap3"
+	       aria-expanded="false"
+	       aria-controls="swap3"
+	       data-bs-toggle="collapse"
+	       data-bs-target="#swap3">
+	<label class="btn btn-outline-primary" for="swap3">swap3</label>
+</div>
+
+<div id="parentId" class="gdContent rowFlex fullSize hiddenFlow flexGrow" style="width: ;">
+	<div id="swap1" class="collapse" data-bs-parent="#parentId">
+		This is first
+	</div>
+	<div id="swap2" class="collapse" data-bs-parent="#parentId">
+		This is first
+	</div>
+	<div id="swap3" class="collapse" data-bs-parent="#parentId">
+		This is first
+	</div>
+</div>
+```
 
 **Collection**
 
+This name sounds somewhat fancy, but this is actually a helper macro to create
+multiple elements without atuomated generation of given element.
+
+Before
+```
+<!-- Horizontal alignment -->
+_coll(collId,2,_btn(,Button Label))
+
+<!-- Vertical alignment -->
+_vcoll(collId,2,_btn(,Button Label))
+```
+After
+```
+<div id="collId" class="gdCollection rowFlex">
+	<button id="" class="flexGrow btn btn-primary">Button Label</button>
+	<button id="" class="flexGrow btn btn-primary">Button Label</button>
+</div>
+
+<div id="collId" class="gdCollection colFlex">
+	<button id="" class="flexGrow btn btn-primary">Button Label</button>
+	<button id="" class="flexGrow btn btn-primary">Button Label</button>
+</div>
+```
+
 **Modal**
+
+Modal is a modal. There are two types of modal. One is an traditional modal and other is full screen modal that intercepts of all input until user clicks a screen aka screen touch.
+
+Modals are not visible in a page and you have to add trigger(callbacks) to show modals. Refer script section. Or even better, you can define you own javascript callback functions with event listener.
+
+You can decare modal or screen touch anywhere, but I recommend separte it from normal elements that are always shown to evade some artifacts. General rule of thumb is to declare hidden elements right before _ui_end macro.
+
+Before
+```
+_modal(modalId, Header Content, Body Content, Footer content)
+
+_screen_touch(modalId, Text to display in center)
+```
+After
+```
+<!-- Normal modal -->
+<div class="modal fade" id="modalId" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Header Content</h5>
+				<button type="button" class="btn-close modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				Body Content
+			</div>
+			<div class="modal-footer">
+				Footer content
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Screen touch -->
+<div class="modal" id="modalId" tabindex="-1" aria-hidden="true" onclick="hideModal">
+	<div class="modal-dialog modal-fullscreen">
+		<div class="modal-content modal-tp text-white">
+			<button type="button" style="display: none;" class="modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-body" style="display: flex; justify-content: center; align-items: center;">
+			Text to display in center
+			</div>
+			<div class="modal-footer" style="border: 0; justify-content: center;">
+				Click to dismiss
+			</div>
+		</div>
+	</div>
+</div>
+```
 
 **Sidebar**
 
+Sidebar is a floating sidemenu that doesn't push main contents aside. You should add a trigger to toggle sidebar.
+
+Before
+```
+<!-- Left sidebar -->
+_sidebar_left(sidebarId, Content to be displayed)
+
+<!-- Right sidebar -->
+_sidebar_right(sidebarId, Content to be displayed)
+```
+After
+```
+<!-- Left sidebar>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarId">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="sidebarIdLabel"></h5>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		Content to be displayed
+	</div>
+</div>
+
+<!-- Right sidebar>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebarId">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="sidebarIdLabel"></h5>
+		<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		Content to be displayed
+	</div>
+</div>
+```
+
 #### Script macros
+
+Script macros add functionality to existing elements. 
+
+Every webui's script(function) macros should be positioned between script start
+and script end macro.
+
+Every script macro expands to javascript functions that are defined by the bts module.
 
 **Set properties**
 
+Whlie this macro was intended for callback usage. But you can directly invoke a macro to change html tag's properties. You know what you are doing if you can understand what properties do.
+
+Before
+```
+_call_update(targetId,propsId,propsValue)
+```
+After
+```
+setProperties(targetId,propsId,propsValue)
+```
+
 **Set tooltip**
+
+This set toolip for a given id. Tooltip is displayed when you hover over an element.
+
+Before
+```
+_add_tooltip(targetId,This is some very useful tooltip)
+```
+
+After
+```
+setProperties("targetId",{"data-bs-toggle":"tooltip","data-bs-placement":"top","title":"This is some very useful tooltip"})
+```
 
 **Set callback**
 
+You can set callbacks, or functions that invoked when specific events occurs, with macros.
+
+```
+<!-- Bare bone-->
+_add_call(targetId,eventType,javascriptCode)
+
+<!-- Real usage -->
+<!-- comma is escaped with \\. to prevent evaluation -->
+_add_call(buttonId,click,_call_alert(Yo yo\\. you pressed "the" button.))
+```
+```
+addCallback("targetId", "eventType",(ev) => {javascriptCode})
+
+addCallback("targetId", "click",(ev) => {alert("Yo yo, you pressed "the" button.")})
+```
+
 **Callbacks**
 
-- trigger an alert
-- toggle an element
-- sync a text
-- visit an url
-- trigger a event
-- update a property
-- show/hide a modal
-- toggle sidebar
+There are several pre-defined macros for setting callback for an element. Callback macros are used with conjuction of "_add_call" macro's argument.
+
+Before
+```
+<!--trigger an alert-->
+_call_alert(Alert text)
+
+<!--toggle an element-->
+_call_toggle(targetId)
+
+<!--sync a text-->
+_call_sync_text(targetId)
+
+<!--visit an url-->
+_call_visit(url)
+
+<!--trigger a event-->
+_call_event(targetId, eventType)
+
+<!--update a property-->
+_call_update(targetId,propsId,propsValue)
+
+<!--show/hide a modal-->
+_call_modal(modalId)
+_hide_modal(modalId)
+
+<!--toggle sidebar-->
+_call_sidebar(sidebarId)
+```
+After
+```
+<!--trigger an alert-->
+alert("Alert text")
+<!--toggle an element-->
+toggleElement("targetId")
+<!--sync a text-->
+syncText("targetId",ev)
+<!--visit an url-->
+window.location="url"
+<!--trigger a event-->
+triggerEvent("targetId" , "eventType")
+<!--update a property-->
+setProperties("targetId",{"propsId" : "propsValue"})
+<!--show/hide a modal-->
+callModal("modalId")
+hideModal("modalId")
+<!--toggle sidebar-->
+toggleSidebar("sidebarId")
+```
