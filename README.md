@@ -99,13 +99,17 @@ alias gdmarp='path/to/your/downloaded/directory/gdmarp'
 
 #### Windows
 
-You can use windows subsystem linux2. However you have to configure chrome installation path with wsl2 option.
+You can use windows subsystem linux2. However you have to configure chrome
+installation path with wsl2 option.
 
-This is a shell script, so theoritically windows bash can execute this script. However it is not guaranteed to work with cygwin or similar unix layer.
+This is a shell script, so theoritically windows bash can execute this script.
+However it is not guaranteed to work with cygwin or similar unix layer.
 
 I strongly recommend using docker image especially on windows.
 
-P.S. CR/LF('\n\r') triggers wrong formatted macro substitutions. Therefore every file's EOL should be formatted as CR('\n'). e.g. visual studio code support a config to set default EOL to CR.
+P.S. CR/LF('\n\r') triggers wrong formatted macro substitutions. Therefore
+every file's EOL should be formatted as CR('\n'). e.g. visual studio code
+support a config to set default EOL to CR.
 
 ### Customization
 
@@ -126,7 +130,8 @@ _img(v_url())
 
 ### Usage
 
-Usages of shell are mostly applicable to docker verison's but the difference of docker commands preceding real program arguments.
+Usages of shell are mostly applicable to docker verison's but the difference is
+that docker run commands should be preceded with real program arguments.
 
 #### shell
 
@@ -170,10 +175,11 @@ gdmarp run
 ```
 #### docker
 
-Every argument and flags are all same but gdmarp should be substituted with ```docker run --rm -v $PWD:/home/marp/app simoncreek/gdmarp```
+Every argument and flags are all same but gdmarp should be substituted with
+docker commands such as ```docker run --rm -v $PWD:/home/marp/app
+simoncreek/gdmarp```
 
 for example,
-
 ```bash
 <!-- Linux-->
 <!-- Linux needs to set user id manually-->
@@ -204,7 +210,7 @@ docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
 }
 ```
 
-### Macro rules
+### Macro rules(interface)
 
 [Macro rules](docs/macro.md)
 

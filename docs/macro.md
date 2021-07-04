@@ -20,16 +20,16 @@ m_not_intended_for_user()
 ### Comma rules
 
 M4 translates comma as argument delimiter so you cannot put comma literal
-without escaping.  There are two ways to escape comma literal. First is "\\."
-and second is \_cc macro. First way is to escape character with sed script. This
-is useful when you need to escape character so that the character should be
-included in final generated file content. Second is a macro that converts
-string literal and redirects comma literal to other internal macro. Thus \_cc
-macro simply postpone direct evaluation for once and should be used if comma
-should be printed in final result.
+without escaping.  There are two ways to escape comma literal. First is
+```\\.``` and second is ```\_cc``` macro. First way is to escape character with
+sed script. This is useful when you need to escape character so that the
+character should be included in final generated file content. Second is a macro
+that converts string literal and redirects comma literal to other internal
+macro. Thus ```\_cc``` macro simply postpone direct evaluation for once and
+should be used if comma should be printed in final result.
 
 General rule of thumb is to use comma literals only in text related macros and
-us "\\." in other macros.
+us ```\\.``` in other macros.
 
 ### Other escape rules
 
@@ -65,8 +65,8 @@ After
 This includes the given texts only when a specific module was given to the
 program. Argument should be a module name not a subcommand name.
 
-"_elif_mod" is not necessary and you can only use "_if_mod" with "_if_end",
-however "_if_mod" without "_if_end" is a panic.
+```_elif_mod``` is not necessary and you can only use ```_if_mod``` with
+```_if_end```, however ```_if_mod``` without ```_if_end``` is a panic.
 
 ```
 _h3(Global Header)
@@ -94,7 +94,7 @@ No repr is in here.
 There are two ways to define variables in gdmarp. First is to define a macro in
 env.m4 file. Other is to use _set_var macros inside of gdt files.
 
-Please be aware that "_set_var"'s syntax is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro too.
+Please be aware that ```_set_var```'s syntax is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro too.
 
 ```
 <!-- Arg order is "Varaible name" followed by "substituted text" -->
@@ -109,8 +109,8 @@ Some repeated text that is a waste of typing and readability
 
 **Random text macro**
 
-While this is not so complete as a lorem ipsum generator. It is enough test a
-text occupied situation.
+While this is not so complete as a lorem ipsum generator. It is enough to test
+a text occupied situation.
 
 Before
 ```
@@ -139,7 +139,7 @@ After
 
 **Web api macro**
 
-Get a response from a given url and parse the response with "jq" program.
+Get a response from a given url and parse the response with ```jq``` program.
 
 ```
 _wapi(http://url/api/get, .env.value)
@@ -162,7 +162,7 @@ Include macro to include other markdown files' content.  You can only give file
 name without extension if given file is gdt file and resides inside of inc
 directory, else you should give a full file name. Lastly, include files should
 be positioned inside of a directory given to the program as an argument of a
-"-I" option.
+```-I``` option.
 
 e.g.)
 Let's assume the file structure is as followed
@@ -275,7 +275,7 @@ After
 
 **New Page**
 
-Normally triple dash is a horizontal line, but marp, which is a markdown to
+Normally triple dash is a horizontal line, but ```marp```, which is a markdown to
 slide generator, treates horizontal line as page separator.
 
 Before
@@ -906,16 +906,15 @@ _set_var(`m_webui_script', `
 #### Component macros
 
 This part illustrates how macros are expanded rather than how it should be
-used. I fixed a formatting aftward for better readabiltity. Raw output is
-rather hard to read.
+used. I fixed a formatting aftward for better readabiltity because raw output is
+rather hard to read. Please refer a demo for redered screen.
 
 **Space**
 
-This example uses top space but bot(bottom) space's syntax is identical to top
-space while bot space is positioned in bottom of the screen.
+Top space is in top of the page while bot space is in bottom of the page.
 
-You have to give all "top|bot_left", "top|bot_center", "top|bot_right" for
-proper formatting.
+You have to give all ```top_left```, ```top_center```, ```top_right``` for
+proper formatting. This also applies for bot_space
 
 Before
 ```
@@ -923,6 +922,14 @@ _top_space(
 	_top_left(Left)
 	_top_center(Center)
 	_top_right(Right)
+)
+
+<!-- Container goes here between spaces -->
+
+_bot_space(
+	_bot_left(Left)
+	_bot_center(Center)
+	_bot_right(Right)
 )
 ```
 After
@@ -938,13 +945,25 @@ After
 		Right
 	</div>
 </div>
+
+<div id="botSpace" class="botSpace">
+	<div id="botLeft" class="botLeft">
+		Left
+	</div>
+	<div id="botCenter" class="botCenter">
+		Center
+	</div>
+	<div id="botRight" class="botRight">
+		Right
+	</div>
+</div>
 ```
 
 **Container**
 
-Container is used only once unlike content macro. Container macro is a semantic
-indicator how space is used for. Actually container also determineds page's
-orientation too. Header and footer are used inside of a container.
+Container macro is used only once unlike a content macro. Container macro is a
+semantic indicator how space is composed. Actually container also determineds
+page's orientation too. Header and footer are to be used within of a container.
 
 Before
 ```
@@ -1252,9 +1271,12 @@ After
 
 **Swap area**
 
-Note : I'm not sure if there is any existing terminology to refer a "Swap" ui, but I'm no expert in UI, so I'll just stitck to a term swap.
+Note : I'm not sure if there is any existing terminology to refer a "Swap" ui,
+but I'm no expert in UI, so I'll just stick to a term swap.
 
-Swap areas are like a deriative of a accordian ui but with remote control. Swap consists of two parts, swap buttons and swap areas. Swap buttons control which content to show in swap areas.
+Swap areas are like a deriative of an accordian ui but with remote control. Swap
+consists of two parts, swap buttons and swap areas. Swap buttons control which
+content to show in swap areas.
 
 Before
 ```
@@ -1342,7 +1364,7 @@ javascript callback functions with event listener.
 
 You can declare a modal or screen touch anywhere, but I recommend separating it
 from other normal elements that are always shown so that artifacts don't occur.
-A general rule of thumb is to declare hidden elements right before "_ui_end" macro.
+A general rule of thumb is to declare hidden elements right before ```_ui_end``` macro.
 
 Before
 ```
@@ -1483,7 +1505,7 @@ addCallback("targetId", "click",(ev) => {alert("Yo yo, you pressed "the" button.
 **Callbacks**
 
 There are several pre-defined macros for setting callback for an element.
-Callback macros are used as conjuction with "_add_call" macro's argument.
+Callback macros are used as conjuction with ```_add_call``` macro's argument.
 
 Before
 ```
