@@ -92,7 +92,7 @@ No repr is in here.
 **Setting variable**
 
 There are two ways to define variables in gdmarp. First is to define a macro in
-env.m4 file. Other is to use _set_var macros inside of gdt files.
+env.m4 file. Other is to use _set_var macros inside of gddt files.
 
 Please be aware that ```_set_var```'s syntax is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro too.
 
@@ -159,7 +159,7 @@ Some value
 **Include other files**
 
 Include macro to include other markdown files' content.  You can only give file
-name without extension if given file is gdt file and resides inside of inc
+name without extension if given file is gddt file and resides inside of inc
 directory, else you should give a full file name. Lastly, include files should
 be positioned inside of a directory given to the program as an argument of a
 ```-I``` option.
@@ -170,15 +170,15 @@ Let's assume the file structure is as followed
 .
 ├── ...
 ├── inc
-│   └── new_file.gdt
-└── outside.gdt
+│   └── new_file.gddt
+└── outside.gddt
 ```
 
 _inc(new_file) -> This is OK
 
-_inc(new_file.gdt) -> This is OK
+_inc(new_file.gddt) -> This is OK
 
-_inc(outside.gdt) -> This is OK
+_inc(outside.gddt) -> This is OK
 
 _inc(outside) -> This is Error
 
