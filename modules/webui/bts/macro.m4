@@ -182,11 +182,11 @@ define(`_car', `')dnl # carousel
 
 # =====
 # General
-define(`_img',`<img id="$1" class="img" style="width: $2; height: $2;" src="$3" alt="!!Image Not FOUND!!"></img>')dnl
+define(`_img',`<img id="$3" class="img" style="width: $4; height: $4;" src="$1" alt="Image not rendered : $2"></img>')dnl
 # Icon
 define(`_icon', `<i class="bi bi-$1"></i>')dnl
 # Paragraph
-define(`_par', `<p>$*</p>')dnl
+define(`_p', `<p>$*</p>')dnl
 
 # Button
 # _btn(id, classes, content)

@@ -59,6 +59,9 @@ define(`_ul', `forloop(`', 2, $1, `  ')*')dnl
 # Ordered list
 define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 
+# Paragraph
+define(`_p',`<p>$*</p>')dnl
+
 # New page
 define(`_new_page', `---')dnl
 
@@ -115,8 +118,8 @@ define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value
 define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
 # Fixed position image
-define(`_fimg',`<div style="position: fixed; top: $1; left: $2;">
-<img style="width: $3;" src="$4"></img>
+define(`_fimg',`<div style="position: fixed; top: $3; left: $4;" alt="$2">
+<img style="width: $5;" src="$1"></img>
 </div>')dnl
 # MACRO >>> Compress image, only for jpeg and png 
 # Example :
@@ -154,9 +157,6 @@ m_trim_nl(shift($*))
 define(`_title', `m_class(title)
 `#' $1
 `##' $2')dnl
-# MACRO >>> Set "Title and Content" class for the slide
-define(`_tnc', `m_class(tnt)
-`#' $1')dnl
 # MACRO >>> Set any class of given arguments
 define(`_cls', `m_class($1)')dnl
 

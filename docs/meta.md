@@ -7,6 +7,7 @@
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
   * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
+  * [ ] Make simg macro's proportion argument to comply with other sizes or support various formats
 
 * [ ] Modular components
   * [x] Create new webui backend macro component. 
@@ -16,11 +17,6 @@
   * [ ] Docx(Microsoft word) module
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
-
-* [ ] Ergonomic program execution script for both windows and linux.
-  * [ ] Windows powershell execution script.
-  This is technically a wrapper around docker commands
-  * [ ] New posix sh script for install and docker execution only
 
 * [ ] Check if windows can run gdmarp without docker
 
