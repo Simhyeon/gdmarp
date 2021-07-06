@@ -17,7 +17,7 @@ define(`m_class', `<!-- \_class: $1 -->')dnl # white space between _class: and $
 define(`m_img', `
 ![$1]($2)')dnl
 # Make Set img's max-width with given arguments
-define(`m_scaled_img',`<div style="text-align: inherit; flex: 1;"><img src="$1" style="width: 100%; max-width: $2%; max-height: auto;"></img></div>
+define(`m_scaled_img',`<div style="text-align: inherit; flex: 1;"><img src="$1" style="width: 100%; max-width: $2; max-height: auto;"></img></div>
 ')dnl
 # Convert contents into single lined html
 # This was intended for multi line support in csv table
@@ -116,7 +116,7 @@ define(`_img', `m_img($2,$1)')dnl # $2 is alternate text, $1 is image url
 # MACRO >>> Simply substitue all image arguments with compatible form
 define(`_imgs', `foreach(`it', ($*), `m_img(`', it)')')dnl
 # MACRO >>> Convert all image arguments as of size with given value
-define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `m_bc_calc( ifelse( `$1', `0', `scale=2;(1 / ( $# - 1)) * 100', `scale=2; $1 * 100'))')')')dnl
+define(`_simgs', `foreach( `it', (`shift($*)'), `m_scaled_img( it, `ifelse(`$1', `0', `m_bc_calc(`scale=2;(1 / ( $# - 1)) * 100')', `$1')')')')dnl
 # Fixed position image
 define(`_fimg',`<div style="position: fixed; top: $3; left: $4;" alt="$2">
 <img style="width: $5;" src="$1"></img>
