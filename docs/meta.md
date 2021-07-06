@@ -1,13 +1,11 @@
 ### TODO
 
 * [ ] Misc
-  * [x] Make a naming convention consistent for real
-  * [x] Individual comment might be a bad idea, consider re-enabling global comment macro or make a specific custom syntax
-  * [x] Improve README
+  * [ ] Improve macro.md
+    * [ ] Add interface explanation for every macros in macro.md
+	* [ ] Add class usage and explanation
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
-  * [ ] Who would've known "gdt" file extension already exist? Consider migrating to gddt(Game Design Document Text)
-  * [ ] Make simg macro's proportion argument to comply with other sizes or support various formats
 
 * [ ] Modular components
   * [x] Create new webui backend macro component. 
@@ -31,8 +29,7 @@
 
 * [ ] New features
 
-* [ ] Language server or snippet extension for vim and vs-code
-This is kind of big todo though...
+* [ ] Vs code extension for gdmarp program
 
 #### Done
 
@@ -83,6 +80,10 @@ This is kind of big todo though...
 
 * [x] Posix compliant binary
 This was intended for alpine linux usage... however I found that I was extensively using gnu version of awk scripts and sed scripts. Thus a sole achievement of this refactor was docker size got slightly smaller. (Amount of bash's binary size) 
+
+* [ ] Misc
+  * [x] Migrate from gdt to gddt file extension.
+  * [x] Make simg macro's proportion argument to comply with other sizes or support various formats
 
 * [x] New macros
   * [x] Basic

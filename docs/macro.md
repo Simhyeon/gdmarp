@@ -1,5 +1,11 @@
 ### Macro rules (WIP)
 
+### Comments
+
+Comments start with double forward slash ```//```.
+
+Macros followed by ```//``` will be ignored and not expanded.
+
 ### Naming convention
 
 End user macro is in snake case with underscore prefix.
@@ -36,7 +42,6 @@ us ```\.``` in other macros.
 - Backtick(`) : \\;
 - Quote(') : \\~
 - Parenthesis( "("and ")" ) : \\9 and \\0
-- Hash(#) : \\3
 - Underscore(\_) : \\\_
 
 ### Basic macros
@@ -363,29 +368,28 @@ This is simple text
 
 Simple img macros creates markdown imgs list.
 
-Sized img macro creates markdown image text with marp favored attribute. First
-argument scale of image and last elements are image file pathes.
+Sized img macro creates markdown image with marp favored attribute. First
+argument is an css value for width and other elements are for image file
+pathes.
 
-Split sized img macro is same with sized img macro but sets standard width as
-200% so that images fit well into split slide.
-
-Default width(in fact, css:max-width) is 100% for sized img macros.
+Default width(is in fact a max-width) is 100% for sized img macros.
 
 Compress macro compress image files with optipng and jpegoptim. And substitute
-original file with compressed file. This does not affect original image file
-nor original index.md file. It just changes out.md file and final product's
+an original file with compressed file. This does not affect original image file
+nor original index.gddt file. It just changes out.gddt file and final product's
 image source. 
 
 ```
-_img(1.jpeg)
+// Alt text is optional
+_img(1.jpeg, alt_text)
 
 _imgs(1.jpeg, 2.png)
 
-_simgs(0 ,1.jpeg, 2.png)
+_simgs(0, 1.jpeg, 2.png)
 
-_simgs(0.5 ,1.jpeg, 2.png)
+_simgs(50% ,1.jpeg, 2.png)
 
-_fimg(100px, 100px, 30%, 3.png)
+_fimg(3.png, alt_text, 100px, 100px, 30%)
 
 _imgs(_comp(1.jpeg), _comp(2.png))
 
@@ -698,17 +702,6 @@ Left contents go here
 Right contents go here
 
 </div>
-```
-
-#### Title and contents slide
-
-```
-_tnc(This is title contents)
-```
-
-```
-<!-- _class: tnc -->
-# This is title contents
 ```
 
 ### Wikitext macros (mw module)
@@ -1187,7 +1180,7 @@ Miscellaneous macros for various components.
 Before
 ```
 <!-- Image -->
-_img(imgId, ratio, imgSrcUrl)
+_img(imgSrcUrl,alt text, imgId, size)
 <!-- Button -->
 _btn(btnId, ButtonLabel)
 <!-- Icon -->
@@ -1198,7 +1191,7 @@ _card(cardId,cardTitle,cardContent)
 <!-- Card with image on top -->
 _card_img(cardId,cardTitle,imgSrcUrl,cardContent)
 <!-- Paragraph -->
-_par(Content)
+_p(Content)
 <!-- Simple text label -->
 _label(labelId,text)
 <!-- Simple text label with centering-->
