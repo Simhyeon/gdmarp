@@ -5,7 +5,7 @@ documenation rederings with automated publishing. Gdmarp can create pdf,
 pptx, html slide, wikitext file for mediawiki instance and webui html
 page for UI/UX demo usage.
 
-Gdmarp uses a gdt filetype which is an abbreviation of a game design text. GDT
+Gdmarp uses a gddt filetype which is an abbreviation of a game design document text. Gddt
 consists of complex macro usages which are defined by various modules. Such
 module expands macros into properly formatted texts. 
 
@@ -31,7 +31,7 @@ wikitexts. Some macros are defined in various modules at the same time which
 enables you to write macros once and render multiple formes without changing
 any of them.
 
-You can edit "index.gdt" which is created by init subcommand however you can also
+You can edit "index.gddt" which is created by init subcommand however you can also
 create new file and give the file to gdmarp with -N command followed by file name.
 
 After writing all macros, simply call subcommand with proper backend modules
@@ -47,7 +47,7 @@ commands at the same time.
 
 To be updated
 - pandoc ( docs creation )
-- template ( for gdt generation )
+- template ( for gddt generation )
 
 ### Dependencies
 
@@ -118,10 +118,10 @@ Edit index.m4 to define custom macros other than default macro rules
 Edit env.m4 file to define macro variables or frequently used but might changing numbers. 
 e.g.) default font size or current products stock ETC...
 
-You can simply use setvar macro to set varaibles inside any gdt files.
+You can simply use setvar macro to set varaibles inside any gddt files.
 e.g.) 
 
-```gdt
+```gddt
 _set_var(`v_url',`http://google.com/some_img_path')dnl
 
 // "v_url" varaible is expanded within image macro during macro processing
@@ -201,11 +201,11 @@ docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
     },
     "test": [
         "prep -M marp -F html",
-        "wui -M bts -N webui_test.gdt -O webui"
+        "wui -M bts -N webui_test.gddt -O webui"
     ],
     "script": [
         "repr -M marp -F html -O repr",
-        "wui -M bts -N webui_test.gdt -O webui"
+        "wui -M bts -N webui_test.gddt -O webui"
     ]
 }
 ```
