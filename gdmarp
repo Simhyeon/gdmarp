@@ -14,7 +14,7 @@ init_var(){
 	flag_init_git=false
 	flag_format=pptx
 	flag_modules=""
-	flag_input_file="index.gdt"
+	flag_input_file="index.gddt"
 	only_prep=false
 	config=""
 	bin_name=$(basename "$0")
@@ -22,8 +22,8 @@ init_var(){
 	action=""
 
 	# This is rather temporary for convenience
-	out_file="$out_dir"/out.gdt
-	frag_file="$out_dir"/frag.gdt
+	out_file="$out_dir"/out.gddt
+	frag_file="$out_dir"/frag.gddt
 }
 
 # Marp path can be changed with a flat
@@ -126,9 +126,9 @@ gd_preprocess(){
 
 	# Construct source files to process
 	# Word splitting for sources varaible is intended because there is no array in posix sh
-	sources="$cwd"/index.m4
+	sources="$cwd/env.m4 $cwd/index.m4"
 	# If default script is enabled(default) include it
-	[ "$flag_use_default" = "true" ] && sources="$cwd/env.m4 $bin_path/m4/default.m4 ${sources}"
+	[ "$flag_use_default" = "true" ] && sources="$bin_path/m4/default.m4 ${sources}"
 	# Add sources according to given modules
 	add_sources $flag_modules
 
@@ -152,7 +152,7 @@ gd_preprocess(){
 	[ "$action" != "gd_wui" ] && sed -i -f "$SCRIPTS"/restore.sed "$out_file"
 
 	# If this is prep subcommand then set file's name to given name
-	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_file" -f "$out_dir"/$out_name.gdt
+	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
 
 	# Remove frag file because it is not used anymore
 	[ "$flag_preserve" = "false" ] && rm "$frag_file"
@@ -162,7 +162,7 @@ gd_repr(){
 	# Preprocessing before marp compilation
 	gd_preprocess
 
-	# Change out.gdt to out.md because marp expects markdown file
+	# Change out.gddt to out.md because marp expects markdown file
 	mv "$out_file" "$out_dir"/out.md
 
 	# Compile with marp-cli
@@ -213,7 +213,7 @@ gd_wiki(){
 			;;
 	esac
 
-	# Previously it simply removed out.gdt file however I became so sure if is a
+	# Previously it simply removed out.gddt file however I became so sure if is a
 	# sane to remove file while it is not a middle file but final result
 	#[ "$flag_preserve" = "false" ] && rm "$out_file"
 }
@@ -228,7 +228,7 @@ gd_wui(){
 	case $flag_modules in
 		bts)
 			# Add divert directives in first line and last line of the file
-			# so that all texts within out.gdt will be ignored in final html file
+			# so that all texts within out.gddt will be ignored in final html file
 			sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
 
 			# Process macros, kind of template engine
@@ -313,8 +313,8 @@ gd_test(){
 		[ "$module_name" != "" ] && module_name=_"$module_name"
 
 		# Set a test middle file's name differnt from a normal middle file
-		out_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_out_"$i".gdt
-		frag_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_frag_"$i".gdt
+		out_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_out_"$i".gddt
+		frag_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_frag_"$i".gddt
 
 		# Always turn on preserve to preserve all miscellaenous files
 		flag_preserve=true
