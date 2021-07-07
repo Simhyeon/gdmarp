@@ -220,6 +220,10 @@ not yet
 
 [Todos and issues](docs/meta.md)
 
+### Release notes
+
+[](docs/release_note.md)
+
 ### License
 
 [MIT](docs/LICENSE.md)
