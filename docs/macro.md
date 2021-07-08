@@ -44,6 +44,27 @@ us ```\.``` in other macros.
 - Parenthesis( "("and ")" ) : \\9 and \\0
 - Underscore(\_) : \\\_
 
+### Using string literal statements
+
+You can use string literal within ```\$``` and ```/$```. Thus every string
+between will be interpreted as literal. I recommend using string literal
+statements if you're writing long texts with  unallowed characters.
+
+Currently string literal statements only supprot one line. This might change later.
+
+e.g)
+```
+<!-- This is ok -->
+_macro_with_long_arguments(/$I'm sentence with quotes, commas and some even double quote "Which is cool"$/)
+
+<!-- This is not ok-->
+_macro_multi_lines(/$
+	Sadly, this doesn't work yet...
+$/)
+```
+
+_label()
+
 ### Basic macros
 
 Basic macros are included regardless of given macro modules.

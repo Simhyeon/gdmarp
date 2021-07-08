@@ -6,6 +6,9 @@
 	* [ ] Add class usage and explanation
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
+  * [ ] String literal rule without escaping any characters (BEGIN=/$, END=$/)
+	* [x] Single liner
+	* [ ] Multiline
 
 * [ ] Modular components
   * [x] Create new webui backend macro component. 
@@ -15,6 +18,9 @@
   * [ ] Docx(Microsoft word) module
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
+  * [ ] Dialogue module
+  * [ ] UML module
+  * [ ] Conti module
 
 * [ ] Check if windows can run gdmarp without docker
 
