@@ -39,6 +39,8 @@ and gdmarp will render output files insdie of the build directory. Or simply
 set all commands in config.json file so that "run" subcommand can call multiple
 commands at the same time.
 
+Please refer a macro part at the bottom of this document for how macro is used and expanded.
+
 ### Available modules
 
 - marp (pptx, pdf, html creation)
