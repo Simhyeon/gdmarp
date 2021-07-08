@@ -58,6 +58,7 @@ help_message(){
 	echo "<test>                  run all test scripts configued in config.json file test automatcially enables preserve flag and don't overwrite middle file"
 	echo "<wiki>                  push the processed file into the given wiki website"
 	echo "<wui>                   create a web ui html"
+	echo "<dial>                  create a dialogue json"
 }
 
 gd_install(){
@@ -99,6 +100,10 @@ add_sources(){
 				;;
 			bts)
 				sources="${sources} $MODULE/webui/bts/env.m4 $MODULE/webui/bts/macro.m4"
+				shift
+				;;
+			gdl)
+				sources="${sources} $MODULE/dialogue/gdlogue/env.m4 $MODULE/dialogue/gdlogue/macro.m4"
 				shift
 				;;
 			*)
@@ -254,6 +259,31 @@ gd_wui(){
 			echo "No proper module was given to yield a web ui page"
 			exit 1
 			;;
+	esac
+}
+
+gd_dial(){
+	# Preprocessing before sending out file
+	gd_preprocess
+
+	# No Docker code only for now
+
+	# Utilzie various backends
+	case $flag_modules in
+		gdl)
+			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$out_file" data  > "$out_dir"/"$out_name".json
+
+			# Restore escaped characters
+			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".json
+
+			# Remove middle file
+			[ "$flag_preserve" = "false" ] && rm "$out_file"
+			;;
+		*)
+			echo "No proper module was given to yield a dialogue json"
+			exit 1
+			;;
+
 	esac
 }
 
@@ -485,6 +515,10 @@ gd_main(){
 				;;
 			wui) # web ui
 				action=gd_wui
+				shift
+				;;
+			dial) # dialogue
+				action=gd_dial
 				shift
 				;;
 			run)
