@@ -6,6 +6,8 @@
 	* [ ] Add class usage and explanation
   * [ ] Improve wikitext macros
   * [ ] Consider making withmods variables can save multiple arguments
+  * [ ] Add option for -O which sets output directory
+  * [ ] Change default temporary files reside in cache directory.
   * [ ] String literal rule without escaping any characters (BEGIN=/$, END=$/)
 	* [x] Single liner
 	* [ ] Multiline
@@ -19,6 +21,8 @@
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
+    * [x] Create data structure macro
+    * [ ] Utilize d3.js for visualization
   * [ ] UML module
   * [ ] Conti module
 
