@@ -132,12 +132,14 @@ gd_preprocess(){
 	# Add sources according to given modules
 	add_sources $flag_modules
 
-	# Escaping all string literals
-	# Reuse frag file for preventing more names or files related
-	awk -f "$SCRIPTS"/literal.awk "$flag_input_file" > "$frag_file"
+	# Combine all include macros to yield single input and send single input to
+	# perl script to escape string literal directives. Reuse frag file (well
+	# actully this is first time using frag file though) to not use another
+	# file.
+	m4 -I "$cwd" -I "$bin_path" -I "$bin_path"/m4/GNU -I "$include" "$SCRIPTS"/inc.m4 "$flag_input_file" | perl "$SCRIPTS"/string_literal.pl > "$frag_file"
 
 	# Run main m4 functions $sources should be expanded
-	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$frag_file" > "$out_file"
+	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources $frag_file > "$out_file"
 
 	# Process again for fragmented macro execution no sources needed
 	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources "$out_file" > "$frag_file"
