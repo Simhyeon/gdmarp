@@ -8,9 +8,6 @@
   * [ ] Consider making withmods variables can save multiple arguments
   * [ ] Add option for -O which sets output directory
   * [ ] Change default temporary files reside in cache directory.
-  * [ ] String literal rule without escaping any characters (BEGIN=/$, END=$/)
-	* [x] Single liner
-	* [ ] Multiline
 
 * [ ] Modular components
   * [x] Create new webui backend macro component. 
@@ -94,6 +91,9 @@ This was intended for alpine linux usage... however I found that I was extensive
 * [ ] Misc
   * [x] Migrate from gdt to gddt file extension.
   * [x] Make simg macro's proportion argument to comply with other sizes or support various formats
+  * [x] String literal rule without escaping any characters (BEGIN=/#, END=#/)
+	* [x] Single liner
+	* [x] Multiline
 
 * [x] New macros
   * [x] Basic

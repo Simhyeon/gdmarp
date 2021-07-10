@@ -75,6 +75,7 @@ To be updated
 ### Optional dependencies
 
 - git (git flag)
+- perl (String literal)
 - sqlite3 (sql macro)
 - curl (web api)
 - jpegoptim (jpeg compression)
