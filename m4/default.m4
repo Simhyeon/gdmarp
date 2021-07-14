@@ -35,7 +35,10 @@ define(`m_if_mod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 # MACRO >>> If mod macros argument should be module name
 define(`_if_mod', ``m_if_mod'`('$1,')dnl
 define(`_elif_mod', ``)'`m_if_mod'`('$1,')dnl
-define(`_if_end', ``)'')dnl
+define(`_fi_mod', ``)'')dnl
+
+# MACRO >>> if mod macro but with single macro usage
+define(`_if_modc',`m_if_mod($1, shift($*))')dnl
 
 # ======''
 # MACRO >>> Set variable as given name

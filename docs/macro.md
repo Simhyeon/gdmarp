@@ -41,26 +41,22 @@ us ```\.``` in other macros.
 
 - Backtick(`) : \\;
 - Quote(') : \\~
-- Parenthesis( "("and ")" ) : \\9 and \\0
-- Underscore(\_) : \\\_
 
-### Using string literal statements
+### Using string literal directives
 
-You can use string literal within ```\$``` and ```/$```. Thus every string
-between will be interpreted as literal. I recommend using string literal
-statements if you're writing long texts with  unallowed characters.
+You can use string literal within ```\#``` and ```/#```. Thus every strings
+between them will be interpreted as it is. I recommend using string literal
+statements if you're writing long texts with unallowed characters.
 
-Currently string literal statements only supprot one line. This might change later.
+String literal directives can be single line or multi line.
 
 e.g)
 ```
-<!-- This is ok -->
-_macro_with_long_arguments(/$I'm sentence with quotes, commas and some even double quote "Which is cool"$/)
+_macro_with_long_arguments(/#I'm sentence with quotes, commas and some even double quote "Which is cool"#/)
 
-<!-- This is not ok-->
-_macro_multi_lines(/$
-	Sadly, this doesn't work yet...
-$/)
+_macro_multi_lines(/#
+	`This' also works too, which is "good".
+#/)
 ```
 
 _label()
@@ -92,7 +88,7 @@ This includes the given texts only when a specific module was given to the
 program. Argument should be a module name not a subcommand name.
 
 ```_elif_mod``` is not necessary and you can only use ```_if_mod``` with
-```_if_end```, however ```_if_mod``` without ```_if_end``` is a panic.
+```_fi_end```, however ```_if_mod``` without ```_fi_end``` is a panic.
 
 ```
 _h3(Global Header)
@@ -100,7 +96,7 @@ _if_mod(marp)
 No wiki allowed in here
 _elif_mod(mw)
 No repr is in here.
-_if_end()
+_fi_end()
 ```
 Converts to
 ```
@@ -114,6 +110,18 @@ No wiki allowed in here
 
 No repr is in here.
 ```
+
+But using if, fi match is sometimes tedious. If then use ```_if_modc```
+
+```
+_if_modc(ModuleName, ModuleContent)
+```
+
+NOTE
+
+```_if_mod``` works by checking if certain macro is defined. Such macros are
+defined in modules. This macro is only included when gdmarp received the module
+as argument. So you should not undefine macro names mod_{module name}.
 
 **Setting variable**
 
@@ -874,6 +882,29 @@ Both converts to
 |-
 |}
 ```
+
+#### Text macro (Set font size)
+
+Text macro simply sets font size for given content. Currently 0 means no font
+size while repr's text sets default font size. Though 0's meaning is not
+finalized yet.
+
+Before
+```
+_text({font-size}, I'm content)
+_text(0, I'm also content)
+```
+After
+```
+<div style="{font-size}px">
+	I'm content
+</div>
+
+<div>
+	I'm content
+</div>
+```
+
 
 ### WebUI macros (bts module)
 

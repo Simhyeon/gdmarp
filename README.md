@@ -12,9 +12,19 @@ module expands macros into properly formatted texts.
 Therefore you don't have to write separate files for separate formats, just write
 once and export with one gdmarp command.
 
-### Caution
+### About 0.3 
 
-This script is in very early stage which means many breaking changes can occur.
+Release of 0.3 includes following updates
+
+- Docx module (with pandoc backend)
+- Dialogue tree module (with d3js backend)
+- UML module (backend not decided)
+- String literal (Single line and multi line string literal)
+
+I've actively developed gdmarp so far however 0.3 will have longer term because
+I need to learn many other concepts and some libraries to fully implement the
+planned updates. While there is no planned update for near future, bug fixes
+will be applied continuously.
 
 ### How gdmarp works
 
@@ -65,6 +75,7 @@ To be updated
 ### Optional dependencies
 
 - git (git flag)
+- perl (String literal)
 - sqlite3 (sql macro)
 - curl (web api)
 - jpegoptim (jpeg compression)
