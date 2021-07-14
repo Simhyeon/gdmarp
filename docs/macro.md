@@ -111,6 +111,18 @@ No wiki allowed in here
 No repr is in here.
 ```
 
+But using if, fi match is sometimes tedious. If then use ```_if_modc```
+
+```
+_if_modc(ModuleName, ModuleContent)
+```
+
+NOTE
+
+```_if_mod``` works by checking if certain macro is defined. Such macros are
+defined in modules. This macro is only included when gdmarp received the module
+as argument. So you should not undefine macro names mod_{module name}.
+
 **Setting variable**
 
 There are two ways to define variables in gdmarp. First is to define a macro in
