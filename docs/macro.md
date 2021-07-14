@@ -88,7 +88,7 @@ This includes the given texts only when a specific module was given to the
 program. Argument should be a module name not a subcommand name.
 
 ```_elif_mod``` is not necessary and you can only use ```_if_mod``` with
-```_if_end```, however ```_if_mod``` without ```_if_end``` is a panic.
+```_fi_end```, however ```_if_mod``` without ```_fi_end``` is a panic.
 
 ```
 _h3(Global Header)
@@ -96,7 +96,7 @@ _if_mod(marp)
 No wiki allowed in here
 _elif_mod(mw)
 No repr is in here.
-_if_end()
+_fi_end()
 ```
 Converts to
 ```
