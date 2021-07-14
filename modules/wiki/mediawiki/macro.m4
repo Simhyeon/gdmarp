@@ -51,4 +51,11 @@ define(`_csv', `esyscmd(`awk -v caption=$2 -f $MODULE/wiki/mediawiki/csvToWikiTa
 # Raw csv file
 define(`_rcsv', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk | awk -f $MODULE/wiki/mediawiki/csvToWikiTable.awk')')dnl
 
+# Text with font size macro
+# No font size if value 0, which is automatic in marp
+define(`_text',`<div ifelse(`$1', `0', `', `style="font-size : $1px;"')>
+
+m_trim_nl(m_sanitize(shift($*)))
+</div>')dnl
+
 divert`'dnl
