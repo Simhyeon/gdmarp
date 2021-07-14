@@ -871,6 +871,29 @@ Both converts to
 |}
 ```
 
+#### Text macro (Set font size)
+
+Text macro simply sets font size for given content. Currently 0 means no font
+size while repr's text sets default font size. Though 0's meaning is not
+finalized yet.
+
+Before
+```
+_text({font-size}, I'm content)
+_text(0, I'm also content)
+```
+After
+```
+<div style="{font-size}px">
+	I'm content
+</div>
+
+<div>
+	I'm content
+</div>
+```
+
+
 ### WebUI macros (bts module)
 
 #### Directives macro
