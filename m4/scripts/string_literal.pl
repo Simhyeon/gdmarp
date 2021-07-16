@@ -11,7 +11,6 @@ use strict;
 
 # Subroutine to convert all unallowed characters to escaped ones
 sub escape{
-	print "BEGIN\n";
 	my $s;
 	$s=shift;
 	# Escpae characters
@@ -20,7 +19,6 @@ sub escape{
 	$s=~s/'/\\;/g;
 	# Remove string literal directives
 	$s=~s/\/\#|\#\///g;
-	print "END\n";
 	$s
 }
 

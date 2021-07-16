@@ -1,5 +1,9 @@
 divert(`-1')
-// Bang means comment
+// Bang(#) originaly means comment in m4, however
+// gddt uses markdown syntax too, so it will make conversion strange.
+// Thus gddt uses double forward slashes and this m4 file also use double forward slash.
+//
+// Basic m4 syntax
 // divert means direction of stdout. 
 // Contents between divert(`-1') and divert`' will not stdout
 // 

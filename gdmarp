@@ -5,6 +5,7 @@
 init_var(){
 	cwd=$PWD
 	out_dir="$PWD"/build
+	cache_dir="$PWD"/cache
 	out_name="out"
 	include=""
 	sources=""
@@ -22,8 +23,8 @@ init_var(){
 	action=""
 
 	# This is rather temporary for convenience
-	out_file="$out_dir"/out.gddt
-	frag_file="$out_dir"/frag.gddt
+	out_file=out.gddt
+	frag_file=frag.gddt
 }
 
 # Marp path can be changed with a flat
@@ -119,6 +120,7 @@ gd_preprocess(){
 
 	# Create build directory if not existent
 	mkdir -p "$out_dir"
+	mkdir -p "$cache_dir"
 
 	# Export environment variable
 	export ROOT=$bin_path
@@ -141,7 +143,7 @@ gd_preprocess(){
 	# perl script to escape string literal directives. Reuse frag file (well
 	# actully this is first time using frag file though) to not use another
 	# file.
-	m4 -I "$cwd" -I "$bin_path" -I "$bin_path"/m4/GNU -I "$include" "$SCRIPTS"/inc.m4 "$flag_input_file" | perl "$SCRIPTS"/string_literal.pl > "$frag_file"
+	m4 -I "$cwd" -I "$bin_path" -I "$bin_path"/m4/GNU -I "$include" "$SCRIPTS"/inc.m4 "$SCRIPTS"/escapeM4Quote.m4 "$flag_input_file" | perl "$SCRIPTS"/string_literal.pl > "$frag_file"
 
 	# Run main m4 functions $sources should be expanded
 	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources $frag_file > "$out_file"
@@ -165,7 +167,13 @@ gd_preprocess(){
 	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
 
 	# Remove frag file because it is not used anymore
-	[ "$flag_preserve" = "false" ] && rm "$frag_file"
+	if [ "$flag_preserve" = "false" ]; then 
+		rm "$frag_file"
+	else 
+		mv -f "$out_file" "$cache_dir"
+		mv -f "$frag_file" "$cache_dir" 
+		out_file="$cache_dir"/"$out_file"
+	fi
 }
 
 gd_repr(){
@@ -348,8 +356,8 @@ gd_test(){
 		[ "$module_name" != "" ] && module_name=_"$module_name"
 
 		# Set a test middle file's name differnt from a normal middle file
-		out_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_out_"$i".gddt
-		frag_file="$out_dir"/test_$(echo $runner | awk '{print $1}')"$module_name"_frag_"$i".gddt
+		out_file=test_$(echo $runner | awk '{print $1}')"$module_name"_out_"$i".gddt
+		frag_file=test_$(echo $runner | awk '{print $1}')"$module_name"_frag_"$i".gddt
 
 		# Always turn on preserve to preserve all miscellaenous files
 		flag_preserve=true

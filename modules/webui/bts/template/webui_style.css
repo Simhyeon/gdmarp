@@ -88,6 +88,8 @@ img {
 	display: flex;
 	/*flex-grow: 1;*/
 	padding : v_content_padding();
+	/*Add border only when given such option*/
+	border : ifdef(`v_content_border',`1px', `0px') solid black;
 }
 
 .topSpace {

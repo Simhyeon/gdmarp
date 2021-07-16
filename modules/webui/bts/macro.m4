@@ -24,12 +24,13 @@ define(`m_script', `
 # "$1," is necessary for the macro "m_webui" to operate
 define(`_ui_begin', ``m_webui'`('$1, 
 ')dnl
-define(`_ui_end', ``)'')dnl
+# Content after ui_end is all discarded
+define(`_ui_end', ``)'`divert(`-1')'')dnl
 
 # "$1," is necessary for the macro "m_webui" to operate
 define(`_script_begin', ``m_script'`(' 
 ')dnl
-define(`_script_end', ``)'')dnl
+define(`_script_end', ``)'`divert(`-1')'')dnl
 
 # =====
 # Top space macros

@@ -1,13 +1,13 @@
 ### TODO
 
+* [ ] Bug
+  * [x] Resource is not set properly due to build directory
+  // Not tested though
+
 * [ ] Misc
   * [ ] Improve macro.md
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
-  * [ ] Improve wikitext macros
-  * [ ] Consider making withmods variables can save multiple arguments
-  * [ ] Add option for -O which sets output directory
-  * [ ] Change default temporary files reside in cache directory.
 
 * [ ] Modular components
   * [x] Create new webui backend macro component. 
@@ -32,6 +32,8 @@
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
   * [ ] Wui
+    * [ ] Carousel
+	* [ ] Dialogue
   * [ ] Wikitext
 
 * [ ] New features
@@ -88,12 +90,19 @@
 * [x] Posix compliant binary
 This was intended for alpine linux usage... however I found that I was extensively using gnu version of awk scripts and sed scripts. Thus a sole achievement of this refactor was docker size got slightly smaller. (Amount of bash's binary size) 
 
+* [ ] Bug
+  * [x] m4 consumes m4 quote even if the macro is not defined... which is a problem because _set_var uses same syntax
+  * [x] url caused end of line becuase comment was double forward slash.
+
 * [ ] Misc
   * [x] Migrate from gdt to gddt file extension.
   * [x] Make simg macro's proportion argument to comply with other sizes or support various formats
   * [x] String literal rule without escaping any characters (BEGIN=/#, END=#/)
 	* [x] Single liner
 	* [x] Multiline
+  * [x] Change default temporary files reside in cache directory.
+  * [x] Make webui can be embedded into index.gddt
+  * [x] Add borders by default
 
 * [x] New macros
   * [x] Basic
