@@ -63,7 +63,9 @@ define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
 define(`_p',`<p>$*</p>')dnl
 
 # New page
-define(`_new_page', `---')dnl
+define(`_new_page', `
+---
+')dnl
 
 # MACRO >>> Get style files' name and paste the content
 # Usage :
@@ -162,12 +164,16 @@ define(`_cls', `m_class($1)')dnl
 
 # Split screen related macros
 # MACRO >>> Start left pane
-define(`_left', `<div class="ldiv">')dnl
+define(`_left', `<div class="ldiv">
+')dnl
 # MACRO >>> Start right pane
-define(`_right', `</div>
-<div class="rdiv">')dnl
+define(`_right', `
+</div>
+<div class="rdiv">
+')dnl
 # MACRO >>> End split screen
-define(`_end', `</div>')dnl
+define(`_end', `
+</div>')dnl
 
 # MACRO >>> Sql macro 
 # Invoke sql query and get result as gfm formatted csv file 
