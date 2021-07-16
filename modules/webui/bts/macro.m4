@@ -30,7 +30,7 @@ define(`_ui_end', ``)'`divert(`-1')'')dnl
 # "$1," is necessary for the macro "m_webui" to operate
 define(`_script_begin', ``m_script'`(' 
 ')dnl
-define(`_script_end', ``)'')dnl
+define(`_script_end', ``)'`divert(`-1')'')dnl
 
 # =====
 # Top space macros
