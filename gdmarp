@@ -136,7 +136,7 @@ gd_preprocess(){
 	# perl script to escape string literal directives. Reuse frag file (well
 	# actully this is first time using frag file though) to not use another
 	# file.
-	m4 -I "$cwd" -I "$bin_path" -I "$bin_path"/m4/GNU -I "$include" "$SCRIPTS"/inc.m4 "$flag_input_file" | perl "$SCRIPTS"/string_literal.pl > "$frag_file"
+	m4 -I "$cwd" -I "$bin_path" -I "$bin_path"/m4/GNU -I "$include" "$SCRIPTS"/inc.m4 "$SCRIPTS"/escapeM4Quote.m4 "$flag_input_file" | perl "$SCRIPTS"/string_literal.pl > "$frag_file"
 
 	# Run main m4 functions $sources should be expanded
 	m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" $sources $frag_file > "$out_file"
