@@ -179,9 +179,20 @@ define(`_range',`
 ')dnl
 
 # TODO carousel
-define(`_car', `')dnl # carousel
+define(`_car', `
+<div id="$1" class="carousel slide" data-bs-ride="carousel">
+	<div class="carousel-inner">
+		shift($*)
+	</div>
+</div>')dnl
+# carousel item
+define(`_car_item',`
+<div class="carousel-item">
+	$*
+</div>')
+')dnl
 
-# TODO Dialogue
+# Dialogue
 # _dial(id,speaker,text)
 define(`_dial',`<div id="$1" class="dialogue">
 	<div id="$1Speaker" class="dialogue-speaker">$2</div>
