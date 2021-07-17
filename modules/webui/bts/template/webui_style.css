@@ -13,6 +13,25 @@ html, body {
 	margin-right: 10px;
 }
 
+.dialogue {
+	display: flex;
+	flex-direction: column;
+	padding-left : 2.5%;
+	padding-right : 2.5%;
+	align-items: flex-start;
+	flex-grow :1;
+}
+
+.dialogue-speaker {
+	font-weight: bold;
+	flex-grow : 0;
+	border-bottom: 1px solid #d0cccc;
+}
+
+.dialogue-text {
+	flex-grow: 1;
+}
+
 .collapsing {
 	transition: none !important;
 }
