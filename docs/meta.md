@@ -33,7 +33,6 @@
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Carousel
-	* [ ] Dialogue
   * [ ] Wikitext
 
 * [ ] New features
@@ -119,6 +118,8 @@ This was intended for alpine linux usage... however I found that I was extensive
       * [x] Modal macro
 	  	* [x] Pop Up Style
 	  	* [x] Screen touch
+	  * [x] Dialogue
+	  * [x] Advanced style macro
 
 ### Big TODO
 

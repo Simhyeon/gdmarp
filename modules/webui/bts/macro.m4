@@ -179,7 +179,25 @@ define(`_range',`
 ')dnl
 
 # TODO carousel
-define(`_car', `')dnl # carousel
+define(`_car', `
+<div id="$1" class="carousel slide" data-bs-ride="carousel">
+	<div class="carousel-inner">
+		shift($*)
+	</div>
+</div>')dnl
+# carousel item
+define(`_car_item',`
+<div class="carousel-item">
+	$*
+</div>')
+')dnl
+
+# Dialogue
+# _dial(id,speaker,text)
+define(`_dial',`<div id="$1" class="dialogue">
+	<div id="$1Speaker" class="dialogue-speaker">$2</div>
+	<div id="$1Text" class="dialogue-text">$3</div>
+</div>')dnl
 
 # =====
 # General
@@ -354,6 +372,12 @@ define(`_sidebar_right', `
   </div>
 </div>
 ')dnl
+
+# ==========
+# Style modifier
+# Css tyle and js script can use this modifier html tag to modify
+# element that comes next to the modifier
+define(`_style_next',`<modifier class="foreach(`it', ($*), ``mdf-'it() ')"></modifier>')dnl
 
 # ==========
 # Scripts
