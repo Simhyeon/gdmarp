@@ -1,3 +1,5 @@
+// ----------
+// Callbacks
 function addCallback(triggerId, eventType, callback) {
 	document.getElementById(triggerId).addEventListener(eventType, callback);
 }
