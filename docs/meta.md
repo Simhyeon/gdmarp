@@ -19,7 +19,7 @@
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
     * [x] Create data structure macro
-    * [ ] Utilize d3.js for visualization
+    * [ ] Utilize graphviz for visualization
   * [ ] UML module
   * [ ] Conti module
 
@@ -33,6 +33,7 @@
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Carousel
+	* [ ] Pop up menu
   * [ ] Wikitext
 
 * [ ] New features
