@@ -9,6 +9,7 @@ init_var(){
 	out_name="out"
 	include=""
 	sources=""
+	flag_purgemode=none
 	flag_preserve=false
 	flag_use_default=true
 	flag_use_docker=false
@@ -43,6 +44,7 @@ help_message(){
 	echo "-N <file name>        designate a file name for input"
 	echo "-I <dir>              specify a m4 script directory to include"
 	echo "-M <module>           a module to include with execution"
+	echo "-P <MODE>             give a purge mode {all|user|var}"
 	echo "-O <file name>        designate a file name for final result"
 	echo "-g                    initiate with git after gdmarp init and create a gitignore file"
 	echo "-h                    show brief help"
@@ -127,6 +129,7 @@ gd_preprocess(){
 	export ROOT=$bin_path
 	export MODULE=$bin_path/modules
 	export SCRIPTS=$bin_path/m4/scripts
+	export PURGEMODE=$(echo "$flag_purgemode" | tr '[:lower:]' '[:upper:]')
 
 	# M4 include path
 	# If -I flag option was not given set current working directory as include directory
@@ -155,8 +158,9 @@ gd_preprocess(){
 	# Remove all comments (which is a line starts with double forward slash "//")
 	sed -i -f "$SCRIPTS/rm_comments.sed" "$frag_file"
 
-	# This squahses multiple new lines into single new line
-	awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"
+	# Firstly purge unused macro usages 
+	# then squashes multiple new lines into single new line
+	perl "$SCRIPTS"/purge.pl "$frag_file" | awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' > "$out_file"
 
 	# NOTE ::: Restore script which restores characters escaped by sanitize.sed 
 	# Sanitize should not be called explicitly in this script because some characters
@@ -179,10 +183,6 @@ gd_preprocess(){
 		# TODO This code is suspicous, comment for now
 		# out_file="$cache_dir"/"$out_file"
 	fi
-	echo "=--=-"
-	echo "$out_file"
-	echo "$frag_file"
-	ls
 }
 
 gd_repr(){
@@ -461,6 +461,26 @@ gd_main(){
 					shift 
 				else
 					printf 'ERROR: "-I" requires a non-empty option argument.\n' >&2
+					exit 1
+				fi
+				;;
+			-P) # Purge
+				if [ -n "$2" ]; then
+					while [ -n "$2" ]; do
+						case "$2" in
+							# Next element is another flag
+							-*)
+								break
+								;;
+							*)
+								flag_purgemode=$2
+								shift
+								;;
+						esac
+					done
+					shift 
+				else
+					printf 'ERROR: "-P" requires a non-empty option argument.\n' >&2
 					exit 1
 				fi
 				;;
