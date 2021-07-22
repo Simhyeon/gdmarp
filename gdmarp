@@ -288,17 +288,15 @@ gd_dial(){
 			# Restore escaped characters because json needs proper formatting
 			sed -i -f "$SCRIPTS"/restore.sed "$cache_dir"/out.json
 
-			# TODO Debuggin purpose, exit early
-			exit 0
-
-			# TODO Validate json file and create dot file
-			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$cache_dir"/out.json dotify  > "$cache_dir"/out.graphviz
+			# Validate json file and create dot file named out.graphviz
+			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$cache_dir"/out.json dotify
 
 			# m4 run again to include file inside of index.html file
-			# m4 -I "$cache_dir" "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
+			m4 -I "$cwd" "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
 
-			# Restore escaped characters
-			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".json
+			# Restore escaped characters 
+			# This is mostly for es6 string literal syntax <``> 
+			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".html
 
 			# Remove middle file
 			if [ "$flag_preserve" = "false" ]; then
