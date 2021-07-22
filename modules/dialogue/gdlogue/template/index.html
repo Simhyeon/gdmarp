@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-	<meta charset="utf-8">
+	<head>
+		<title>Dialogue</title>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="#">
+	</head>
 	<body>
 		<script src="//d3js.org/d3.v5.min.js"></script>
 		<script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
@@ -8,7 +12,7 @@
 		<div id="graph" style="text-align: center;"></div>
 		<script>
 			d3.select("#graph").graphviz()
-				.renderDot('include(out.graphviz)');
+				.renderDot(\~include(out.gv)\~);
 		</script>
 	</body>
 </html>
