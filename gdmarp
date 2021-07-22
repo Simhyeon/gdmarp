@@ -158,15 +158,20 @@ gd_preprocess(){
 	# Remove all comments (which is a line starts with double forward slash "//")
 	sed -i -f "$SCRIPTS/rm_comments.sed" "$frag_file"
 
-	# Firstly purge unused macro usages 
-	# then squashes multiple new lines into single new line
-	perl "$SCRIPTS"/purge.pl "$frag_file" | awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' > "$out_file"
 
-	# NOTE ::: Restore script which restores characters escaped by sanitize.sed 
+	# Purge unused macro usages 
+	# then squashes multiple new lines into single new line
+	# Restore script which restores characters escaped by sanitize.sed 
 	# Sanitize should not be called explicitly in this script because some characters
 	# are intended as it is such as define macros thus restoration should be initiated 
 	# NOTE ::: webui subcommand processes m4 one more time thus should not be restored in here
-	[ "$flag_prep_norestore" = "false" ] && sed -i -f "$SCRIPTS"/restore.sed "$out_file"
+	if [ "$flag_prep_norestore" = "false" ]; then 
+		perl "$SCRIPTS"/purge.pl "$frag_file" | awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' > "$out_file"
+		sed -i -f "$SCRIPTS"/restore.sed "$out_file"
+	else
+		# Only squash
+		awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"
+	fi
 
 	# If this is prep subcommand then set file's name to given name
 	# Other than out_file should be in root directory
@@ -291,6 +296,10 @@ gd_dial(){
 	gd_preprocess
 
 	# No Docker code only for now
+
+	# Add divert directives in first line and last line of the file
+	# so that all texts within out.gddt will be ignored in final html file
+	sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
 
 	# Utilzie various backends
 	case $flag_modules in
