@@ -1,67 +1,27 @@
 import Ajv from "ajv";
 import fs from "fs";
-const schema = {
-	type: "object",
-	properties: {
-		speakers: {
-			type: "array",
-			items: {
-				type: "object",
-				properties: {
-					id: { type: "string" },
-					name: { type: "string" }
-				},
-				required: ["id", "name"]
-			}
-		},
-		dialogues: {
-			type: "array",
-			items: {
-				type: "object",
-				properties: {
-					id: { type: "string" },
-					content: {
-						type: "array",
-						items: {
-							type: "object",
-							properties: {
-								type: { type: "string" },
-								speaker: { type: "string" },
-								text: { type: "string" },
-								selection: {
-									type: "array",
-									optional: "true",
-									itmes: {
-										type: "object",
-										properties: {
-											text: { type: "string" },
-											redirect: { type: "string" }
-										},
-										required: ["text", "redirect"]
-									}
-								}
-							},
-							required: ["type", "speaker", "text"]
-						}
-					}
-				},
-				required: ["id", "content"]
-			}
-		}
-	},
-	required: ["speakers", "dialogues"],
-	additionalProperties: false
+import { schema } from "./schema.js";
+
+function nullEmpty(str) {
+	if (str == null || str.toLowerCase() == 'null' || str == ''){
+		return true;
+	} else {
+		return false;
+	}
 }
 
 class Gdlogue {
 	constructor(json) { 
 		this.ajv = new Ajv();
 		this.validater = this.ajv.compile(schema)
-		this.json = json;
+		this.content = json;
+
+		this.error_list = [];
+		this.warning_list = [];
 	}
 
-	validate() {
-		if (!this.validater(this.json)) {
+	format_validate() {
+		if (!this.validater(this.content)) {
 			console.log(this.validater.errors);
 			return false;
 		} else {
@@ -69,36 +29,114 @@ class Gdlogue {
 		}
 	}
 
+	content_validate() {
+		this.content.forEach((node) => {
+			switch (node.type) {
+				case 'text':
+					if (node.text = '') {
+						this.warning_list.push('<Warning> : ' + node.id + '\'s text is empty.\n');
+					}
+					if (node.speaker = '') {
+						this.warning_list.push('<Warning> : ' + node.id + '\'s speaker is empty.\n');
+					}
+					break;
+				case 'selection':
+					if (node.diversion.length == 0 ) {
+						this.error_list.push('<Error> : ' + node.id + '\'s diversion array is empty. This node\' type is selection thus this is not allowed.\n');
+					}
+					node.diversion.forEach((div) => {
+						if (div.text = '') {
+							this.warning_list.push('<Warning> : ' + node.id + '\'s diversion, ' + div.id + '\' has empty text although node type is selection.\n');
+						}
+					});
+					break;
+				case 'branch':
+					if (node.diversion.length == 0 ) {
+						this.error_list.push('<Error> : ' + node.id + '\'s diversion array is empty. This node\' type is branch thus this is not allowed.\n');
+					}
+					let empty_qual_count = 0;
+					node.diversion.forEach((div) => {
+						if (div.qual = '') { empty_qual_count++; }
+						// To only print once.
+						// There is no break statement in js foreach
+						if (empty_qual_count == 1){
+							this.warning_list.push('<Warning> : ' + node.id + '\'s diversion include multiple empty qualifications although node type is branch. Multiple empty(default) node might not work as intended.\n');
+							return;
+						}
+					});
+					break;
+				
+				// Null is fine
+				case null:
+					break;
+				case 'null':
+					break;
+
+				default:
+					this.error_list.push(`<Error> : ${node.id}'s type ${node.type} is not valid\n`);
+					break;
+			}
+		});
+	}
+
 	print() {
-		console.log(JSON.stringify(this.json));
+		console.log(JSON.stringify(this.content));
 	}
 
 	pretty_print(){
-		console.log(JSON.stringify(this.json, null, 4));
+		console.log(JSON.stringify(this.content, null, 4));
 	}
 
-	// TODO 
-	treefy(){
+	dotify(){
+		// Start
+		let dotScript = 'digraph Dialogue {\n';
+		let globalAttributes = 'node [shape="record"]\n';
 
-	}
+		dotScript += globalAttributes;
+		this.content.forEach((node) => {
+			// Continue if type is null (Null type means invalid or placeholder)
+			if (nullEmpty(node.type)) {
+				return
+			}
 
-	// TODO
-	visualize(){
+			// Set node attributes
+			let label = `Type : ${node.type}|`;
+			let style ='';
+			switch (node.type) {
+				case 'text':
+					label += `Speaker : ${node.speaker}|`;
+					break;
+				case 'selection':
+					label += `Speaker : ${node.speaker}|`;
+					style += `colorfill="white" color="green3"`;
+					break;
+				case 'branch':
+					style += `colorfill="white" color="dodgerblue3"`;
+					break;
+				default:
+					break;
+					
+			}
 
-	}
-}
+			// Set node edges TODO : Check if this is valid syntax
+			let edges = '';
 
-class GdTree {
-	constructor(top_nodes) {
-		this.top_nodes = top_nodes;
-	}
-}
+			if (node.type == 'text' && !nullEmpty(node.goto)) {
+				edges += `${node.id} -> ${node.goto}\n`;
+			} else if (node.type == 'selection' || node.type == 'branch') {
+				node.diversion.forEach((div) => {
+					if (!nullEmpty(div.goto)){
+						edges += `${node.id} -> ${div.goto}\n`;
+					}
+				});
+			}
+			dotScript += `${node.id} [label="{${label.slice(0,-1)}}" ${style}]\n`;
+			dotScript += edges;
+		});
 
-class GdNode {
-	constructor(nodeObject) {
-		this.id = nodeObject.id;
-		this.content = nodeObject.content;
-		this.redirect = nodeObject.redirect;
+		// End
+		dotScript += '}';
+		fs.writeFileSync('out.gv', dotScript);
 	}
 }
 
@@ -112,9 +150,18 @@ function main() {
 	let json = JSON.parse(fs.readFileSync(file_path));
 	let gdlogue = new Gdlogue(json);
 
-	if (!gdlogue.validate()) {
+	if (!gdlogue.format_validate()) {
 		console.log("Failed to validate json file.");
 		return;
+	}
+
+	gdlogue.content_validate();
+
+	console.log(...gdlogue.warning_list);
+	console.log(...gdlogue.error_list);
+
+	if (gdlogue.error_list.length != 0 ) {
+		process.exit(0);
 	}
 
 	switch (sub_command) {
@@ -124,9 +171,13 @@ function main() {
 		case 'data':
 			gdlogue.print();
 			break;
+		case 'dotify':
+			gdlogue.dotify();
+			break;
 		
 		default:
-			console.log(`"${sub_command}" is not viable sub command, aborting...`);
+			console.log(`"${sub_command}" is not viable sub command`);
+			console.log("Use either <print> or <data>")
 			return;
 	}
 }
