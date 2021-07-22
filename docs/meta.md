@@ -8,9 +8,7 @@
   * [ ] Improve macro.md
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
-	* [ ] Add submodule option
-	* [ ] Make a preserve logic consistent
-	* [ ] Re-make purge option (-P all) with perl script
+  * [ ] Add submodule option
 
 * [ ] Modular components
   * [ ] Create new webui backend macro component. 
@@ -103,6 +101,8 @@ This was intended for alpine linux usage... however I found that I was extensive
   * [x] url caused end of line becuase comment was double forward slash.
 
 * [ ] Misc
+  * [x] Make a preserve logic consistent
+  * [x] Re-make purge option (-P all) with perl script
   * [x] Migrate from gdt to gddt file extension.
   * [x] Make simg macro's proportion argument to comply with other sizes or support various formats
   * [x] String literal rule without escaping any characters (BEGIN=/#, END=#/)
