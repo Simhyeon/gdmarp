@@ -2,7 +2,6 @@
 
 * [ ] Bug
   * [x] Resource is not set properly due to build directory
-  // Not tested though
 
 * [ ] Misc
   * [ ] Improve macro.md
@@ -22,6 +21,8 @@
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
+    * [ ] Make detailed window display on hover or click
+	* [ ] Make immersive representation which is marp conversion with hyperlinks
   * [ ] UML module
   * [ ] Conti module
 
