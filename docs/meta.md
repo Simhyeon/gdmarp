@@ -8,9 +8,12 @@
   * [ ] Improve macro.md
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
+	* [ ] Add submodule option
+	* [ ] Make a preserve logic consistent
+	* [ ] Re-make purge option (-P all) with perl script
 
 * [ ] Modular components
-  * [x] Create new webui backend macro component. 
+  * [ ] Create new webui backend macro component. 
   * [ ] Template module
     * [ ] Template macro sets
     * [ ] Template related configs
@@ -18,8 +21,6 @@
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
-    * [x] Create data structure macro
-    * [ ] Utilize graphviz for visualization
   * [ ] UML module
   * [ ] Conti module
 
@@ -80,6 +81,10 @@
   * [x] Config option to designate multiple render process but for test purposes
 
 * [x] Modular components
+  * [x] Dialogue module
+    * [x] Create data structure macro
+	* [x] Convert out.json into out.gv
+    * [x] Utilize graphviz for visualization
   * [x] Separate a global basic macro component.
   * [x] Separate a representation macro component.
   * [x] Create new mediawiki backend macro component for wiki render forme.
