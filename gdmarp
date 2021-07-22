@@ -16,6 +16,7 @@ init_var(){
 	flag_format=pptx
 	flag_modules=""
 	flag_input_file="index.gddt"
+	flag_prep_norestore=false
 	only_prep=false
 	config=""
 	bin_name=$(basename "$0")
@@ -161,10 +162,10 @@ gd_preprocess(){
 	# Sanitize should not be called explicitly in this script because some characters
 	# are intended as it is such as define macros thus restoration should be initiated 
 	# NOTE ::: webui subcommand processes m4 one more time thus should not be restored in here
-	[ "$action" != "gd_wui" ] && sed -i -f "$SCRIPTS"/restore.sed "$out_file"
+	[ "$flag_prep_norestore" = "false" ] && sed -i -f "$SCRIPTS"/restore.sed "$out_file"
 
 	# If this is prep subcommand then set file's name to given name
-	[ "$only_prep" = "true" ] && [ "$out_name" != "out" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
+	[ "$only_prep" = "true" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
 
 	# Remove frag file because it is not used anymore
 	if [ "$flag_preserve" = "false" ]; then 
@@ -281,13 +282,30 @@ gd_dial(){
 	# Utilzie various backends
 	case $flag_modules in
 		gdl)
-			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$out_file" data  > "$out_dir"/"$out_name".json
+			# Creat JSON file
+			m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" "$bin_path"/m4/default.m4 "$out_file" "$bin_path"/modules/dialogue/gdlogue/template/data.json > "$cache_dir"/out.json
+
+			# Restore escaped characters because json needs proper formatting
+			sed -i -f "$SCRIPTS"/restore.sed "$cache_dir"/out.json
+
+			# TODO Debuggin purpose, exit early
+			exit 0
+
+			# TODO Validate json file and create dot file
+			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$cache_dir"/out.json dotify  > "$cache_dir"/out.graphviz
+
+			# m4 run again to include file inside of index.html file
+			# m4 -I "$cache_dir" "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
 
 			# Restore escaped characters
 			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".json
 
 			# Remove middle file
-			[ "$flag_preserve" = "false" ] && rm "$out_file"
+			if [ "$flag_preserve" = "false" ]; then
+				rm "$out_file"
+			else
+				mv "$out_file" "$cache_dir"
+			fi
 			;;
 		*)
 			echo "No proper module was given to yield a dialogue json"
@@ -525,10 +543,12 @@ gd_main(){
 				;;
 			wui) # web ui
 				action=gd_wui
+				flag_prep_norestore=true
 				shift
 				;;
 			dial) # dialogue
 				action=gd_dial
+				flag_prep_norestore=true
 				shift
 				;;
 			run)
