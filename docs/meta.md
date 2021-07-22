@@ -14,6 +14,9 @@
 
 * [ ] Modular components
   * [ ] Create new webui backend macro component. 
+  * [ ] Publish module
+  	* [ ] Send email with diff delta of target file
+	* [ ] Other possible publish options
   * [ ] Template module
     * [ ] Template macro sets
     * [ ] Template related configs
