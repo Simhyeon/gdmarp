@@ -165,16 +165,24 @@ gd_preprocess(){
 	[ "$flag_prep_norestore" = "false" ] && sed -i -f "$SCRIPTS"/restore.sed "$out_file"
 
 	# If this is prep subcommand then set file's name to given name
+	# Other than out_file should be in root directory
 	[ "$only_prep" = "true" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
 
 	# Remove frag file because it is not used anymore
 	if [ "$flag_preserve" = "false" ]; then 
+		# Out_file should be in root directory, so don't remove
 		rm "$frag_file"
 	else 
-		mv -f "$out_file" "$cache_dir"
+		# Out_file should be in root directory, so don't move but copy
+		cp -f "$out_file" "$cache_dir"
 		mv -f "$frag_file" "$cache_dir" 
-		out_file="$cache_dir"/"$out_file"
+		# TODO This code is suspicous, comment for now
+		# out_file="$cache_dir"/"$out_file"
 	fi
+	echo "=--=-"
+	echo "$out_file"
+	echo "$frag_file"
+	ls
 }
 
 gd_repr(){
@@ -182,22 +190,22 @@ gd_repr(){
 	gd_preprocess
 
 	# Change out.gddt to out.md because marp expects markdown file
-	mv "$out_file" "$out_dir"/out.md
+	mv "$out_file" out.md
 
 	# Compile with marp-cli
 	if [ "$flag_use_docker" = "false" ]; then
 		# No Docker
-		$marp --allow-local-files --$flag_format --html "$out_dir"/out.md -o "$out_dir"/$out_name.$flag_format
+		$marp --allow-local-files --$flag_format --html out.md -o "$out_dir"/$out_name.$flag_format
 	else
 		# With Docker
-		docker run --rm --init -v "$cwd":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli "$out_dir"/out.md --$flag_format --allow-local-files --html -o "$out_dir"/$out_name.$flag_format
+		docker run --rm --init -v "$cwd":/home/marp/app/ -e LANG="$LANG" marpteam/marp-cli out.md --$flag_format --allow-local-files --html -o "$out_dir"/$out_name.$flag_format
 	fi
 
 	if [ "$flag_preserve" = "false" ]; then
-		rm "$out_dir"/out.md
+		rm out.md
 	else
-		# For test subcommand compatibility
-		mv "$out_dir"/out.md "$out_file"
+		# For test subcommand compatibility -> What?
+		mv out.md "$cache_dir"
 	fi
 }
 
@@ -217,11 +225,15 @@ gd_wiki(){
 			export page_title=$(printf '%s' "$config" | jq .env.page_title)
 
 			# Return early if variable is null
-			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && exit 1
-			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && exit 1
-			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && exit 1
+			[ "$bot_id" = "null" ] && echo "Config's env is missing bot_id" && rm $out_file && exit 1
+			[ "$bot_pwd" = "null" ] && echo "Config's env is missing bot_pwd" && rm $out_file &&exit 1
+			[ "$page_title" = "null" ] && echo "Config's env is missing page_title" && rm $out_file && exit 1
 
 			node "$bin_path"/modules/wiki/mediawiki/mediawiki_bin/index.js "$out_file" "$cwd"/config.json
+
+			# NOTE
+			# No need to remove file because out_file is the file that should
+			# be sent and it is natural to save final result
 
 			# Change name to given final name and save to 
 			mv "$out_file" -f "$out_dir"/$out_name.wikitext
@@ -263,8 +275,9 @@ gd_wui(){
 			# Restore escaped characters
 			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".html
 
-			# Remove middle file
-			[ "$flag_preserve" = "false" ] && rm "$out_file"
+			# Remove middle file because preserve flag would have already saved
+			# copy in cache
+			rm "$out_file"
 			;;
 		*)
 			echo "No proper module was given to yield a web ui page"
@@ -283,13 +296,13 @@ gd_dial(){
 	case $flag_modules in
 		gdl)
 			# Creat JSON file
-			m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" "$bin_path"/m4/default.m4 "$out_file" "$bin_path"/modules/dialogue/gdlogue/template/data.json > "$cache_dir"/out.json
+			m4 -I "$cwd" -I "$bin_path"/m4 -I "$bin_path"/m4/GNU -I "$include" "$bin_path"/m4/default.m4 "$out_file" "$bin_path"/modules/dialogue/gdlogue/template/data.json > out.json
 
 			# Restore escaped characters because json needs proper formatting
-			sed -i -f "$SCRIPTS"/restore.sed "$cache_dir"/out.json
+			sed -i -f "$SCRIPTS"/restore.sed out.json
 
 			# Validate json file and create dot file named out.graphviz
-			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js "$cache_dir"/out.json dotify
+			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js out.json dotify
 
 			# m4 run again to include file inside of index.html file
 			m4 -I "$cwd" "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
@@ -301,8 +314,14 @@ gd_dial(){
 			# Remove middle file
 			if [ "$flag_preserve" = "false" ]; then
 				rm "$out_file"
+				rm out.json
+				rm out.gv
 			else
-				mv "$out_file" "$cache_dir"
+				# No need to copy out_file because there is already
+				# Just remove
+				rm "$out_file"
+				mv out.json "$cache_dir"
+				mv out.gv "$cache_dir"
 			fi
 			;;
 		*)
