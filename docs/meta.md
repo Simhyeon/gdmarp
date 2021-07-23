@@ -21,7 +21,7 @@
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
-    * [ ] Make detailed window display on hover or click
+    * [x] Make detailed window display on hover or click
 	* [ ] Make immersive representation which is marp conversion with hyperlinks
   * [ ] UML module
   * [ ] Conti module
