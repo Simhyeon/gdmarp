@@ -21,8 +21,9 @@
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option
   * [ ] Dialogue module
+    * [x] Multi formats other than html
     * [x] Make detailed window display on hover or click
-	* [ ] Make immersive representation which is marp conversion with hyperlinks
+	* [ ] Make immersive representation which is marp conversion with hyperlinks -> This has low priority
   * [ ] UML module
   * [ ] Conti module
 
