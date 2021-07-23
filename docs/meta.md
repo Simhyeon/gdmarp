@@ -11,9 +11,10 @@
 
 * [ ] Modular components
   * [ ] Create new webui backend macro component. 
-  * [ ] Docx(Microsoft word) module
+  * [ ] Docx(Microsoft word) module (uses latex internally)
     * [ ] Simple conversion
-    * [ ] Formatting(Attribute) option
+    * [ ] Formatting(Attribute) option 
+	* [ ] Uses reference.docx
   * [ ] Dialogue module
     * [x] Multi formats other than html
     * [x] Make detailed window display on hover or click
@@ -26,6 +27,7 @@
 * [ ] New macros
   * [ ] Basic
   * [ ] Repr
+    * [ ] TOC wiah href 
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
@@ -33,6 +35,7 @@
     * [ ] Carousel
 	* [ ] Pop up menu
   * [ ] Wikitext
+    * [ ] TOC wiah href 
 
 * [ ] New features
 
