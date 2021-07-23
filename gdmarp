@@ -314,7 +314,7 @@ gd_dial(){
 			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js out.json dotify
 
 			# m4 run again to include file inside of index.html file
-			m4 -I "$cwd" "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
+			m4 -I "$cwd" -I "$bin_path"/modules/dialogue/gdlogue/template "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
 
 			# Restore escaped characters 
 			# This is mostly for es6 string literal syntax <``> 
