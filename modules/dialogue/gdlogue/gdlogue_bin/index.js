@@ -100,14 +100,14 @@ class Gdlogue {
 			}
 
 			// Set node attributes
-			let label = `Type : ${node.type}|`;
+			let label = `{${node.id}|${node.type}}|`;
 			let style ='';
 			switch (node.type) {
 				case 'text':
-					label += `Speaker : ${node.speaker}|`;
+					label += `${node.speaker}|`;
 					break;
 				case 'selection':
-					label += `Speaker : ${node.speaker}|`;
+					label += `${node.speaker}|`;
 					style += `colorfill="white" color="green3"`;
 					break;
 				case 'branch':
@@ -130,7 +130,7 @@ class Gdlogue {
 					}
 				});
 			}
-			dotScript += `${node.id} [label="{${label.slice(0,-1)}}" ${style}]\n`;
+			dotScript += `${node.id} [id="${node.id}" label="{${label.slice(0,-1)}}" ${style}]\n`;
 			dotScript += edges;
 		});
 
