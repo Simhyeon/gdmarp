@@ -5,9 +5,9 @@ documenation rederings with automated publishing. Gdmarp can create pdf,
 pptx, html slide, wikitext file for mediawiki instance and webui html
 page for UI/UX demo usage.
 
-Gdmarp uses a gddt filetype which is an abbreviation of a game design document text. Gddt
-consists of complex macro usages which are defined by various modules. Such
-module expands macros into properly formatted texts. 
+Gdmarp uses a gddt filetype which is an abbreviation of a game design document
+text. Gddt consists of complex macro usages which are defined by various
+modules. Such module expands macros into properly formatted texts. 
 
 Therefore you don't have to write separate files for separate formats, just write
 once and export with one gdmarp command.
@@ -17,7 +17,7 @@ once and export with one gdmarp command.
 Release of 0.3 includes following updates
 
 - Docx module (with pandoc backend)
-- Dialogue tree module (with d3js backend)
+- Dialogue tree module (with d3js + graphviz backend)
 - UML module (backend not decided)
 - String literal (Single line and multi line string literal)
 
@@ -45,7 +45,7 @@ You can edit "index.gddt" which is created by init subcommand however you can al
 create new file and give the file to gdmarp with -N command followed by file name.
 
 After writing all macros, simply call subcommand with proper backend modules
-and gdmarp will render output files insdie of the build directory. Or simply
+and gdmarp will render output files into the build directory. Or simply
 set all commands in config.json file so that "run" subcommand can call multiple
 commands at the same time.
 
@@ -53,13 +53,22 @@ Please refer a macro part at the bottom of this document for how macro is used a
 
 ### Available modules
 
+There are two types of modules; render module and component module. Render
+module yield complete document while component module yields component that can
+be utilized in document or used as it is.
+
+**Render modules**
+
 - marp (pptx, pdf, html creation)
-- bts (web ui html page with bootstrap cdn)
 - mw (mediawiki page)
 
 To be updated
 - pandoc ( docs creation )
-- template ( for gddt generation )
+
+**Component modules**
+
+- bts (web ui html page with bootstrap cdn)
+- gdl (graphviz dialgoue as html, pdf and png format)
 
 ### Dependencies
 
@@ -69,17 +78,18 @@ To be updated
 - marp-cli (node package)
 - google chrome or chromium (pptx creation dependencies)
 - jq (config parsing)
+- perl (over 5.10 version)
 - bc
 - tr
 
 ### Optional dependencies
 
 - git (git flag)
-- perl (String literal)
 - sqlite3 (sql macro)
 - curl (web api)
 - jpegoptim (jpeg compression)
 - optipng (png compression)
+- "graphviz" for dot binary (dialogue png and pdf format)
 
 ### Installation
 
@@ -150,7 +160,6 @@ that docker run commands should be preceded with real program arguments.
 
 ```bash
 # To get help messages
-gdmarp
 gdmarp -h
 gdmarp help
 
@@ -179,6 +188,15 @@ gdmarp wiki -M mw
 # with prep for now.
 gdmarp wui -M bts
 
+# To render dialogue tree
+# Available formats are {html|png|pdf}
+gdmarp dial -M gdl -F html
+
+# Purgemode
+# You can give purgemode {all|user|var} to purge unused macros
+# Purgemode is used only on render modules
+gdmarp <Subcommand> -m <ModuleName> -P <Purgemode>
+
 # To run test scripts in config.json
 # This enables preserve flag("-p") and creates distinctive middle files in build directory
 gdmarp test
@@ -200,6 +218,20 @@ docker run --rm -v $PWD:/home/marp/app --user="$(id -u):$(id -g)" simoncreek/gdm
 
 <!-- Windows Powershell-->
 docker run --rm -v ${PWD}:/home/marp/app simoncreek/gdmarp init -g
+```
+
+Also you can use docker wrapper gde placed within gde directory. Windows
+version is powershell script called ```gde.ps1``` and unix version is shell
+script called ```gde```.
+
+With wrapper script you can use gde instead of gdmarp.
+
+for example,
+```sh
+// This will invoke docker run simoncreek:latest ... with given arguments
+
+gde wiki -M mw
+gde wui -M bts
 ```
 
 ### Sample config.json

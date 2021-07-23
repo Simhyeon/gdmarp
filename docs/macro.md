@@ -1601,3 +1601,122 @@ hideModal("modalId")
 <!--toggle sidebar-->
 toggleSidebar("sidebarId")
 ```
+
+### Dialogue macros (gdl module)
+
+Use gdlogue internally for conversion.
+
+#### Directives
+
+```
+_dial_begin()
+	// Contents go here
+_dial_end()
+```
+
+#### Node 
+
+```
+_dial_begin()
+
+_dnode(id,text,id2,
+	_dspeaker(Speaker)
+	_dtext(/#I'm speaking#/)
+)
+_dnode(id2,selection,null,
+	_dspeaker(speaker2)
+	_dtext(/#You should select#/)
+	_div(
+		_div_sel(id3,/#I'm selective#/)
+		_div_sel(id4,/#I'm also selective#/)
+	)
+)
+_dnode(id3,branch,null,
+	_div(
+		_div_branch(id4,status,sick)
+		_div_branch(id5,inventory,potion)
+	)
+)
+_dnode(id4,text,null,
+	_dspeaker(Speaker)
+	_dtext(/#Amigo#/)
+)
+_dnode(id5,text,id3,
+	_dspeaker(Speaker)
+	_dtext(/#Hola#/)
+)
+
+_dial_end()
+```
+Converts to
+
+```json
+[
+  {
+    "speaker": "Speaker",
+    "text": "I'm speaking",
+    "id": "id",
+    "type": "text",
+    "goto": "id2"
+  },
+  {
+    "speaker": "speaker2",
+    "text": "You should select",
+    "diversion": [
+      {
+        "goto": "id3",
+        "text": "I'm selective"
+      },
+      {
+        "goto": "id4",
+        "text": "I'm also selective"
+      },
+      {
+        "goto": ""
+      }
+    ],
+    "id": "id2",
+    "type": "selection",
+    "goto": "null"
+  },
+  {
+    "diversion": [
+      {
+        "goto": "id4",
+        "target": "status",
+        "qual": "sick"
+      },
+      {
+        "goto": "id5",
+        "target": "inventory",
+        "qual": "potion"
+      },
+      {
+        "goto": ""
+      }
+    ],
+    "id": "id3",
+    "type": "branch",
+    "goto": "null"
+  },
+  {
+    "speaker": "Speaker",
+    "text": "Amigo",
+    "id": "id4",
+    "type": "text",
+    "goto": "null"
+  },
+  {
+    "speaker": "Speaker",
+    "text": "Hola",
+    "id": "id5",
+    "type": "text",
+    "goto": "id3"
+  },
+  {
+    "id": null,
+    "type": null,
+    "goto": null
+  }
+]
+```
