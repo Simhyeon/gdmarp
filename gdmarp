@@ -14,7 +14,7 @@ init_var(){
 	flag_use_default=true
 	flag_use_docker=false
 	flag_init_git=false
-	flag_format=pptx
+	flag_format=""
 	flag_modules=""
 	flag_input_file="index.gddt"
 	flag_prep_norestore=false
@@ -310,15 +310,26 @@ gd_dial(){
 			# Restore escaped characters because json needs proper formatting
 			sed -i -f "$SCRIPTS"/restore.sed out.json
 
-			# Validate json file and create dot file named out.graphviz
+			# Validate json file and create dot file named out.gv
 			node "$bin_path"/modules/dialogue/gdlogue/gdlogue_bin/index.js out.json dotify
 
-			# m4 run again to include file inside of index.html file
-			m4 -I "$cwd" -I "$bin_path"/modules/dialogue/gdlogue/template "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
+			# Yield differnt format by given argument
+			case $flag_format in
+				html)
+					# m4 run again to include file inside of index.html file
+					m4 -I "$cwd" -I "$bin_path"/modules/dialogue/gdlogue/template "$bin_path"/modules/dialogue/gdlogue/template/index.html > "$out_dir"/"$out_name".html
 
-			# Restore escaped characters 
-			# This is mostly for es6 string literal syntax <``> 
-			sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".html
+					# Restore escaped characters 
+					# This is mostly for es6 string literal syntax <``> 
+					sed -i -f "$SCRIPTS"/restore.sed "$out_dir"/"$out_name".html
+					;;
+				pdf)
+					dot -Tpdf out.gv -o "$out_dir"/"$out_name".pdf
+					;;
+				png)
+					dot -Gdpi=300 -Tpng out.gv -o "$out_dir"/"$out_name".png
+					;;
+			esac
 
 			# Remove middle file
 			if [ "$flag_preserve" = "false" ]; then
@@ -581,6 +592,7 @@ gd_main(){
 				;;
 			repr) # representation
 				action=gd_repr
+				[ -z "$flag_format" ] && flag_format="pptx"
 				shift
 				;;
 			wiki)
@@ -595,6 +607,7 @@ gd_main(){
 			dial) # dialogue
 				action=gd_dial
 				flag_prep_norestore=true
+				[ -z "$flag_format" ] && flag_format="png"
 				shift
 				;;
 			run)
@@ -612,8 +625,6 @@ gd_main(){
 				;;
 			test)
 				action=gd_test
-				flag_modules=marp
-				flag_format=html
 				shift
 				;;
 			check)
