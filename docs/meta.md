@@ -85,6 +85,7 @@
     * [x] Create data structure macro
 	* [x] Convert out.json into out.gv
     * [x] Utilize graphviz for visualization
+	* [x] Added goto hyperlink feature
   * [x] Separate a global basic macro component.
   * [x] Separate a representation macro component.
   * [x] Create new mediawiki backend macro component for wiki render forme.
