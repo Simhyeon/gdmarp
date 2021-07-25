@@ -70,3 +70,9 @@ body, html {
 .modal-header {
 	text-align: center;
 }
+
+.goto {
+	cursor: pointer;
+	color: cornflowerblue;
+	text-decoration: underline;
+}

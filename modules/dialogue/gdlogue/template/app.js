@@ -45,13 +45,25 @@ function newDiversion(type,parentNode, div) {
 
 	let gotoElem = document.createElement('div');
 	gotoElem.textContent = 'Goto -> ' + div.goto;
+	gotoElem.classList = "goto";
+	gotoElem.dataset.goto = div.goto;
+	gotoElem.addEventListener('click', showNextNodeInfo);
 	wrapper.appendChild(gotoElem);
 
 	parentNode.appendChild(wrapper);
 }
 
-function showInformation(e) {
-	let id = e.currentTarget.id;
+function showNextNodeInfo(event) {
+	let gotoId = event.currentTarget.dataset.goto;
+	showInfo(gotoId);
+}
+
+function showNodeInfo(event) {
+	let id = event.currentTarget.id;
+	showInfo(id);
+}
+
+function showInfo(id) {
 	modal.style.display = "flex";
 	let target = datamap.get(id);
 
@@ -74,7 +86,10 @@ function showInformation(e) {
 	let gotoText = 'Goto -> ';
 	if (!nullEmpty(target.goto)){ gotoText += target.goto; }
 	else {gotoText = '';}
-	modal.querySelector("#goto").textContent = gotoText
+	let gotoElem = modal.querySelector("#goto");
+	gotoElem.textContent = gotoText
+	gotoElem.classList = "goto";
+	gotoElem.dataset.goto = target.goto;
 
 	if(!nullEmptyArr(target.diversion)) {
 		let divGroup = modal.querySelector("#diversion");
@@ -113,7 +128,7 @@ d3.select("#graph").graphviz()
 	.on('end', () => {
 		let nodes = document.querySelectorAll('.node');
 		nodes.forEach((node) => {
-			node.addEventListener('click', showInformation); 
+			node.addEventListener('click', showNodeInfo); 
 		});
 	});
 
