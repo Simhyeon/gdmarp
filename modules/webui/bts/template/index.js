@@ -62,3 +62,12 @@ function onlyNumberKey(evt) {
 		return false;
 	return true;
 }
+
+function toggleFloatMenu(id) {
+	let elem = document.getElementById(id);
+	if (elem.style.visibility === 'visible') {
+		elem.style.visibility = 'hidden';
+	} else {
+		elem.style.visibility = 'visible';
+	}
+}
