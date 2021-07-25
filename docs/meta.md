@@ -10,7 +10,8 @@
   * [ ] Add submodule option
 
 * [ ] Modular components
-  * [ ] Create new webui backend macro component. 
+  * [ ] Web ui
+    * [ ] Data oriented approach macro 
   * [ ] Docx(Microsoft word) module (uses latex internally)
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option 
@@ -33,9 +34,8 @@
     * [ ] pptx template feature
   * [ ] Wui
     * [ ] Carousel
-	* [ ] Pop up menu
+	* [x] Pop up menu
   * [ ] Wikitext
-    * [ ] TOC with href 
 
 * [ ] New features
 
