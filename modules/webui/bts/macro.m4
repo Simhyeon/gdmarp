@@ -4,18 +4,22 @@ divert(`-1')
 # Gets all contents into something other magic... I don't know
 # ===> Start of m_webui macro
 define(`m_webui', `
+`divert`'dnl'
 `divert(`-1')'
 `_set_var(`m_webui_title', `$1')'
 `_set_var(`m_webui_content', `shift($*)')'
 `divert`'dnl'
+`divert(`-1')'
 ')dnl
 # <=== End of m_webui macro
 
 # ===> Start of script macro
 define(`m_script', `
+`divert`'dnl'
 `divert(`-1')'
 `_set_var(`m_webui_script', `$*')'
 `divert`'dnl'
+`divert(`-1')'
 ')dnl
 # <=== End of script macro
 
@@ -25,12 +29,12 @@ define(`m_script', `
 define(`_ui_begin', ``m_webui'`('$1, 
 ')dnl
 # Content after ui_end is all discarded
-define(`_ui_end', ``)'`divert(`-1')'')dnl
+define(`_ui_end', ``)'')dnl
 
 # "$1," is necessary for the macro "m_webui" to operate
 define(`_script_begin', ``m_script'`(' 
 ')dnl
-define(`_script_end', ``)'`divert(`-1')'')dnl
+define(`_script_end', ``)'')dnl
 
 # =====
 # Top space macros
@@ -191,6 +195,16 @@ define(`_car_item',`
 	$*
 </div>')
 ')dnl
+
+# Floating menu
+define(`_float_menu',`
+<div id="$1" class="floating-menu floating-$2" disabled="true">
+	shift(shift($*))
+</div>')dnl
+define(`_float_item',`
+<div id="$1" class="floating-item">
+	shift($*)
+</div>')dnl
 
 # Dialogue
 # _dial(id,speaker,text)
@@ -419,5 +433,8 @@ define(`_hide_modal',`hideModal\9"$1"\0')dnl
 
 # Toggle sidebar
 define(`_call_sidebar', `toggleSidebar\9"$1"\0')dnl
+
+# Toggle floatmenu
+define(`_call_float_menu', `toggleFloatMenu\9"$1"\0')dnl
 
 divert`'dnl
