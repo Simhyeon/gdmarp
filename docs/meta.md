@@ -27,7 +27,7 @@
 * [ ] New macros
   * [ ] Basic
   * [ ] Repr
-    * [ ] TOC wiah href 
+    * [x] TOC with href 
     * [ ] Background image macro
     * [ ] Fixed position image(or textbox) macro
     * [ ] pptx template feature
@@ -35,7 +35,7 @@
     * [ ] Carousel
 	* [ ] Pop up menu
   * [ ] Wikitext
-    * [ ] TOC wiah href 
+    * [ ] TOC with href 
 
 * [ ] New features
 
