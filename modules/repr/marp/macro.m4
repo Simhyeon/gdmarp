@@ -155,6 +155,9 @@ m_trim_nl(shift($*))
 </div>')dnl
 
 # Class related macros
+
+# Macro >>> set table of contents
+define(`_toc',`<ol><a href="#$2">$1</a></ol>')dnl
 # MACRO >>> Set title class into slide and type title, author text at the same time
 define(`_title', `m_class(title)
 `#' $1
