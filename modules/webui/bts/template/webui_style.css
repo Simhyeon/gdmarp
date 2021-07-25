@@ -243,3 +243,45 @@ img {
 	height: 100%;
 	width: 100%;
 }
+
+.floating-menu {
+	visibility: hidden;
+	display: flex;
+	position: absolute;
+}
+
+.floating-left {
+	flex-direction: column;
+
+	top: 50%;
+	left: 5px;
+	transform: translateY(-50%); 
+	border: 1px solid black;
+}
+
+.floating-right {
+	flex-direction: column;
+
+	top: 50%;
+	right: 5px;
+	transform: translateY(-50%); 
+}
+
+.floating-top {
+	flex-direction: row;
+	top: 5px;
+	left: 50%;
+	transform: translateX(-50%); 
+}
+
+.floating-bottom {
+	flex-direction: row;
+	bottom: 5px;
+	left: 50%;
+	transform: translateX(-50%); 
+}
+
+.floating-item {
+	flex: 1;
+	cursor: pointer;
+}
