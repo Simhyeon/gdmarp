@@ -173,17 +173,19 @@ gd_preprocess(){
 		awk '/./ { e=0 } /^$/ { e += 1 } e <= 1' < "$frag_file" > "$out_file"
 	fi
 
-	# If this is prep subcommand then set file's name to given name
-	# Other than out_file should be in root directory
-	[ "$only_prep" = "true" ] && mv "$out_file" -f "$out_dir"/$out_name.gddt
-
 	# Remove frag file because it is not used anymore
 	if [ "$flag_preserve" = "false" ]; then 
 		# Out_file should be in root directory, so don't remove
 		rm "$frag_file"
 	else 
-		# Out_file should be in root directory, so don't move but copy
-		cp -f "$out_file" "$cache_dir"
+		# If this is prep subcommand then set file's name to given name
+		# Other than out_file should be in root directory
+		if [ "$only_prep" = "true" ]; then
+			mv "$out_file" -f "$out_dir"/$out_name.gddt
+		else
+			# Out_file should be in root directory, so don't move but copy
+			cp -f "$out_file" "$cache_dir"
+		fi 
 		mv -f "$frag_file" "$cache_dir" 
 		# TODO This code is suspicous, comment for now
 		# out_file="$cache_dir"/"$out_file"
