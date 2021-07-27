@@ -2,6 +2,9 @@
 
 * [ ] Bug
   * [x] Resource is not set properly due to build directory
+  * [x] Include macro is not invoked
+  This was because I escaped m4 quote to reseve _set_var macro
+  Solution was to change the syntax of set var
 
 * [ ] Misc
   * [ ] Check sanitization process
@@ -12,6 +15,7 @@
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
   * [ ] Add submodule option
+  * [ ] Make list element default to 1st level
 
 * [ ] Modular components
   * [ ] Web ui

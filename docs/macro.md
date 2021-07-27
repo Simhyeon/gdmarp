@@ -39,10 +39,21 @@ should not be used if comma is required to be printed in final result.
 General rule of thumb is to use comma literals only in text related macros and
 us ```\.``` in other macros.
 
-### Other escape rules
+### Quote escape rules
+
+Backtick(`) and single quote(') is a m4 quote. This two characters are reserved to
+define macros. Though you can change the quote rules, gdmarp conform to
+standard m4 quotes.
+
+Thus m4 quotes in gddt files will be deleted. This does not trigger a critical error,
+but every m4 quotes will not be rendered in final result.
+
+You can escape manually with special rules such as,
 
 - Backtick(`) : \\;
 - Quote(') : \\~
+
+However string literal will take care of escaping jobs for you.
 
 ### Using string literal directives
 
@@ -128,11 +139,9 @@ as argument. So you should not undefine macro names mod_{module name}.
 There are two ways to define variables in gdmarp. First is to define a macro in
 env.m4 file. Other is to use _set_var macros inside of gddt files.
 
-Please be aware that ```_set_var```'s syntax is same with m4's macro definition syntax. Which means you can nest other macros inside a _set_var macro too.
-
 ```
 <!-- Arg order is "Varaible name" followed by "substituted text" -->
-_set_var(`v_simple_name', `Some repeated text that is a waste of typing and readability')dnl
+_set_var(v_simple_name,Some repeated text that is a waste of typing and readability)dnl
 
 v_simple_name()
 ```
@@ -257,13 +266,13 @@ _from_file(macro_name,path.csv)
 <!-- You have to define varaible content within string literal because comma is
 evaludated by default -->
 
-_set_var(`v_value',`
+_set_var(v_value,
 /#
 1,2,3
 4,5,6
 7,8,9
 #/
-')dnl
+)dnl
 
 _from_var(range,v_value)
 
