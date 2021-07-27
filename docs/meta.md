@@ -4,6 +4,10 @@
   * [x] Resource is not set properly due to build directory
 
 * [ ] Misc
+  * [ ] Check sanitization process
+  For example special characters such as colon(;) can be problematic in esyscmd
+  call if value is not printed as quoted form.
+  * [ ] There are caveats with esyscmd and non quoted "$*" value, make this right
   * [ ] Improve macro.md
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
@@ -111,6 +115,7 @@ This was intended for alpine linux usage... however I found that I was extensive
   * [x] Change default temporary files reside in cache directory.
   * [x] Make webui can be embedded into index.gddt
   * [x] Add borders by default
+  * [x] Add automation macro with raw csv and file format
 
 * [x] New macros
   * [x] Basic
