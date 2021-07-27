@@ -21,7 +21,11 @@ define(`argn', `ifelse(`$1', 1, ``$2'',
 # Send formula to program bc and return calculated result
 define(`m_bc_calc', `esyscmd(`echo "$1" | bc | tr -d "\n" ')')dnl
 # Trim all starting and trailing new lines from content
-define(`m_trim_nl', `esyscmd(`echo "$*" | awk -f $SCRIPTS/rmExtNewLines.awk')')dnl
+# TODO this script can be substituted with much simpler commands
+define(`m_trim_nl', `esyscmd(`printf "$*" | awk -f $SCRIPTS/rmExtNewLines.awk')')dnl
+# Removes leading and trailing new lines with leading and trailing white spaces
+# for each lines without printing extra last new line(which is default in awk).
+define(`m_trim_nl_and_spaces',`esyscmd(`sh $SCRIPTS/rmExt.sh "$*"')')dnl
 # Sanitize content, or say temporarily convert content that disturbs sane macro operations
 define(`m_sanitize', `esyscmd(`printf "$*" | sed -f $SCRIPTS/sanitize.sed')')dnl
 # Set to default value if given value is empty
@@ -33,6 +37,7 @@ define(`m_if_mod', `ifdef(`mod_$1',`shift($*)', `')')dnl
 # The reason why fmrestore is a shell script not sed script is because I
 # couldn't make it right although is should be simple.
 define(`m_fm_restore',`esyscmd(`sh $SCRIPTS/fmrestore.sh "$*"')')dnl
+define(`m_fm_literal',`esyscmd(`printf "$1" | perl "$SCRIPTS"/string_literal.pl')')dnl;
 define(`m_fm_read_file_literal',`esyscmd(`cat $1 | perl "$SCRIPTS"/string_literal.pl')')dnl
 
 # ==========
@@ -66,11 +71,14 @@ define(`_repeat',`forloop(`_i_', 1, $1, `shift($*)')')dnl
 
 # MACRO >>> Repeat given macro with given arguments
 # Set newline at the end of foreach loop result for easy debuggin
-define(`_from',`foreach(`it',(esyscmd(`sh $SCRIPTS/fmsanitize.sh "$*"')),`_$1(m_fm_restore(it))
+define(`_from',`foreach(`it',(esyscmd(`sh $SCRIPTS/fmsanitize.sh "$*"')),`_$1(m_trim_nl_and_spaces(m_fm_restore(it)))
 ')')dnl
 
-# MACRO >>> Repeat given macro with given arguments
-define(`_from_file',`_from($1, m_fm_read_file_literal($2))')dnl
+# MACRO >>> Repeat given macro with given file
+define(`_from_file',`_from($1, m_trim_nl_and_spaces(m_fm_read_file_literal($2)))')dnl
+
+# MACRO >>> Repeat given macro with given variable
+define(`_from_var',`_from($1, m_trim_nl_and_spaces(m_fm_literal($2)))')dnl
 
 # MACRO >>> Shorthand version of include macro
 # macro expects path to be inside of "inc" directory
