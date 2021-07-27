@@ -53,10 +53,11 @@ define(`_if_modc',`m_if_mod($1, shift($*))')dnl
 
 # ======''
 # MACRO >>> Set variable as given name
-# Usage : _set_var(`someurl', `http://google.com')
-# Recommended naming rule is to start name with prefix "lv_" which stands for local variable
-define(`_set_var', `define(`$1',
+# Usage : _set_var(v_someurl,http://google.com)
+# Recommended naming rule is to start name with prefix "v_" which stands for variable
+define(`m_set_var', `define(`$1',
 `ifelse(`$3', `0', ``$4'', `$2')')')dnl
+define(`_set_var',`m_set_var($1,$2)')dnl
 
 # MACRO >>> Random texts macros for dev usage
 # There are many spaces for improvements
