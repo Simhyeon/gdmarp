@@ -15,7 +15,6 @@
 
 * [ ] Modular components
   * [ ] Web ui
-    * [ ] Data oriented approach macro 
   * [ ] Docx(Microsoft word) module (uses latex internally)
     * [ ] Simple conversion
     * [ ] Formatting(Attribute) option 
@@ -105,6 +104,7 @@ This was intended for alpine linux usage... however I found that I was extensive
   * [x] url caused end of line becuase comment was double forward slash.
 
 * [ ] Misc
+  * [x] From macro enable no leading, trailing spaces, whitespaces variable utilization
   * [x] Make a preserve logic consistent
   * [x] Re-make purge option (-P all) with perl script
   * [x] Migrate from gdt to gddt file extension.
