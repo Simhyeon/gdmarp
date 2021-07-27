@@ -25,6 +25,8 @@ m_not_intended_for_user()
 
 ### Comma rules
 
+NOTE, using string literal is recommended.
+
 M4 translates comma as argument delimiter so you cannot put comma literal
 without escaping.  There are two ways to escape comma literal. First is
 ```\.``` and second is ```_cc``` macro. First way is to escape character with
@@ -58,8 +60,6 @@ _macro_multi_lines(/#
 	`This' also works too, which is "good".
 #/)
 ```
-
-_label()
 
 ### Basic macros
 
@@ -232,11 +232,56 @@ Included lines
 Following lines
 ```
 
+**Automatic macro generation**
+
+Using a same macro multiple times is very tedious work and repeat macro cannot
+handle such situations. In that case from macro comes very handy.
+
+for example,
+
+```
+<!-- Don't provide full macro names unless it will be expanded before and would
+yield strange result. Simply provide macro name without leading underscore -->
+
+_from(macro_name,1,2,3
+4,5,6,
+7,8,9)
+
+_from_file(macro_name,path.csv)
+
+<!-- File content of path.csv is -->
+1,2,3
+4,5,6
+7,8,9
+
+<!-- You have to define varaible content within string literal because comma is
+evaludated by default -->
+
+_set_var(`v_value',`
+/#
+1,2,3
+4,5,6
+7,8,9
+#/
+')dnl
+
+_from_var(range,v_value)
+
+```
+Converts to
+```
+<!-- _macro_name is expanded if it is already defined -->
+_macro_name(1,2,3)
+_macro_name(4,5,6)
+_macro_name(7,8,9)
+```
+
 ### Representaion macros (Marp module)
 
 #### Basic markdown syntax macros
 
-Using raw markdown syntax is fine, but for multi-format rendering macros are recommended.
+Using raw markdown syntax is fine, but for multi-format rendering macros are
+recommended.
 
 **Headers**
 
@@ -305,6 +350,20 @@ After
   * 2
 1. first
   1. second
+```
+
+**Table of contens**
+
+You have to provide page number to a table of contents. Unless it will not
+redirect.  Page number is automatically increased when new page is used.
+
+```
+_toc(PageNumber,Text)
+```
+converts to
+```
+<!-- Let Pagenumber is 2 in this case -->
+<ol><a href="#2">Text</a></ol>'
 ```
 
 **New Page**
