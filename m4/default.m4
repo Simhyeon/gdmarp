@@ -28,6 +28,12 @@ define(`m_sanitize', `esyscmd(`printf "$*" | sed -f $SCRIPTS/sanitize.sed')')dnl
 define(`m_default', `esyscmd(`sh $SCRIPTS/default.sh $1 $2')')dnl
 # Either enable or disable according to module used
 define(`m_if_mod', `ifdef(`mod_$1',`shift($*)', `')')dnl
+# Restore macro for from macro's restoration process
+# NOTE 
+# The reason why fmrestore is a shell script not sed script is because I
+# couldn't make it right although is should be simple.
+define(`m_fm_restore',`esyscmd(`sh $SCRIPTS/fmrestore.sh "$*"')')dnl
+define(`m_fm_read_file_literal',`esyscmd(`cat $1 | perl "$SCRIPTS"/string_literal.pl')')dnl
 
 # ==========
 # User interface macros 
@@ -57,6 +63,14 @@ define(`m_parse_pair', `esyscmd(`sh $SCRIPTS/parse_pair.sh $1')')dnl
 
 # MACRO >>> Repeat given arguments for given times
 define(`_repeat',`forloop(`_i_', 1, $1, `shift($*)')')dnl
+
+# MACRO >>> Repeat given macro with given arguments
+# Set newline at the end of foreach loop result for easy debuggin
+define(`_from',`foreach(`it',(esyscmd(`sh $SCRIPTS/fmsanitize.sh "$*"')),`_$1(m_fm_restore(it))
+')')dnl
+
+# MACRO >>> Repeat given macro with given arguments
+define(`_from_file',`_from($1, m_fm_read_file_literal($2))')dnl
 
 # MACRO >>> Shorthand version of include macro
 # macro expects path to be inside of "inc" directory
