@@ -192,10 +192,16 @@ gdmarp wui -M bts
 # Available formats are {html|png|pdf}
 gdmarp dial -M gdl -F html
 
+# Copy to given directory
+# You can copy final file into the direcotry you want it copied to.
+# Next command will make a final file named as <file_name> 
+# and copy the file to <directory>
+gdmarp <subcommand> -M <module_name> -O <file_name> -C <directory>
+
 # Purgemode
 # You can give purgemode {all|user|var} to purge unused macros
 # Purgemode is used only on render modules
-gdmarp <Subcommand> -m <ModuleName> -P <Purgemode>
+gdmarp <subcommand> -M <module_name> -P <purgemode>
 
 # To run test scripts in config.json
 # This enables preserve flag("-p") and creates distinctive middle files in build directory
