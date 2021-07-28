@@ -50,14 +50,17 @@ define(`_st', `~~$1~~')dnl
 define(`_ud', `\_\_$1\_\_')dnl
 
 # Indentation
-define(`_idt', ` forloop(`', 2, $1, `  ')')dnl
+# WARNING : Single spaces between if else bracket end and macro define bracket end
+# is necessary, do not erase it.
+define(`_idt', `ifelse(`$1', `', `', `forloop(`', 2, $1, `  ')') ')dnl
 
 # Lists
 # Unordered List
-define(`_ul', `forloop(`', 2, $1, `  ')*')dnl
+# Emtpry ul is same with level 1 
+define(`_ul', `ifelse(`$1', `', `*', `forloop(`', 2, $1, `  ')*')')dnl
 
 # Ordered list
-define(`_ol', `forloop(`', 2, $1, `  ')1.')dnl
+define(`_ol', `ifelse(`$1', `', `1.', `forloop(`', 2, $1, `  ')1.')')dnl
 
 # Paragraph
 define(`_p',`<p>$*</p>')dnl

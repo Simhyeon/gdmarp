@@ -30,13 +30,13 @@ define(`_wiki_page',`[[$1]]')dnl
 define(`_wiki_page_alt',`_wikipage($1|$2)')dnl # Wikipage link with alternative text
 
 # Unordered List
-define(`_ul', `forloop(`', 1, $1, ``*'')')dnl
+define(`_ul', `ifelse(`$1', `', `*', `forloop(`', 1, $1, ``*'')')')dnl
 
 # Ordered list
-define(`_ol', `forloop(`', 1, $1, ``#'')')dnl
+define(`_ol', `ifelse(`$1', `', `#', `forloop(`', 1, $1, ``#'')')')dnl
 
 # Indentation
-define(`_idt', `forloop(`', 1, $1, `:')')dnl
+define(`_idt', `ifelse(`$1', `', `:', `forloop(`', 1, $1, `:')')')dnl
 
 # URL Link (Same functionality wit markdown link)
 define(`_url',`[$1 $2]')dnl
