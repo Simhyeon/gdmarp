@@ -334,12 +334,14 @@ __Underline__
 
 Before
 ```
+_idt Indented
 _idt(1) Indented
 _idt(2) Indented2
 ```
 After
 ```
 <!-- Indentation is two spaces in markdown -->
+  Indented 
   Indented 
     Indented2
 ```
@@ -348,15 +350,19 @@ After
 
 Before
 ```
-_ul(1)
-_ul(2)
-_ol(first)
-_ol(second)
+_ul 1
+_ul(1) 1
+_ul(2) 2
+_ol first
+_ol(1) first
+_ol(2) second
 ```
 After
 ```
 * 1
+* 1
   * 2
+1. first
 1. first
   1. second
 ```
@@ -848,15 +854,19 @@ After
 
 Before
 ```
-_ul(1)
-_ul(2)
-_ol(first)
-_ol(second)
+_ul 1
+_ul(1) 1
+_ul(2) 2 
+_ol first
+_ol(1) first
+_ol(2) second
 ```
 After
 ```wikitext
 * 1
+* 1
 ** 2
+# first
 # first
 ## second
 ```
@@ -865,11 +875,14 @@ After
 
 Before
 ```
+_idt Indented
 _idt(1) Indented
 _idt(2) Indented2
 ```
 After
 ```
+<!-- wikitext indentation is single colon -->
+: Indented
 : Indented
 :: Indented2
 ```

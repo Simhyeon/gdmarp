@@ -1,10 +1,6 @@
 ### TODO
 
 * [ ] Bug
-  * [x] Resource is not set properly due to build directory
-  * [x] Include macro is not invoked
-  This was because I escaped m4 quote to reseve _set_var macro
-  Solution was to change the syntax of set var
 
 * [ ] Misc
   * [ ] Check sanitization process
@@ -15,7 +11,6 @@
     * [ ] Add interface explanation for every macros in macro.md
 	* [ ] Add class usage and explanation
   * [ ] Add submodule option
-  * [ ] Make list element default to 1st level
 
 * [ ] Modular components
   * [ ] Web ui
@@ -106,8 +101,14 @@ This was intended for alpine linux usage... however I found that I was extensive
 * [ ] Bug
   * [x] m4 consumes m4 quote even if the macro is not defined... which is a problem because _set_var uses same syntax
   * [x] url caused end of line becuase comment was double forward slash.
+  * [x] Resource is not set properly due to build directory
+  * [x] Include macro is not invoked
+  This was because I escaped m4 quote to reseve _set_var macro
+  Solution was to change the syntax of set var
 
 * [ ] Misc
+  * [x] Make list element default to 1st level
+  * [x] Copy option
   * [x] From macro enable no leading, trailing spaces, whitespaces variable utilization
   * [x] Make a preserve logic consistent
   * [x] Re-make purge option (-P all) with perl script
