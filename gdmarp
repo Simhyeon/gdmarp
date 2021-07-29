@@ -71,7 +71,8 @@ help_message(){
 	echo "<test>                  run all test scripts configued in config.json file test automatcially enables preserve flag and don't overwrite middle file"
 	echo "<wiki>                  push the processed file into the given wiki website"
 	echo "<wui>                   create a web ui html"
-	echo "<dial>                  create a dialogue json"
+	echo "<dial>                  create a dialogue"
+	echo "<flow>                  create a flowchart"
 }
 
 gd_install(){
