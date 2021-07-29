@@ -2,6 +2,11 @@
 
 # Reference source : https://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash
 
+repr_default_module="marp"
+wiki_default_module="mw"
+wui_default_module="bts"
+dial_default_module="gdl"
+
 init_var(){
 	cwd=$PWD
 	out_dir="$PWD"/build
@@ -624,20 +629,24 @@ gd_main(){
 				;;
 			repr) # representation
 				action=gd_repr
+				[ -z "$flag_modules" ] && flag_modules="$repr_default_module"
 				[ -z "$flag_format" ] && flag_format="pptx"
 				shift
 				;;
 			wiki)
 				action=gd_wiki
+				[ -z "$flag_modules" ] && flag_modules="$wiki_default_module"
 				shift
 				;;
 			wui) # web ui
 				action=gd_wui
+				[ -z "$flag_modules" ] && flag_modules="$wui_default_module"
 				flag_prep_norestore=true
 				shift
 				;;
 			dial) # dialogue
 				action=gd_dial
+				[ -z "$flag_modules" ] && flag_modules="$dial_default_module"
 				flag_prep_norestore=true
 				[ -z "$flag_format" ] && flag_format="png"
 				shift
