@@ -6,6 +6,7 @@ repr_default_module="marp"
 wiki_default_module="mw"
 wui_default_module="bts"
 dial_default_module="gdl"
+flow_default_module="fjs"
 
 init_var(){
 	cwd=$PWD
@@ -116,6 +117,10 @@ add_sources(){
 				;;
 			gdl)
 				sources="${sources} $MODULE/dialogue/gdlogue/env.m4 $MODULE/dialogue/gdlogue/macro.m4"
+				shift
+				;;
+			fjs)
+				sources="${sources} $MODULE/flowchart/fjs/env.m4 $MODULE/flowchart/fjs/macro.m4"
 				shift
 				;;
 			*)
@@ -238,8 +243,6 @@ gd_wiki(){
 	# Preprocessing before sending out file
 	gd_preprocess
 
-	# No Docker code only for now
-
 	# Utilzie various backends
 	case $flag_modules in
 		mw)
@@ -280,8 +283,6 @@ gd_wui(){
 	# Preprocessing before sending out file
 	gd_preprocess
 
-	# No Docker code only for now
-
 	# Utilzie various backends
 	case $flag_modules in
 		bts)
@@ -318,8 +319,6 @@ gd_wui(){
 gd_dial(){
 	# Preprocessing before sending out file
 	gd_preprocess
-
-	# No Docker code only for now
 
 	# Add divert directives in first line and last line of the file
 	# so that all texts within out.gddt will be ignored in final html file
@@ -376,6 +375,45 @@ gd_dial(){
 			exit 1
 			;;
 
+	esac
+}
+
+gd_flowchart(){
+	# Preprocessing before sending out file
+	gd_preprocess
+
+	# Utilzie various backends
+	case $flag_modules in
+		fjs)
+			# Add divert directives in first line and last line of the file
+			# so that all texts within out.gddt will be ignored in final html file
+			sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
+
+			final_name="$out_dir"/"$out_name".html
+
+			# Process macros, kind of template engine
+			# This doesn't uitilze webui's macro because it is not used internally
+			# however this might change in the future, who knows
+			m4 -I "$bin_path"/m4/GNU -I "$MODULE"/flowchart/fjs/template \
+			-I "$cwd" \
+			"$MODULE"/flowchart/fjs/env.m4 "$cwd"/env.m4 \
+			"$bin_path"/m4/default.m4 "$out_file" \
+			"$MODULE"/flowchart/fjs/template/main.html | awk -f \
+			"$SCRIPTS"/rmExtNewLines.awk > "$final_name"
+
+			# Restore escaped characters
+			sed -i -f "$SCRIPTS"/restore.sed "$final_name"
+
+			# Remove middle file because preserve flag would have already saved
+			# copy in cache
+			rm "$out_file"
+			# Remove cached file which has edges in it
+			rm -f "$cwd"/cached
+			;;
+		*)
+			echo "No proper module was given to yield a web ui page"
+			exit 1
+			;;
 	esac
 }
 
@@ -649,6 +687,13 @@ gd_main(){
 				[ -z "$flag_modules" ] && flag_modules="$dial_default_module"
 				flag_prep_norestore=true
 				[ -z "$flag_format" ] && flag_format="png"
+				shift
+				;;
+			flow) # flowchart
+				action=gd_flowchart
+				[ -z "$flag_modules" ] && flag_modules="$flow_default_module"
+				flag_prep_norestore=true
+				rm -f "$cwd"/cached
 				shift
 				;;
 			run)
