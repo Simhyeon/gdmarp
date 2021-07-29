@@ -1801,3 +1801,38 @@ Converts to
   }
 ]
 ```
+
+### Flow chart (fjs module)
+
+Fjs module macro converts given command as flowchart-js compatible syntax.
+
+```
+_flowchart_begin()
+
+_fstart(Start,ID)
+
+_fnode(ID,label,goto)
+_fnode(goto,label2,cond)
+_fcond(cond,/#Yes or no#/,end,no)
+_fnode_right(no,/#This is no#/,goto)
+
+_fend(END)
+
+_flowchart_end()
+```
+Converts to
+```
+start=>start: Start
+ID=>operation: label
+goto=>operation: label2
+cond=>condition: Yes or no
+no=>operation: This is no
+end=>end: END
+
+start->ID
+ID->goto
+goto->cond
+cond(yes)->end
+cond(no)->no
+no(right)->goto
+```

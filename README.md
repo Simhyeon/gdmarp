@@ -16,9 +16,9 @@ once and export with one gdmarp command.
 
 Release of 0.3 includes following updates
 
-- Docx module (with pandoc backend)
-- Dialogue tree module (with d3js + graphviz backend)
-- UML module (backend not decided)
+- Docx module (with latex+pandoc)
+- Dialogue tree module (d3-graphviz)
+- Flowchart module (flowchart-js)
 - String literal (Single line and multi line string literal)
 
 I've actively developed gdmarp so far however 0.3 will have longer term because
@@ -69,6 +69,7 @@ To be updated
 
 - bts (web ui html page with bootstrap cdn)
 - gdl (graphviz dialgoue as html, pdf and png format)
+- fjs (flowchart-js to creat flowchart)
 
 ### Dependencies
 
@@ -172,6 +173,11 @@ gdmarp check
 gdmarp init
 gdmarp init -g
 gdmarp init -M mw # This module is mediawiki backend
+
+# NOTE
+# Every subcommand get get module name with -M flag
+# However default module is set already, so you don't always have to give
+# module name.
 
 # Simpley preprocess and don't publish to final format
 gdmarp prep -M marp

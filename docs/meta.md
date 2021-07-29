@@ -22,7 +22,10 @@
     * [x] Multi formats other than html
     * [x] Make detailed window display on hover or click
 	* [ ] Make immersive representation which is marp conversion with hyperlinks -> This has low priority
-  * [ ] UML module
+  * [ ] Flow chart module with flowchar-js backend
+  	* [ ] Html page creation
+	* [ ] Static image file creation with flowchart-js cli
+	* [ ] Flowchart simulation feature with target json object
   * [ ] Conti module
 
 * [ ] Check if windows can run gdmarp without docker
