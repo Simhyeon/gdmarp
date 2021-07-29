@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Flowchart</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js" integrity="sha512-tBzZQxySO5q5lqwLWfu8Q+o4VkTcRGOeQGVQ0ueJga4A1RKuzmAu5HXDOXLEjpbKyV7ow9ympVoa6wZLEzRzDg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.15.0/flowchart.min.js" integrity="sha512-6QsSiIybtf8tuZ6xfjRTr2tdtw3Gp4q5RSCh2b6q9seoKEQmhAG1RrCA8F0kXTwivVxRVbp/YF3zOh8rvEAU7Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	</head>
+	<body>
+		<div id="diagram"></div>
+		<script charset="utf-8">
+			var diagram = flowchart.parse(\~v_flowchart_content()\~);
+			diagram.drawSVG('diagram');
+		</script>
+	</body>
+</html>
