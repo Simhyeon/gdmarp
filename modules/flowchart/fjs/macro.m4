@@ -38,13 +38,15 @@ define(`_fnode',`$1=>operation: $2
 esyscmd(`echo "$1->$3" >> cached')dnl
 ')dnl
 
+# This was to make redirection look better,
+# But I'm sure there would be a better approach.
 # _fnode_right(id,label,nextId)
 define(`_fnode_right',`$1=>operation: $2
 esyscmd(`echo "$1(right)->$3" >> cached')dnl
 ')dnl
 
 # _fnode_input(id,label,nextId)
-define(`_finput',`$1=>input: $2
+define(`_finput',`$1=>inputoutput: $2
 esyscmd(`echo "$1->$3" >> cached')dnl
 ')dnl
 
