@@ -3,6 +3,8 @@
 * [ ] Bug
 
 * [ ] Misc
+  * [ ] Move format validation to each module proecessing, not commandline parsing
+  * [ ] Every call will remove existing out file which is ok or not?
   * [ ] Check sanitization process
   For example special characters such as colon(;) can be problematic in esyscmd
   call if value is not printed as quoted form.
