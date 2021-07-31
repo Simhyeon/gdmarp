@@ -1820,19 +1820,51 @@ _fend(END)
 
 _flowchart_end()
 ```
-Converts to
+With **fjx** module, converts to flowchart-js syntax
 ```
 start=>start: Start
-ID=>operation: label
-goto=>operation: label2
+Id1=>operation: label
+Id2=>operation: label2
 cond=>condition: Yes or no
-no=>operation: This is no
+ip1=>input: Get User Input
 end=>end: END
 
-start->ID
-ID->goto
-goto->cond
-cond(yes)->end
-cond(no)->no
-no(right)->goto
+start->Id1
+Id1->Id2
+Id2->cond
+cond(yes)->ip1
+cond(no)->Id1
+ip1->end
+```
+With **gvz** module, converts to dot syntax
+```
+digraph G {
+	start [ label="Start" ];
+	
+	Id1 [label="label" shape=rect];
+	Id1__RIGHT [width=0 shape=point];
+	{rank=same; Id1; Id1__RIGHT;}
+	
+	Id2 [label="label2" shape=rect];
+	Id2__RIGHT [width=0 shape=point];
+	{rank=same; Id2; Id2__RIGHT;}
+	
+	cond [label="Yes or no" shape=diamond];
+	cond__RIGHT [ width=0 shape=point ];
+	{rank=same; cond; cond__RIGHT;}
+	
+	ip1 [label="Get User Input" shape=parallelogram];
+	ip1__RIGHT [width=0 shape=point];
+	{rank=same; ip1; ip1__RIGHT;}
+	
+	end [label="END"];
+
+	start -> Id1 [weight=8];
+	Id1 -> Id2 [weight=8];
+	Id2 -> cond [weight=8];
+	cond:e -> cond__RIGHT:w [arrowhead=none];
+	cond -> ip1 [weight=8];
+	cond__RIGHT:e -> Id1__RIGHT:e [arrowhead=none];
+	Id1 -> Id1__RIGHT [dir=back minlen=2];ip1 -> end [weight=8];
+}
 ```

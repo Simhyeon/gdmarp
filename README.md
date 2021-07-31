@@ -69,7 +69,8 @@ To be updated
 
 - bts (web ui html page with bootstrap cdn)
 - gdl (graphviz dialgoue as html, pdf and png format)
-- fjs (flowchart-js to creat flowchart)
+- fjs (flowchart-js to create interactive flowchart)
+- gvz (graphviz to create static flowchart as image format)
 
 ### Dependencies
 
