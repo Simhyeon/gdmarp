@@ -124,6 +124,10 @@ add_sources(){
 				sources="${sources} $MODULE/flowchart/fjs/env.m4 $MODULE/flowchart/fjs/macro.m4"
 				shift
 				;;
+			gvz)
+				sources="${sources} $MODULE/flowchart/gvz/env.m4 $MODULE/flowchart/gvz/macro.m4"
+				shift
+				;;
 			*)
 				shift
 				;;
@@ -411,6 +415,36 @@ gd_flowchart(){
 			# Remove cached file which has edges in it
 			rm -f "$cwd"/cached
 			;;
+		gvz)
+			# Add divert directives in first line and last line of the file
+			# so that all texts within out.gddt will be ignored in final html file
+			sed -i -e '1 i\divert(`-1\x27)' -e '$a\divert`\x27' "$out_file"
+
+			dot_file="$cache_dir"/out.gv
+			final_name="$out_dir"/"$out_name".png
+
+			m4 -I "$bin_path"/m4/GNU -I "$cwd" \
+			"$MODULE"/flowchart/gvz/env.m4 "$cwd"/env.m4 \
+			"$bin_path"/m4/default.m4 "$out_file" \
+			"$MODULE"/flowchart/gvz/index.gv | awk -f \
+			"$SCRIPTS"/rmExtNewLines.awk > "$dot_file"
+
+			# Restore escaped characters
+			sed -i -f "$SCRIPTS"/restore.sed "$dot_file"
+
+			# Use dot binary to render png file
+			dot -Tpng -Gdpi=300 "$dot_file" > "$final_name"
+
+			# Remove middle file because preserve flag would have already saved
+			# copy in cache
+			rm "$out_file"
+			# Remove cached file which has edges in it
+			# Remove original dot file
+			if ! [ "$flag_preserve" ]; then
+				rm -f "$cwd"/cached
+				rm -f "$dot_file"
+			fi
+			;;
 		*)
 			echo "No proper module was given to yield a web ui page"
 			exit 1
@@ -646,6 +680,9 @@ gd_main(){
 							;;
 						"html")
 							flag_format=html
+							;;
+						"png")
+							flag_format=png
 							;;
 						*)
 							echo "\"$2\" is not a supported format"
