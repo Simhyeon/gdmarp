@@ -1,3 +1,12 @@
+## Currently gdmarp is in maintenance mode.
+
+No feature will be updated for the time. I'm going to start making a fully
+functional binary program that can be cross platform and also easily
+distributed without the help of container technologies.
+
+Read the doc for further information 
+[Why gdmarp is not enough](docs/why_gdmarp_is_not_enough.md)
+
 ## Gdmarp, an automatic game document generation script
 
 This is a shell script to automate m4 macro pre-processing and various
@@ -11,20 +20,6 @@ modules. Such module expands macros into properly formatted texts.
 
 Therefore you don't have to write separate files for separate formats, just write
 once and export with one gdmarp command.
-
-### About 0.3 
-
-Release of 0.3 includes following updates
-
-- Docx module (with latex+pandoc)
-- Dialogue tree module (d3-graphviz)
-- Flowchart module (flowchart-js)
-- String literal (Single line and multi line string literal)
-
-I've actively developed gdmarp so far however 0.3 will have longer term because
-I need to learn many other concepts and some libraries to fully implement the
-planned updates. While there is no planned update for near future, bug fixes
-will be applied continuously.
 
 ### How gdmarp works
 
@@ -77,8 +72,6 @@ To be updated
 - sed (GNU version)
 - m4 
 - awk (GNU version)
-- marp-cli (node package)
-- google chrome or chromium (pptx creation dependencies)
 - jq (config parsing)
 - perl (over 5.10 version)
 - bc
@@ -86,6 +79,8 @@ To be updated
 
 ### Optional dependencies
 
+- marp-cli (node package)
+- google chrome or chromium (pptx creation dependencies)
 - git (git flag)
 - sqlite3 (sql macro)
 - curl (web api)
