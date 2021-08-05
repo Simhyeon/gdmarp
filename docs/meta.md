@@ -1,5 +1,9 @@
 ### TODO
 
+* [ ] Refactor codes 
+  * [ ] Make docker image more lighter
+  * [ ] Decrease dependencies
+
 * [ ] Bug
 
 * [ ] Misc
