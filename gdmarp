@@ -131,6 +131,7 @@ add_sources(){
 				shift
 				;;
 			*)
+				echo "Given module $1 is not available"
 				shift
 				;;
 		esac
