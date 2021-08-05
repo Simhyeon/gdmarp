@@ -7,6 +7,7 @@ wiki_default_module="mw"
 wui_default_module="bts"
 dial_default_module="gdl"
 flow_default_module="fjs"
+doc_default_module="pan"
 
 init_var(){
 	cwd=$PWD
@@ -38,7 +39,7 @@ init_var(){
 }
 
 # Marp path can be changed with a flat
-marp=marp
+marp="sudo marp"
 
 # ----------
 # FUNCTIONS
@@ -73,6 +74,7 @@ help_message(){
 	echo "<wui>                   create a web ui html"
 	echo "<dial>                  create a dialogue"
 	echo "<flow>                  create a flowchart"
+	echo "<doc>                   create a document"
 }
 
 gd_install(){
@@ -629,10 +631,6 @@ gd_main(){
 				;;
 			-n) # no default, negate or I don't any negatation word
 				flag_use_default=false
-				shift
-				;;
-			-c) # This is Container only usage not for end user
-				marp="node /home/marp/.cli/marp-cli.js"
 				shift
 				;;
 			-g) # git
