@@ -1,10 +1,22 @@
 ### TODO
 
-* [ ] Refactor codes 
-  * [ ] Make docker image more lighter
-  * [ ] Decrease dependencies
+#### Refactor project
+
+**Goals**
+
+- Remove unnecessary dependencies
+  * [ ] Replace posix tools with perl if possible
+    * [ ] Sed
+    * [ ] Awk
+    * [ ] tr
+    * [ ] bc
+- Make final docker binary more smaller
+- Provide multiple dockerfile according end user usage
+
+#### General
 
 * [ ] Bug
+  * [ ] Prep doesn't yield file to build directory
 
 * [ ] Misc
   * [ ] Move format validation to each module proecessing, not commandline parsing
