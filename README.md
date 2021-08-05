@@ -1,12 +1,3 @@
-## Currently gdmarp is in maintenance mode.
-
-No feature will be updated for the time. I'm going to start making a fully
-functional binary program that can be cross platform and also easily
-distributed without the help of container technologies.
-
-Read the doc for further information 
-[Why gdmarp is not enough](docs/why_gdmarp_is_not_enough.md)
-
 ## Gdmarp, an automatic game document generation script
 
 This is a shell script to automate m4 macro pre-processing and various
