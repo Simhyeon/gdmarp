@@ -7,6 +7,7 @@ wiki_default_module="mw"
 wui_default_module="bts"
 dial_default_module="gdl"
 flow_default_module="fjs"
+doc_default_module="pan"
 
 init_var(){
 	cwd=$PWD
@@ -73,6 +74,7 @@ help_message(){
 	echo "<wui>                   create a web ui html"
 	echo "<dial>                  create a dialogue"
 	echo "<flow>                  create a flowchart"
+	echo "<doc>                   create a document(docx)"
 }
 
 gd_install(){
@@ -452,6 +454,25 @@ gd_flowchart(){
 	esac
 }
 
+gd_doc(){
+	# Preprocessing before marp compilation
+	gd_preprocess
+
+	# Change out.gddt to out.md because pandoc expects markdown file
+	mv "$out_file" out.md
+
+	final_name="$out_dir"/$out_name.docx
+
+	pandoc out.md -o "$final_name"
+
+	if [ "$flag_preserve" = "false" ]; then
+		rm out.md
+	else
+		# For test subcommand compatibility -> What?
+		mv out.md "$cache_dir"
+	fi
+}
+
 gd_run(){
 	# Read a config
 	readconfig
@@ -732,6 +753,11 @@ gd_main(){
 				[ -z "$flag_modules" ] && flag_modules="$flow_default_module"
 				flag_prep_norestore=true
 				rm -f "$cwd"/cached
+				shift
+				;;
+			doc) # representation
+				action=gd_doc
+				[ -z "$flag_modules" ] && flag_modules="$doc_default_module"
 				shift
 				;;
 			run)
