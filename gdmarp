@@ -130,6 +130,10 @@ add_sources(){
 				sources="${sources} $MODULE/flowchart/gvz/env.m4 $MODULE/flowchart/gvz/macro.m4"
 				shift
 				;;
+			pan)
+				sources="${sources} $MODULE/doc/pan/env.m4 $MODULE/doc/pan/macro.m4"
+				shift
+				;;
 			*)
 				echo "Given module $1 is not available"
 				shift
