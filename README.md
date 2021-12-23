@@ -1,3 +1,8 @@
+## Gdmarp is not developed anymore
+
+Gdmarp is deprecated in favor of new cross-platform implementation,
+[gdengine](https://github.com/simhyeon/gdengine).
+
 ## Gdmarp, an automatic game document generation script
 
 This is a shell script to automate m4 macro pre-processing and various
